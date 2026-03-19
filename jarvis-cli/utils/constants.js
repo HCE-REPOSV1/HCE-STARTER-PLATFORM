@@ -4,13 +4,21 @@ const PREFIXES = {
     prefix: "ds"
   },
   CANAL: {
-    name: "(CH) Microservicio Canal",
-    prefix: "ch"
+    name: "(CN) Microservicio Canal",
+    prefix: "cn"
   },
   NEGOCIO: {
     name: "(BS) Microservicio Negocio",
     prefix: "bs"
   }
+};
+
+const GENERATOR_CONFIG = {
+  prefix: {
+    channel: "ms-cn",
+    business: "ms-bs",
+  },
+  defaultType: "business", // "channel" | "business"
 };
 
 const PROJECT_FOLDERS = [
@@ -62,5 +70,6 @@ module.exports = {
   CREATE_PROJECT_MESSAGES,
   PROMPT_TYPE,
   PROMPT_NAME,
+  GENERATOR_CONFIG,
   RETURN
 };
