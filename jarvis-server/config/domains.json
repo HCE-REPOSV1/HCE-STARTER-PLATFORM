@@ -1,10 +1,10 @@
 [
   {
-    "id": "9c8384fe-dd86-4d39-b3f4-820859b0d2ea",
-    "name": "patients-domain",
+    "id": "a320cbee-77ba-4fd0-aaa5-f0ca65190d3c",
+    "name": "billing",
     "entities": [
       {
-        "name": "patient",
+        "name": "Claim",
         "fields": [
           {
             "name": "id",
@@ -12,7 +12,508 @@
             "required": true
           },
           {
+            "name": "type",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "patient",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "encounter",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "total",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "Coverage",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "beneficiary",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "payer",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "policyHolder",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "e56c0963-b490-4461-8efc-d32a2b1540a1",
+    "name": "clinical",
+    "entities": [
+      {
+        "name": "Condition",
+        "fields": [
+          {
+            "name": "id",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "clinicalStatus",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "verificationStatus",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "code",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "subject",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "encounter",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "onsetDateTime",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "Observation",
+        "fields": [
+          {
+            "name": "id",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "status",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "code",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "subject",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "encounter",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "effectiveDateTime",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "valueQuantity",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "valueString",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "450f0899-2670-432e-8b79-f792ce934b1d",
+    "name": "common",
+    "entities": [
+      {
+        "name": "Address",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "use",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "line",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "city",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "district",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "state",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "postalCode",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "country",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "CodeableConcept",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "coding",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "text",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "Coding",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "system",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "code",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "display",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "ContactPoint",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "system",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "use",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "HumanName",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "use",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "family",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "given",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "Identifier",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "system",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "Period",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "start",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "end",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "Quantity",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "unit",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "system",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "Reference",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "reference",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "display",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c2078b8e-9e34-4c71-9f72-acd456ec2e1a",
+    "name": "encounter",
+    "entities": [
+      {
+        "name": "Encounter",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "status",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "class",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "subject",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "period",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "856c8d3f-e0fb-4915-95c6-72503b424817",
+    "name": "infraestructure",
+    "entities": [
+      {
+        "name": "AuditEvent",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "type",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "action",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "recorded",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "agent",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "df19903e-57f7-4359-a95b-06d1663d0a89",
+    "name": "organization",
+    "entities": [
+      {
+        "name": "Organization",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "identifier",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "active",
+            "type": "string",
+            "required": true
+          },
+          {
             "name": "name",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "49779800-ac49-4e49-ae68-531aea20dee7",
+    "name": "patient",
+    "entities": [
+      {
+        "name": "Patient",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "identifier",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "active",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "telecom",
             "type": "string",
             "required": true
           },
@@ -23,18 +524,80 @@
           },
           {
             "name": "birthDate",
-            "type": "Date",
+            "type": "string",
             "required": true
           },
           {
             "name": "address",
             "type": "string",
-            "required": false
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "23d18370-dfe0-4e6d-81be-aa92e5fbb37c",
+    "name": "practitioner",
+    "entities": [
+      {
+        "name": "Practitioner",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
           },
           {
-            "name": "phone",
+            "name": "identifier",
             "type": "string",
-            "required": false
+            "required": true
+          },
+          {
+            "name": "active",
+            "type": "boolean",
+            "required": true
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "eb46ea82-0a09-4f67-a8d8-8e44f2898cc8",
+    "name": "scheduling",
+    "entities": [
+      {
+        "name": "Appointment",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "status",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "start",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "end",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "participant",
+            "type": "string",
+            "required": true
           }
         ]
       }

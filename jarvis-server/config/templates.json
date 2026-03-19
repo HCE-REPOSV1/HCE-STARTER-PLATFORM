@@ -1,0 +1,42 @@
+[
+  {
+    "id": "e2ace084-1ebc-492f-8b1a-6c4cc5a48c06",
+    "name": "NestJS Hexagonal",
+    "type": "nestjs",
+    "version": "1.0.0",
+    "description": "Arquitectura hexagonal con NestJS 10",
+    "path": "nestjs/hexagonal",
+    "active": true,
+    "createdAt": "2026-03-19T21:13:48.585Z"
+  },
+  {
+    "id": "eabe2316-8769-4679-94cf-07d2fd34c90e",
+    "name": "NestJS Clean",
+    "type": "nestjs",
+    "version": "1.0.0",
+    "description": "Clean Architecture con NestJS",
+    "path": "nestjs/clean",
+    "active": true,
+    "createdAt": "2026-03-19T21:13:48.585Z"
+  },
+  {
+    "id": "3f4648dc-3753-4969-829d-ca8535c37a7c",
+    "name": "OpenAPI 3.0",
+    "type": "openapi",
+    "version": "3.0.3",
+    "description": "Contrato OpenAPI API First",
+    "path": "openapi/v3",
+    "active": true,
+    "createdAt": "2026-03-19T21:13:48.585Z"
+  },
+  {
+    "id": "57c6eca0-1cd8-4fad-a9e1-1e7a500dc1d4",
+    "name": "Dockerfile NestJS",
+    "type": "docker",
+    "version": "1.0.0",
+    "description": "Dockerfile multi-stage para NestJS",
+    "path": "docker/nestjs",
+    "active": true,
+    "createdAt": "2026-03-19T21:13:48.585Z"
+  }
+]
