@@ -1,0 +1,43 @@
+[
+  {
+    "id": "9c8384fe-dd86-4d39-b3f4-820859b0d2ea",
+    "name": "patients-domain",
+    "entities": [
+      {
+        "name": "patient",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "gender",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "birthDate",
+            "type": "Date",
+            "required": true
+          },
+          {
+            "name": "address",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "phone",
+            "type": "string",
+            "required": false
+          }
+        ]
+      }
+    ]
+  }
+]

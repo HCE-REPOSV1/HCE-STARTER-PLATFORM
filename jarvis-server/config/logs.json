@@ -1,0 +1,39 @@
+[
+  {
+    "timestamp": "2026-03-19T18:18:08.394Z",
+    "user": "admin",
+    "action": "CREATE_DOMAIN",
+    "details": {
+      "name": "Patients"
+    }
+  },
+  {
+    "timestamp": "2026-03-19T18:18:18.350Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "details": {
+      "serviceName": "ds-patient",
+      "type": "UX"
+    }
+  },
+  {
+    "timestamp": "2026-03-19T18:52:54.407Z",
+    "user": "admin",
+    "action": "UPDATE_DOMAIN",
+    "module": "domains",
+    "level": "INFO",
+    "details": {
+      "id": "9c8384fe-dd86-4d39-b3f4-820859b0d2ea"
+    }
+  },
+  {
+    "timestamp": "2026-03-19T18:53:11.698Z",
+    "user": "admin",
+    "action": "UPDATE_DOMAIN",
+    "module": "domains",
+    "level": "INFO",
+    "details": {
+      "id": "9c8384fe-dd86-4d39-b3f4-820859b0d2ea"
+    }
+  }
+]

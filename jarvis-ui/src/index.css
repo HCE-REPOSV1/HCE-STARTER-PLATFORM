@@ -1,0 +1,31 @@
+/* Clínica San Felipe - Paleta institucional */
+:root {
+  --csf-blue: #003087;
+  --csf-blue-mid: #0050b3;
+  --csf-blue-light: #1a73e8;
+  --csf-blue-pale: #e8f0fe;
+  --csf-white: #ffffff;
+  --csf-gray-light: #f4f6f9;
+  --csf-gray-mid: #d1d9e6;
+  --csf-gray-text: #5a6a85;
+  --csf-danger: #d32f2f;
+  --csf-success: #2e7d32;
+  --csf-warning: #f57c00;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--csf-gray-light);
+  color: #1a2a4a;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
