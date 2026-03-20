@@ -57,6 +57,7 @@ interface GenField {
 interface GenEntity {
   name: string;       // camelCase: 'patient'
   tableName: string;  // DB table: 'patients'
+  schema?: string;    // DB schema: 'clinica', 'public', etc.
   fields: GenField[];
 }
 
@@ -141,6 +142,7 @@ export class GeneratorService {
       entities = domain.entities.map(e => ({
         name: e.name,
         tableName: `${e.name}s`,
+        schema: domain.schema || undefined,
         fields: e.fields.map(f => ({
           name: f.name,
           type: f.type,
@@ -211,7 +213,10 @@ export class GeneratorService {
       const imports = new Set<string>(['Entity', 'Column']);
       entity.fields.forEach(f => { if (f.isPk) imports.add('PrimaryColumn'); });
       const props = entity.fields.map(f => this.buildTypeOrmProp(f)).join('\n\n');
-      content = `import { ${[...imports].join(', ')} } from 'typeorm';\n\n@Entity('${entity.tableName}')\nexport class ${E} {\n${props}\n}\n`;
+      const entityOpts = entity.schema
+        ? `{ name: '${entity.tableName}', schema: '${entity.schema}' }`
+        : `'${entity.tableName}'`;
+      content = `import { ${[...imports].join(', ')} } from 'typeorm';\n\n@Entity(${entityOpts})\nexport class ${E} {\n${props}\n}\n`;
     } else {
       const props = entity.fields.map(f => `  ${f.name}${f.nullable ? '?' : '!'}: ${f.type};`).join('\n');
       content = `export class ${E} {\n${props}\n}\n`;
@@ -268,7 +273,10 @@ export class GeneratorService {
       const imports = new Set<string>(['Entity', 'Column']);
       entity.fields.forEach(f => { if (f.isPk) imports.add('PrimaryColumn'); });
       const props = entity.fields.map(f => this.buildTypeOrmProp(f)).join('\n\n');
-      content = `import { ${[...imports].join(', ')} } from 'typeorm';\n\n@Entity('${entity.tableName}')\nexport class ${E} {\n${props}\n}\n`;
+      const entityOpts = entity.schema
+        ? `{ name: '${entity.tableName}', schema: '${entity.schema}' }`
+        : `'${entity.tableName}'`;
+      content = `import { ${[...imports].join(', ')} } from 'typeorm';\n\n@Entity(${entityOpts})\nexport class ${E} {\n${props}\n}\n`;
     } else {
       const props = entity.fields.map(f => `  ${f.name}${f.nullable ? '?' : '!'}: ${f.type};`).join('\n');
       content = `export class ${E} {\n${props}\n}\n`;

@@ -1,7 +1,7 @@
 // Shared types — mirrors backend interfaces
 export interface EntityField { name: string; type: string; required: boolean; size?: number; isPk?: boolean; isIdentity?: boolean; isUnique?: boolean; }
 export interface DomainEntity { name: string; fields: EntityField[] }
-export interface Domain { id: string; name: string; entities: DomainEntity[]; datasourceId?: string }
+export interface Domain { id: string; name: string; schema?: string; entities: DomainEntity[]; datasourceId?: string }
 
 export interface Datasource {
   id: string; engine: string; host: string; port: number;

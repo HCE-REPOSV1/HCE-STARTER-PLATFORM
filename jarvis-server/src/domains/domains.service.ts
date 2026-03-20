@@ -17,6 +17,7 @@ export interface DomainEntity {
 export interface Domain {
   id: string;
   name: string;
+  schema?: string;
   entities: DomainEntity[];
   datasourceId?: string;
 }

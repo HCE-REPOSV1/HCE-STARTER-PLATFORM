@@ -871,5 +871,69 @@
     "module": "system",
     "level": "INFO",
     "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:46:17.189Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:46:17.195Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T21:10:07.087Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T21:10:07.093Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T21:10:17.953Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T21:10:17.958Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T21:10:31.596Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T21:10:31.601Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
   }
 ]

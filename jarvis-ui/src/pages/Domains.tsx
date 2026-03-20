@@ -11,7 +11,7 @@ interface EntityField {
   isPk?: boolean; isIdentity?: boolean; isUnique?: boolean;
 }
 interface DomainEntity { name: string; fields: EntityField[] }
-interface Domain { id: string; name: string; entities: DomainEntity[]; datasourceId?: string }
+interface Domain { id: string; name: string; schema?: string; entities: DomainEntity[]; datasourceId?: string }
 interface DS { id: string; database: string; engine: string }
 
 const FIELD_TYPES = ['string', 'number', 'boolean', 'Date'];
@@ -37,6 +37,7 @@ export default function Domains() {
   const [datasources, setDatasources] = useState<DS[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [domainName, setDomainName] = useState('');
+  const [domainSchema, setDomainSchema] = useState('');
   const [datasourceId, setDatasourceId] = useState('');
   const [entities, setEntities] = useState<DomainEntity[]>([EMPTY_ENTITY()]);
   const [editId, setEditId] = useState<string | null>(null);
@@ -48,7 +49,7 @@ export default function Domains() {
   useEffect(() => { load(); }, []);
 
   const resetForm = () => {
-    setDomainName(''); setDatasourceId('');
+    setDomainName(''); setDomainSchema(''); setDatasourceId('');
     setEntities([EMPTY_ENTITY()]); setEditId(null); setShowForm(false);
   };
 
@@ -61,7 +62,7 @@ export default function Domains() {
       ...en,
       fields: [...en.fields.filter((f) => !AUDIT_NAMES.has(f.name)), ...AUDIT_FIELDS],
     }));
-    const payload = { name: domainName, entities: entitiesWithAudit, datasourceId: datasourceId || undefined };
+    const payload = { name: domainName, schema: domainSchema || undefined, entities: entitiesWithAudit, datasourceId: datasourceId || undefined };
     try {
       if (editId) { await api.put(`/domains/${editId}`, payload); toast.success('Dominio actualizado'); }
       else { await api.post('/domains', payload); toast.success('Dominio creado'); }
@@ -76,7 +77,7 @@ export default function Domains() {
   };
 
   const startEdit = (d: Domain) => {
-    setDomainName(d.name); setDatasourceId(d.datasourceId || '');
+    setDomainName(d.name); setDomainSchema(d.schema || ''); setDatasourceId(d.datasourceId || '');
     // Strip audit fields so they don't appear in the editable section
     setEntities(d.entities.map((e) => ({
       ...e,
@@ -125,6 +126,10 @@ export default function Domains() {
               <div style={{ ...styles.field, flex: 2 }}>
                 <label style={styles.label}>Nombre del dominio</label>
                 <input style={styles.input} value={domainName} onChange={(e) => setDomainName(e.target.value)} placeholder="ej: Patients" required />
+              </div>
+              <div style={{ ...styles.field, flex: 1 }}>
+                <label style={styles.label}>Schema de BD</label>
+                <input style={styles.input} value={domainSchema} onChange={(e) => setDomainSchema(e.target.value)} placeholder="ej: clinica" />
               </div>
               <div style={{ ...styles.field, flex: 2 }}>
                 <label style={styles.label}>Datasource (opcional)</label>
@@ -200,7 +205,7 @@ export default function Domains() {
                               disabled={fi === 0}
                               onChange={(e) => updateField(ei, fi, { required: e.target.checked })}
                             />
-                            <span style={{ marginLeft: 4, fontSize: 11, color: '#5a6a85' }}>req</span>
+                            <span style={{ marginLeft: 4, fontSize: 11, color: '#5a6a85' }}>not null</span>
                           </label>
                           {fi > 0 && (
                             <button type="button" style={styles.removeFieldBtn} onClick={() => removeField(ei, fi)}>
@@ -240,7 +245,7 @@ export default function Domains() {
 
                     {/* Audit fields — always locked */}
                     <div style={styles.auditSection}>
-                      <div style={styles.auditHeader}><Lock size={10} /> campos de auditoría (fijos)</div>
+                      <div style={styles.auditHeader}><Lock size={10} /> campos de auditoría (obligatorios)</div>
                       {AUDIT_FIELDS.map((f) => (
                         <div key={f.name} style={styles.auditRow}>
                           <span style={styles.fieldIndent} />
@@ -279,6 +284,7 @@ export default function Domains() {
                   <div style={styles.domainIcon}><Globe size={18} color="#003087" /></div>
                   <div>
                     <div style={styles.domainName}>{d.name}</div>
+                    {d.schema && <div style={styles.domainSchema}><code>{d.schema}</code></div>}
                     {ds && <div style={styles.domainDs}>{ds.engine} — {ds.database}</div>}
                   </div>
                   <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
@@ -363,6 +369,7 @@ const styles: Record<string, React.CSSProperties> = {
   domainHeader: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 },
   domainIcon: { width: 40, height: 40, borderRadius: 10, background: '#e8f0fe', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   domainName: { fontWeight: 700, fontSize: 16, color: '#003087' },
+  domainSchema: { fontSize: 11, color: '#0050b3', marginTop: 2 },
   domainDs: { fontSize: 11, color: '#5a6a85', marginTop: 2 },
   entityPreview: { marginBottom: 10 },
   entityPreviewName: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: '#0050b3', marginBottom: 4 },
