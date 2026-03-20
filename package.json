@@ -5,7 +5,14 @@
   "private": true,
   "workspaces": ["jarvis-cli"],
   "scripts": {
+    "dev": "concurrently --names \"SERVER,UI\" --prefix-colors \"blue,green\" \"npm run server\" \"npm run ui\"",
+    "server": "npm --prefix jarvis-server run start:dev",
+    "ui": "npm --prefix jarvis-ui run dev",
+    "install:all": "npm install && npm --prefix jarvis-server install && npm --prefix jarvis-ui install",
     "build": "echo build step placeholder",
     "start": "echo use jarvis-cli to create a project"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
   }
 }

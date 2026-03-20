@@ -245,5 +245,631 @@
     "details": {
       "name": "scheduling"
     }
+  },
+  {
+    "timestamp": "2026-03-20T01:13:58.396Z",
+    "user": "admin",
+    "action": "CREATE_DATASOURCE",
+    "module": "datasources",
+    "level": "INFO",
+    "details": {
+      "id": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77",
+      "database": "clinica"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T01:20:21.140Z",
+    "user": "admin",
+    "action": "CREATE_DOMAIN",
+    "module": "domains",
+    "level": "INFO",
+    "details": {
+      "name": "pruebas_server"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T01:26:44.806Z",
+    "user": "admin",
+    "action": "TEST_DATASOURCE",
+    "module": "datasources",
+    "level": "INFO",
+    "details": {
+      "id": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77",
+      "success": true
+    }
+  },
+  {
+    "timestamp": "2026-03-20T01:28:55.832Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-cn-pruebas-service",
+      "type": "CN",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T01:38:17.758Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-cn-pruebas-service",
+      "type": "CN",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T01:42:50.516Z",
+    "user": "admin",
+    "action": "TEST_DATASOURCE",
+    "module": "datasources",
+    "level": "INFO",
+    "details": {
+      "id": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77",
+      "success": true
+    }
+  },
+  {
+    "timestamp": "2026-03-20T18:15:07.952Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:07.960Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:08.989Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:09.005Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:09.671Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:09.677Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:10.205Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:10.213Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:18.177Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:18.185Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:21.616Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:21.621Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:23.523Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:15:23.531Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:16:23.430Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:16:23.438Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:16:39.462Z",
+    "user": "admin",
+    "action": "CREATE_OPENAPI_SPEC",
+    "module": "system",
+    "level": "INFO",
+    "details": {
+      "name": "pruebas-api",
+      "domainId": "5e42f907-dafe-4360-a58a-7fcf651b232f"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T18:16:39.467Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:16:41.965Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:16:41.973Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:21:32.278Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:21:32.293Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:25:08.149Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:25:08.156Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:25:13.832Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:25:13.836Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T18:25:57.421Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-cn-asd",
+      "type": "CN",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T19:24:56.872Z",
+    "user": "admin",
+    "action": "UPDATE_DOMAIN",
+    "module": "domains",
+    "level": "INFO",
+    "details": {
+      "id": "5e42f907-dafe-4360-a58a-7fcf651b232f"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T19:24:58.989Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:24:58.999Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:25:37.175Z",
+    "user": "admin",
+    "action": "UPDATE_DATASOURCE",
+    "module": "datasources",
+    "level": "INFO",
+    "details": {
+      "id": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T19:25:43.186Z",
+    "user": "admin",
+    "action": "TEST_DATASOURCE",
+    "module": "datasources",
+    "level": "INFO",
+    "details": {
+      "id": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77",
+      "success": true
+    }
+  },
+  {
+    "timestamp": "2026-03-20T19:25:47.141Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:25:47.147Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:25:53.116Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:25:53.121Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:25:56.402Z",
+    "user": "admin",
+    "action": "DELETE_OPENAPI_SPEC",
+    "module": "system",
+    "level": "WARN",
+    "details": {
+      "id": "60ce7aec-7c43-4e62-a541-0ada561c3105"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T19:25:56.412Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:26:09.181Z",
+    "user": "admin",
+    "action": "CREATE_OPENAPI_SPEC",
+    "module": "system",
+    "level": "INFO",
+    "details": {
+      "name": "pruebas-nuevas",
+      "domainId": "5e42f907-dafe-4360-a58a-7fcf651b232f"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T19:26:09.198Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:26:12.395Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:26:12.410Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:26:38.811Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-cn-pruebas",
+      "type": "CN",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T19:42:37.883Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:42:37.893Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:42:41.056Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:42:41.061Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:59:07.007Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T19:59:07.019Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:06:53.500Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:06:53.505Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:06:56.421Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:06:56.427Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:06:58.763Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:06:58.768Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:09:27.424Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:09:27.431Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:10:59.931Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "auth-pruebas-auth",
+      "type": "AA",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T20:14:23.322Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "auth-pruebas-auth",
+      "type": "AA",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T20:17:28.838Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "auth-asdfghj",
+      "type": "AA",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T20:20:28.198Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "gw-qwesdf",
+      "type": "AG",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-03-20T20:24:54.793Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:24:54.802Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:25:02.647Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-20T20:25:02.657Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
   }
 ]

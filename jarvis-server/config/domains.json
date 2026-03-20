@@ -602,5 +602,54 @@
         ]
       }
     ]
+  },
+  {
+    "id": "5e42f907-dafe-4360-a58a-7fcf651b232f",
+    "name": "pruebas_server",
+    "entities": [
+      {
+        "name": "pruebas_server2",
+        "fields": [
+          {
+            "name": "id",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "txt_prueba",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "user_create",
+            "type": "string",
+            "required": true,
+            "size": 10
+          },
+          {
+            "name": "user_modify",
+            "type": "Date",
+            "required": false
+          },
+          {
+            "name": "date_create",
+            "type": "string",
+            "required": true,
+            "size": 10
+          },
+          {
+            "name": "date_modify",
+            "type": "Date",
+            "required": false
+          },
+          {
+            "name": "is_active",
+            "type": "boolean",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "datasourceId": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77"
   }
 ]

@@ -1,12 +1,22 @@
 // Shared types — mirrors backend interfaces
-export interface EntityField { name: string; type: string; required: boolean }
+export interface EntityField { name: string; type: string; required: boolean; size?: number; isPk?: boolean; isIdentity?: boolean; isUnique?: boolean; }
 export interface DomainEntity { name: string; fields: EntityField[] }
 export interface Domain { id: string; name: string; entities: DomainEntity[]; datasourceId?: string }
 
 export interface Datasource {
   id: string; engine: string; host: string; port: number;
-  username: string; password: string; database: string; npmLibrary: string;
+  username: string; password: string; database: string; schema?: string; npmLibrary: string;
   status?: 'active' | 'failed' | 'untested'; lastTestedAt?: string;
+}
+
+export interface OpenApiSpec {
+  id: string;
+  name: string;
+  domainId: string;
+  domainName: string;
+  selectedEntities: string[];
+  yaml: string;
+  createdAt: string;
 }
 
 export interface User { id: string; username: string; role: 'ADMIN' | 'DEV'; active: boolean; createdAt: string }
@@ -28,12 +38,30 @@ export interface LogEntry {
   module: string; level: 'INFO' | 'ERROR' | 'WARN'; details: Record<string, any>;
 }
 
+export interface GatewayService { name: string; url: string; protected: boolean }
+
 export interface GenerateDto {
-  name: string; type: 'UX' | 'CN' | 'BS'; domainId: string; datasourceId?: string;
+  name: string; type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA'; domainId: string; datasourceId?: string;
+  openApiSpecId?: string;
   architecture?: 'hexagonal' | 'clean' | 'layered';
   orm?: 'typeorm' | 'prisma' | 'none';
   apiStyle?: 'rest' | 'graphql';
   authType?: 'none' | 'jwt' | 'oauth';
   observability?: { logs: boolean; metrics: boolean; tracing: boolean };
   gitEnabled?: boolean; gitRepoUrl?: string; gitBranch?: string;
+  // AG — API Gateway
+  gatewayServices?: GatewayService[];
+  rateLimitTtl?: number;
+  rateLimitMax?: number;
+  requestTimeout?: number;
+  allowedOrigins?: string;
+  useSsl?: boolean;
+  sslPort?: number;
+  serverName?: string;
+  certPath?: string;
+  // AA — API Auth
+  authUser?: string;
+  authPassword?: string;
+  jwtExpiresIn?: string;
+  jwtRefreshExpiresIn?: string;
 }

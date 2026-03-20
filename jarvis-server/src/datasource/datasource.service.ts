@@ -7,12 +7,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 export interface Datasource {
   id: string;
-  engine: string;       // PostgreSQL | MySQL
+  engine: string;       // PostgreSQL | MySQL | SQL Server
   host: string;
   port: number;
   username: string;
   password: string;
   database: string;
+  schema?: string;        // DB schema (dbo for SQL Server, public for PostgreSQL)
+  instanceName?: string;  // SQL Server: nombre de instancia (ej: INST01)
   npmLibrary: string;
   status?: 'active' | 'failed' | 'untested';
   lastTestedAt?: string;
@@ -29,14 +31,23 @@ export interface TableInfo {
   columns: TableColumn[];
 }
 
-// Map SQL types to TypeScript types
+// Map SQL types to TypeScript types (PostgreSQL, MySQL, SQL Server)
 const SQL_TO_TS: Record<string, string> = {
-  int: 'number', integer: 'number', bigint: 'number', smallint: 'number',
-  numeric: 'number', decimal: 'number', float: 'number', double: 'number', real: 'number',
+  // Numeric
+  int: 'number', integer: 'number', bigint: 'number', smallint: 'number', tinyint: 'number',
+  numeric: 'number', decimal: 'number', float: 'number', double: 'number', real: 'number', money: 'number', smallmoney: 'number',
+  // String
   varchar: 'string', char: 'string', text: 'string', uuid: 'string',
   'character varying': 'string', 'character': 'string',
-  boolean: 'boolean', bool: 'boolean',
-  date: 'Date', timestamp: 'Date', 'timestamp without time zone': 'Date', 'timestamp with time zone': 'Date',
+  nvarchar: 'string', nchar: 'string', ntext: 'string',       // SQL Server unicode
+  uniqueidentifier: 'string',                                   // SQL Server UUID
+  // Boolean
+  boolean: 'boolean', bool: 'boolean', bit: 'boolean',         // SQL Server bit
+  // Date
+  date: 'Date', timestamp: 'Date', datetime: 'Date', datetime2: 'Date', smalldatetime: 'Date',
+  'timestamp without time zone': 'Date', 'timestamp with time zone': 'Date',
+  datetimeoffset: 'Date',                                       // SQL Server timezone-aware
+  // JSON
   json: 'Record<string, any>', jsonb: 'Record<string, any>',
 };
 
@@ -98,8 +109,9 @@ export class DatasourceService {
         await this.testPostgres(ds);
       } else if (ds.engine.toLowerCase().includes('mysql')) {
         await this.testMysql(ds);
+      } else if (this.isSqlServer(ds.engine)) {
+        await this.testSqlServer(ds);
       } else {
-        // Simulated for unsupported engines
         return { success: true, message: `Conexión simulada a ${ds.database} (motor ${ds.engine} no soportado para test real)` };
       }
       this.update(id, { status: 'active', lastTestedAt: new Date().toISOString() });
@@ -117,6 +129,8 @@ export class DatasourceService {
       return this.getPostgresTables(ds);
     } else if (ds.engine.toLowerCase().includes('mysql')) {
       return this.getMysqlTables(ds);
+    } else if (this.isSqlServer(ds.engine)) {
+      return this.getSqlServerTables(ds);
     }
     return [];
   }
@@ -127,8 +141,15 @@ export class DatasourceService {
       return this.getPostgresColumns(ds, tableName);
     } else if (ds.engine.toLowerCase().includes('mysql')) {
       return this.getMysqlColumns(ds, tableName);
+    } else if (this.isSqlServer(ds.engine)) {
+      return this.getSqlServerColumns(ds, tableName);
     }
     return [];
+  }
+
+  private isSqlServer(engine: string): boolean {
+    const e = engine.toLowerCase();
+    return e.includes('sql server') || e.includes('mssql') || e.includes('sqlserver');
   }
 
   // ─── PostgreSQL helpers ─────────────────────────────────────
@@ -143,7 +164,11 @@ export class DatasourceService {
     const { Client } = await import('pg');
     const client = new Client({ host: ds.host, port: ds.port, user: ds.username, password: ds.password, database: ds.database, connectionTimeoutMillis: 5000 });
     await client.connect();
-    const res = await client.query(`SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE' ORDER BY table_name`);
+    const schema = ds.schema ?? 'public';
+    const res = await client.query(
+      `SELECT table_name FROM information_schema.tables WHERE table_schema = $1 AND table_type = 'BASE TABLE' ORDER BY table_name`,
+      [schema],
+    );
     await client.end();
     return res.rows.map((r: any) => r.table_name);
   }
@@ -152,9 +177,10 @@ export class DatasourceService {
     const { Client } = await import('pg');
     const client = new Client({ host: ds.host, port: ds.port, user: ds.username, password: ds.password, database: ds.database, connectionTimeoutMillis: 5000 });
     await client.connect();
+    const schema = ds.schema ?? 'public';
     const res = await client.query(
-      `SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = 'public' AND table_name = $1 ORDER BY ordinal_position`,
-      [table],
+      `SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = $1 AND table_name = $2 ORDER BY ordinal_position`,
+      [schema, table],
     );
     await client.end();
     return res.rows.map((r: any) => ({ name: r.column_name, type: sqlTypeToTs(r.data_type), nullable: r.is_nullable === 'YES' }));
@@ -181,5 +207,72 @@ export class DatasourceService {
     const [rows] = await conn.query(`SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = ? AND table_name = ? ORDER BY ordinal_position`, [ds.database, table]) as any[];
     await conn.end();
     return rows.map((r: any) => ({ name: r.column_name ?? r.COLUMN_NAME, type: sqlTypeToTs(r.data_type ?? r.DATA_TYPE), nullable: (r.is_nullable ?? r.IS_NULLABLE) === 'YES' }));
+  }
+
+  // ─── SQL Server helpers ─────────────────────────────────────
+  private buildMssqlConfig(ds: Datasource) {
+    return {
+      server: ds.host,
+      port: ds.port,
+      user: ds.username,
+      password: ds.password,
+      database: ds.database,
+      options: {
+        encrypt: false,
+        trustServerCertificate: true,
+        enableArithAbort: true,
+        connectTimeout: 5000,
+        instanceName: ds.instanceName || undefined,
+      },
+    };
+  }
+
+  // mssql v11 usa ConnectionPool, no mssql.connect() directamente
+  // El dynamic import en CommonJS puede devolver el módulo en .default
+  private async getMssqlPool(ds: Datasource) {
+    const mod = await import('mssql');
+    const sql = (mod as any).default ?? mod;
+    const pool = new sql.ConnectionPool(this.buildMssqlConfig(ds));
+    await pool.connect();
+    return pool;
+  }
+
+  private async testSqlServer(ds: Datasource): Promise<void> {
+    const pool = await this.getMssqlPool(ds);
+    await pool.close();
+  }
+
+  private async getSqlServerTables(ds: Datasource): Promise<string[]> {
+    const pool = await this.getMssqlPool(ds);
+    const mod = await import('mssql');
+    const sql = (mod as any).default ?? mod;
+    const result = await pool.request()
+      .input('schema', sql.NVarChar, ds.schema ?? 'dbo')
+      .query(
+        `SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = @schema ORDER BY TABLE_NAME`,
+      );
+    await pool.close();
+    return result.recordset.map((r: any) => r.TABLE_NAME);
+  }
+
+  private async getSqlServerColumns(ds: Datasource, table: string): Promise<TableColumn[]> {
+    const pool = await this.getMssqlPool(ds);
+    const mod = await import('mssql');
+    const sql = (mod as any).default ?? mod;
+    const result = await pool.request()
+      .input('table', sql.NVarChar, table)
+      .input('schema', sql.NVarChar, ds.schema ?? 'dbo')
+      .query(
+        `SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE
+         FROM INFORMATION_SCHEMA.COLUMNS
+         WHERE TABLE_NAME = @table AND TABLE_SCHEMA = @schema
+         ORDER BY ORDINAL_POSITION`,
+      );
+    await pool.close();
+    return result.recordset.map((r: any) => ({
+      name: r.COLUMN_NAME,
+      type: sqlTypeToTs(r.DATA_TYPE),
+      nullable: r.IS_NULLABLE === 'YES',
+    }));
   }
 }

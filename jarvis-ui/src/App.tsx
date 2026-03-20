@@ -10,6 +10,7 @@ import Logs from './pages/Logs';
 import Users from './pages/Users';
 import Templates from './pages/Templates';
 import Generations from './pages/Generations';
+import OpenApiSpecs from './pages/OpenApiSpecs';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   return isAuthenticated() ? <>{children}</> : <Navigate to="/" replace />;
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="templates" element={<Templates />} />
           <Route path="users" element={<Users />} />
           <Route path="logs" element={<Logs />} />
+          <Route path="openapi-specs" element={<OpenApiSpecs />} />
         </Route>
       </Routes>
     </BrowserRouter>

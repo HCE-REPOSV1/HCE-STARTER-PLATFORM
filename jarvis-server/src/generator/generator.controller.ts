@@ -17,14 +17,15 @@ export class GeneratorController {
 
   @Post()
   async generate(@Body() dto: GenerateDto, @Res() res: Response) {
-    const domain = this.domainsService.findOne(dto.domainId);
+    const needsDomain = dto.type !== 'AG' && dto.type !== 'AA';
+    const domain = needsDomain ? this.domainsService.findOne(dto.domainId) : null;
 
     // Record generation attempt
     const gen = this.generationsService.record({
       serviceName: `${dto.type.toLowerCase()}-${dto.name}`,
       type: dto.type,
-      domainId: dto.domainId,
-      domainName: domain.name,
+      domainId: dto.domainId ?? '',
+      domainName: domain?.name ?? dto.type,
       architecture: dto.architecture ?? 'hexagonal',
       orm: dto.orm ?? 'none',
       status: 'pending',

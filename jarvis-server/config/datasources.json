@@ -1,0 +1,16 @@
+[
+  {
+    "id": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77",
+    "status": "active",
+    "engine": "SQL Server",
+    "host": "192.168.42.152",
+    "port": 1433,
+    "username": "user_dev",
+    "password": "us3rd3v$",
+    "database": "clinica",
+    "instanceName": "INST01",
+    "npmLibrary": "mssql",
+    "lastTestedAt": "2026-03-20T19:25:43.185Z",
+    "schema": "dbo"
+  }
+]

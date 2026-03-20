@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { TemplatesModule } from './templates/templates.module';
 import { GenerationsModule } from './generations/generations.module';
 import { GenerationConfigModule } from './generation-config/generation-config.module';
+import { OpenApiSpecsModule } from './openapi-specs/openapi-specs.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { GenerationConfigModule } from './generation-config/generation-config.mo
     TemplatesModule,
     GenerationsModule,
     GenerationConfigModule,
+    OpenApiSpecsModule,
   ],
 })
 export class AppModule {}

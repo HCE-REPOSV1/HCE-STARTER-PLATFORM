@@ -7,10 +7,17 @@ import Btn from '../components/Btn';
 
 interface DS {
   id: string; engine: string; host: string; port: number;
-  username: string; password: string; database: string; npmLibrary: string;
+  username: string; password: string; database: string; schema?: string;
+  instanceName?: string; npmLibrary: string;
 }
 
-const EMPTY: Omit<DS, 'id'> = { engine: 'PostgreSQL', host: 'localhost', port: 5432, username: 'postgres', password: '', database: '', npmLibrary: 'pg' };
+const ENGINE_DEFAULTS: Record<string, { port: number; npmLibrary: string; username: string; schema: string }> = {
+  PostgreSQL:   { port: 5432,  npmLibrary: 'pg',     username: 'postgres', schema: 'public' },
+  MySQL:        { port: 3306,  npmLibrary: 'mysql2',  username: 'root',     schema: '' },
+  'SQL Server': { port: 1433,  npmLibrary: 'mssql',   username: 'sa',       schema: 'dbo' },
+};
+
+const EMPTY: Omit<DS, 'id'> = { engine: 'PostgreSQL', host: 'localhost', port: 5432, username: 'postgres', password: '', database: '', schema: 'public', instanceName: '', npmLibrary: 'pg' };
 
 export default function DataSources() {
   const [list, setList] = useState<DS[]>([]);
@@ -52,16 +59,15 @@ export default function DataSources() {
   };
 
   const startEdit = (ds: DS) => {
-    setForm({ engine: ds.engine, host: ds.host, port: ds.port, username: ds.username, password: ds.password, database: ds.database, npmLibrary: ds.npmLibrary });
+    setForm({ engine: ds.engine, host: ds.host, port: ds.port, username: ds.username, password: ds.password, database: ds.database, schema: ds.schema ?? '', instanceName: ds.instanceName ?? '', npmLibrary: ds.npmLibrary });
     setEditId(ds.id); setShowForm(true);
   };
 
-  const fields: { key: keyof typeof EMPTY; label: string; type?: string }[] = [
-    { key: 'engine', label: 'Motor' }, { key: 'host', label: 'Host' },
-    { key: 'port', label: 'Puerto', type: 'number' }, { key: 'username', label: 'Usuario' },
-    { key: 'password', label: 'Password', type: 'password' }, { key: 'database', label: 'Database' },
-    { key: 'npmLibrary', label: 'Librería npm' },
-  ];
+  const onEngineChange = (engine: string) => {
+    const defaults = ENGINE_DEFAULTS[engine];
+    if (defaults) setForm(f => ({ ...f, engine, port: defaults.port, npmLibrary: defaults.npmLibrary, username: defaults.username, schema: defaults.schema }));
+    else setForm(f => ({ ...f, engine }));
+  };
 
   return (
     <div>
@@ -79,18 +85,48 @@ export default function DataSources() {
       {showForm && (
         <Card title={editId ? 'Editar Datasource' : 'Nueva Conexión'} style={{ marginBottom: 24 }}>
           <form onSubmit={save} style={styles.formGrid}>
-            {fields.map((f) => (
-              <div key={f.key} style={styles.field}>
-                <label style={styles.label}>{f.label}</label>
-                <input
-                  style={styles.input}
-                  type={f.type || 'text'}
-                  value={String(form[f.key])}
-                  onChange={(e) => setForm({ ...form, [f.key]: f.type === 'number' ? Number(e.target.value) : e.target.value })}
-                  required={f.key !== 'password'}
-                />
+            {/* Motor — controla defaults del formulario */}
+            <div style={styles.field}>
+              <label style={styles.label}>Motor</label>
+              <select style={styles.input} value={form.engine} onChange={(e) => onEngineChange(e.target.value)} required>
+                {Object.keys(ENGINE_DEFAULTS).map(e => <option key={e} value={e}>{e}</option>)}
+              </select>
+            </div>
+            <div style={styles.field}>
+              <label style={styles.label}>Host</label>
+              <input style={styles.input} value={form.host} onChange={(e) => setForm({ ...form, host: e.target.value })} placeholder="192.168.1.10" required />
+            </div>
+            <div style={styles.field}>
+              <label style={styles.label}>Puerto</label>
+              <input style={styles.input} type="number" value={form.port} onChange={(e) => setForm({ ...form, port: Number(e.target.value) })} required />
+            </div>
+            <div style={styles.field}>
+              <label style={styles.label}>Usuario</label>
+              <input style={styles.input} value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} required />
+            </div>
+            <div style={styles.field}>
+              <label style={styles.label}>Password</label>
+              <input style={styles.input} type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+            </div>
+            <div style={styles.field}>
+              <label style={styles.label}>Database</label>
+              <input style={styles.input} value={form.database} onChange={(e) => setForm({ ...form, database: e.target.value })} placeholder="clinica" required />
+            </div>
+            <div style={styles.field}>
+              <label style={styles.label}>Schema</label>
+              <input style={styles.input} value={form.schema ?? ''} onChange={(e) => setForm({ ...form, schema: e.target.value })} placeholder="dbo / public" />
+            </div>
+            {/* SQL Server: campo de instancia opcional */}
+            {form.engine === 'SQL Server' && (
+              <div style={styles.field}>
+                <label style={styles.label}>Instancia (opcional)</label>
+                <input style={styles.input} value={form.instanceName ?? ''} onChange={(e) => setForm({ ...form, instanceName: e.target.value })} placeholder="INST01" />
               </div>
-            ))}
+            )}
+            <div style={styles.field}>
+              <label style={styles.label}>Librería npm</label>
+              <input style={{ ...styles.input, background: '#f4f6f9', color: '#5a6a85' }} value={form.npmLibrary} readOnly />
+            </div>
             <div style={{ gridColumn: '1/-1', display: 'flex', gap: 10, marginTop: 8 }}>
               <Btn type="submit"><Check size={14} /> Guardar</Btn>
               <Btn variant="ghost" onClick={() => { setShowForm(false); setEditId(null); }}><X size={14} /> Cancelar</Btn>
@@ -106,7 +142,7 @@ export default function DataSources() {
           <div style={styles.tableWrap}>
             <table style={styles.table}>
               <thead>
-                <tr>{['Motor', 'Host', 'Puerto', 'Database', 'Librería', 'Acciones'].map((h) => (
+                <tr>{['Motor', 'Host', 'Puerto', 'Database', 'Schema', 'Librería', 'Acciones'].map((h) => (
                   <th key={h} style={styles.th}>{h}</th>
                 ))}</tr>
               </thead>
@@ -117,6 +153,7 @@ export default function DataSources() {
                     <td style={styles.td}>{ds.host}</td>
                     <td style={styles.td}>{ds.port}</td>
                     <td style={styles.td}>{ds.database}</td>
+                    <td style={styles.td}><code style={styles.code}>{ds.schema || '—'}</code></td>
                     <td style={styles.td}><code style={styles.code}>{ds.npmLibrary}</code></td>
                     <td style={styles.td}>
                       <div style={{ display: 'flex', gap: 6 }}>

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { clearUser, getUser } from '../store/auth';
 import toast from 'react-hot-toast';
-import { Zap, Database, Globe, FileText, LogOut, Menu, X, Users, LayoutTemplate, History, Settings, ChevronDown, ChevronRight } from 'lucide-react';
+import { Zap, Database, Globe, FileText, LogOut, Menu, X, Users, LayoutTemplate, History, Settings, ChevronDown, ChevronRight, FileCode } from 'lucide-react';
 
 interface NavItem { to: string; icon: React.ReactNode; label: string }
 interface NavGroup { label: string; icon: React.ReactNode; items: NavItem[] }
@@ -23,6 +23,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { to: '/dashboard/datasources', icon: <Database size={16} />, label: 'DataSources' },
       { to: '/dashboard/domains', icon: <Globe size={16} />, label: 'Domains' },
+      { to: '/dashboard/openapi-specs', icon: <FileCode size={16} />, label: 'OpenAPI Specs' },
       { to: '/dashboard/templates', icon: <LayoutTemplate size={16} />, label: 'Templates' },
     ],
   },

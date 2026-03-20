@@ -1,18 +1,36 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Globe, Plus, Trash2, Edit2, X, Check, Tag, PlusCircle } from 'lucide-react';
+import { Globe, Plus, Trash2, Edit2, X, Check, Tag, PlusCircle, Lock } from 'lucide-react';
 import api from '../api/client';
 import Card from '../components/Card';
 import Btn from '../components/Btn';
 
-interface EntityField { name: string; type: string; required: boolean }
+interface EntityField {
+  name: string; type: string; required: boolean;
+  size?: number;
+  isPk?: boolean; isIdentity?: boolean; isUnique?: boolean;
+}
 interface DomainEntity { name: string; fields: EntityField[] }
 interface Domain { id: string; name: string; entities: DomainEntity[]; datasourceId?: string }
 interface DS { id: string; database: string; engine: string }
 
 const FIELD_TYPES = ['string', 'number', 'boolean', 'Date'];
-const EMPTY_FIELD = (): EntityField => ({ name: '', type: 'string', required: true });
-const EMPTY_ENTITY = (): DomainEntity => ({ name: '', fields: [{ name: 'id', type: 'string', required: true }] });
+
+// Audit fields always appended to every entity on save — not editable by user
+const AUDIT_FIELDS: EntityField[] = [
+  { name: 'user_create',  type: 'string',  required: true,  size: 10 },
+  { name: 'user_modify',  type: 'Date',    required: false },
+  { name: 'date_create',  type: 'string',  required: true,  size: 10 },
+  { name: 'date_modify',  type: 'Date',    required: false },
+  { name: 'is_active',    type: 'boolean', required: true  },
+];
+const AUDIT_NAMES = new Set(AUDIT_FIELDS.map((f) => f.name));
+
+const EMPTY_FIELD = (): EntityField => ({ name: '', type: 'string', required: true, size: 10 });
+const EMPTY_ENTITY = (): DomainEntity => ({
+  name: '',
+  fields: [{ name: 'id', type: 'number', required: true, isPk: true, isIdentity: true, isUnique: true }],
+});
 
 export default function Domains() {
   const [list, setList] = useState<Domain[]>([]);
@@ -36,10 +54,14 @@ export default function Domains() {
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Validate all entity names filled
     if (entities.some((en) => !en.name.trim())) { toast.error('Todas las entidades deben tener nombre'); return; }
     if (entities.some((en) => en.fields.some((f) => !f.name.trim()))) { toast.error('Todos los campos deben tener nombre'); return; }
-    const payload = { name: domainName, entities, datasourceId: datasourceId || undefined };
+    // Inject audit fields (remove any duplicates first, then append)
+    const entitiesWithAudit = entities.map((en) => ({
+      ...en,
+      fields: [...en.fields.filter((f) => !AUDIT_NAMES.has(f.name)), ...AUDIT_FIELDS],
+    }));
+    const payload = { name: domainName, entities: entitiesWithAudit, datasourceId: datasourceId || undefined };
     try {
       if (editId) { await api.put(`/domains/${editId}`, payload); toast.success('Dominio actualizado'); }
       else { await api.post('/domains', payload); toast.success('Dominio creado'); }
@@ -55,7 +77,11 @@ export default function Domains() {
 
   const startEdit = (d: Domain) => {
     setDomainName(d.name); setDatasourceId(d.datasourceId || '');
-    setEntities(d.entities.map((e) => ({ ...e, fields: e.fields.map((f) => ({ ...f })) })));
+    // Strip audit fields so they don't appear in the editable section
+    setEntities(d.entities.map((e) => ({
+      ...e,
+      fields: e.fields.filter((f) => !AUDIT_NAMES.has(f.name)).map((f) => ({ ...f })),
+    })));
     setEditId(d.id); setShowForm(true);
   };
 
@@ -95,7 +121,6 @@ export default function Domains() {
       {showForm && (
         <Card title={editId ? 'Editar Dominio' : 'Nuevo Dominio'} style={{ marginBottom: 24 }}>
           <form onSubmit={save}>
-            {/* Domain header */}
             <div style={styles.formRow}>
               <div style={{ ...styles.field, flex: 2 }}>
                 <label style={styles.label}>Nombre del dominio</label>
@@ -110,7 +135,6 @@ export default function Domains() {
               </div>
             </div>
 
-            {/* Entities */}
             <div style={{ marginTop: 20 }}>
               <div style={styles.sectionHeader}>
                 <span style={styles.sectionTitle}>Entidades del dominio</span>
@@ -121,7 +145,6 @@ export default function Domains() {
 
               {entities.map((entity, ei) => (
                 <div key={ei} style={styles.entityBlock}>
-                  {/* Entity name row */}
                   <div style={styles.entityNameRow}>
                     <div style={styles.entityDot} />
                     <input
@@ -138,39 +161,75 @@ export default function Domains() {
                     )}
                   </div>
 
-                  {/* Fields */}
                   <div style={styles.fieldsArea}>
                     {entity.fields.map((field, fi) => (
-                      <div key={fi} style={styles.fieldRow}>
-                        <span style={styles.fieldIndent} />
-                        <input
-                          style={{ ...styles.input, ...styles.fieldNameInput }}
-                          value={field.name}
-                          onChange={(e) => updateField(ei, fi, { name: e.target.value })}
-                          placeholder="campo"
-                          disabled={fi === 0 && field.name === 'id'}
-                        />
-                        <span style={styles.colon}>:</span>
-                        <select
-                          style={{ ...styles.input, ...styles.fieldTypeSelect }}
-                          value={field.type}
-                          onChange={(e) => updateField(ei, fi, { type: e.target.value })}
-                        >
-                          {FIELD_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
-                        </select>
-                        <label style={styles.requiredLabel}>
+                      <div key={fi} style={{ marginBottom: fi === 0 ? 10 : 0 }}>
+                        <div style={styles.fieldRow}>
+                          <span style={styles.fieldIndent} />
                           <input
-                            type="checkbox"
-                            checked={field.required}
-                            onChange={(e) => updateField(ei, fi, { required: e.target.checked })}
-                            disabled={fi === 0 && field.name === 'id'}
+                            style={{ ...styles.input, ...styles.fieldNameInput }}
+                            value={field.name}
+                            onChange={(e) => updateField(ei, fi, { name: e.target.value })}
+                            placeholder="campo"
                           />
-                          <span style={{ marginLeft: 4, fontSize: 11, color: '#5a6a85' }}>requerido</span>
-                        </label>
-                        {!(fi === 0 && field.name === 'id') && (
-                          <button type="button" style={styles.removeFieldBtn} onClick={() => removeField(ei, fi)}>
-                            <X size={11} />
-                          </button>
+                          <span style={styles.colon}>:</span>
+                          <select
+                            style={{ ...styles.input, ...styles.fieldTypeSelect }}
+                            value={field.type}
+                            onChange={(e) => {
+                              const t = e.target.value;
+                              updateField(ei, fi, { type: t, size: t === 'string' ? (field.size ?? 10) : undefined });
+                            }}
+                          >
+                            {FIELD_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                          </select>
+                          {field.type === 'string' && (
+                            <input
+                              style={{ ...styles.input, ...styles.sizeInput }}
+                              type="number"
+                              min={1}
+                              value={field.size ?? 10}
+                              onChange={(e) => updateField(ei, fi, { size: Number(e.target.value) || 1 })}
+                              title="Tamaño varchar"
+                            />
+                          )}
+                          <label style={styles.requiredLabel}>
+                            <input
+                              type="checkbox"
+                              checked={field.required}
+                              disabled={fi === 0}
+                              onChange={(e) => updateField(ei, fi, { required: e.target.checked })}
+                            />
+                            <span style={{ marginLeft: 4, fontSize: 11, color: '#5a6a85' }}>req</span>
+                          </label>
+                          {fi > 0 && (
+                            <button type="button" style={styles.removeFieldBtn} onClick={() => removeField(ei, fi)}>
+                              <X size={11} />
+                            </button>
+                          )}
+                        </div>
+                        {/* PK / Identity / Unique toggles — first field only */}
+                        {fi === 0 && (
+                          <div style={styles.pkRow}>
+                            <span style={styles.fieldIndent} /><span style={styles.fieldIndent} />
+                            <label style={styles.pkToggle}>
+                              <input type="checkbox" checked={!!field.isPk} onChange={(e) => updateField(ei, fi, { isPk: e.target.checked })} />
+                              <span>PK</span>
+                            </label>
+                            <label style={{ ...styles.pkToggle, opacity: field.type !== 'number' ? 0.45 : 1 }}>
+                              <input
+                                type="checkbox"
+                                checked={!!field.isIdentity}
+                                disabled={field.type !== 'number'}
+                                onChange={(e) => updateField(ei, fi, { isIdentity: e.target.checked })}
+                              />
+                              <span>Identity (1,1)</span>
+                            </label>
+                            <label style={styles.pkToggle}>
+                              <input type="checkbox" checked={!!field.isUnique} onChange={(e) => updateField(ei, fi, { isUnique: e.target.checked })} />
+                              <span>Unique</span>
+                            </label>
+                          </div>
                         )}
                       </div>
                     ))}
@@ -178,6 +237,20 @@ export default function Domains() {
                     <button type="button" style={styles.addFieldBtn} onClick={() => addField(ei)}>
                       <PlusCircle size={12} /> agregar campo
                     </button>
+
+                    {/* Audit fields — always locked */}
+                    <div style={styles.auditSection}>
+                      <div style={styles.auditHeader}><Lock size={10} /> campos de auditoría (fijos)</div>
+                      {AUDIT_FIELDS.map((f) => (
+                        <div key={f.name} style={styles.auditRow}>
+                          <span style={styles.fieldIndent} />
+                          <span style={styles.auditName}>{f.name}</span>
+                          <span style={styles.colon}>:</span>
+                          <span style={styles.auditType}>{f.type}{f.size ? `(${f.size})` : ''}</span>
+                          <span style={styles.auditNull}>{f.required ? 'not null' : 'null'}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <div style={styles.braceClose}>{'}'}</div>
@@ -214,21 +287,26 @@ export default function Domains() {
                   </div>
                 </div>
 
-                {d.entities.map((entity) => (
-                  <div key={entity.name} style={styles.entityPreview}>
-                    <div style={styles.entityPreviewName}>
-                      <Tag size={11} /> {entity.name}
+                {d.entities.map((entity) => {
+                  const userFields = entity.fields.filter((f) => !AUDIT_NAMES.has(f.name));
+                  return (
+                    <div key={entity.name} style={styles.entityPreview}>
+                      <div style={styles.entityPreviewName}>
+                        <Tag size={11} /> {entity.name}
+                      </div>
+                      <div style={styles.entityPreviewFields}>
+                        {userFields.map((f) => (
+                          <span key={f.name} style={styles.fieldChip}>
+                            <span style={{ color: '#003087', fontWeight: 600 }}>{f.name}</span>
+                            {f.isPk && <span style={styles.pkBadge}>PK</span>}
+                            <span style={{ color: '#5a6a85' }}>: {f.type}{f.size ? `(${f.size})` : ''}{f.required ? '' : '?'}</span>
+                          </span>
+                        ))}
+                        <span style={styles.auditChip}><Lock size={9} /> +5 auditoría</span>
+                      </div>
                     </div>
-                    <div style={styles.entityPreviewFields}>
-                      {entity.fields.map((f) => (
-                        <span key={f.name} style={styles.fieldChip}>
-                          <span style={{ color: '#003087', fontWeight: 600 }}>{f.name}</span>
-                          <span style={{ color: '#5a6a85' }}>: {f.type}{f.required ? '' : '?'}</span>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </Card>
             );
           })
@@ -260,10 +338,13 @@ const styles: Record<string, React.CSSProperties> = {
   removeEntityBtn: { marginLeft: 'auto', background: '#fdecea', border: 'none', borderRadius: 6, padding: '4px 6px', cursor: 'pointer', color: '#d32f2f', display: 'flex', alignItems: 'center' },
   fieldsArea: { paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 6 },
   fieldRow: { display: 'flex', alignItems: 'center', gap: 8 },
+  pkRow: { display: 'flex', alignItems: 'center', gap: 12, marginTop: 4 },
+  pkToggle: { display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: '#0050b3', cursor: 'pointer', background: '#e8f0fe', padding: '3px 8px', borderRadius: 5, border: '1px solid #b3c8f0' },
   fieldIndent: { width: 16, flexShrink: 0 },
   fieldNameInput: { width: 140 },
   colon: { color: '#5a6a85', fontWeight: 700 },
   fieldTypeSelect: { width: 100, color: '#0050b3' },
+  sizeInput: { width: 56, textAlign: 'center', color: '#5a6a85', padding: '8px 6px' },
   requiredLabel: { display: 'flex', alignItems: 'center', cursor: 'pointer', flexShrink: 0 },
   removeFieldBtn: { background: 'none', border: 'none', cursor: 'pointer', color: '#d32f2f', padding: 2, display: 'flex', alignItems: 'center' },
   addFieldBtn: {
@@ -271,6 +352,12 @@ const styles: Record<string, React.CSSProperties> = {
     background: 'none', border: '1px dashed #b3c8f0', borderRadius: 6,
     padding: '5px 12px', fontSize: 12, color: '#0050b3', cursor: 'pointer',
   },
+  auditSection: { marginTop: 10, borderTop: '1px dashed #d1d9e6', paddingTop: 8 },
+  auditHeader: { display: 'flex', alignItems: 'center', gap: 5, fontSize: 10, fontWeight: 700, color: '#5a6a85', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 },
+  auditRow: { display: 'flex', alignItems: 'center', gap: 8, opacity: 0.6 },
+  auditName: { fontSize: 12, color: '#5a6a85', width: 140 },
+  auditType: { fontSize: 12, color: '#0050b3', width: 100 },
+  auditNull: { fontSize: 11, color: '#9aabad', fontStyle: 'italic' },
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 },
   empty: { color: '#5a6a85', fontSize: 14, textAlign: 'center', padding: '32px 0' },
   domainHeader: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 },
@@ -280,5 +367,7 @@ const styles: Record<string, React.CSSProperties> = {
   entityPreview: { marginBottom: 10 },
   entityPreviewName: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: '#0050b3', marginBottom: 4 },
   entityPreviewFields: { display: 'flex', flexWrap: 'wrap', gap: 4, paddingLeft: 16 },
-  fieldChip: { background: '#f4f6f9', padding: '2px 8px', borderRadius: 4, fontSize: 11, fontFamily: 'monospace' },
+  fieldChip: { background: '#f4f6f9', padding: '2px 8px', borderRadius: 4, fontSize: 11, fontFamily: 'monospace', display: 'flex', alignItems: 'center', gap: 4 },
+  pkBadge: { background: '#003087', color: '#fff', fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 3 },
+  auditChip: { background: '#f0f2f5', color: '#9aabad', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontFamily: 'monospace', display: 'flex', alignItems: 'center', gap: 3 },
 };
