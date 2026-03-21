@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FileCode, Plus, Trash2, Download, Check, X, Tag } from 'lucide-react';
 import api from '../api/client';
-import Card from '../components/Card';
-import Btn from '../components/Btn';
+import { Button, Card, PageHeader, TextInput, SelectInput } from '@jarvis/design-system';
 
 interface EntityField { name: string; type: string; required: boolean }
 interface DomainEntity { name: string; fields: EntityField[] }
@@ -74,46 +73,45 @@ export default function OpenApiSpecs() {
       .catch(() => toast.error('Error al descargar'));
   };
 
+  const domainOptions = [
+    { value: '', label: '-- Seleccionar dominio --' },
+    ...domains.map((d) => ({ value: d.id, label: `${d.name} (${d.entities.length} entidades)` })),
+  ];
+
   return (
     <div>
-      <div style={styles.pageHeader}>
-        <FileCode size={22} color="#003087" />
-        <div>
-          <h1 style={styles.pageTitle}>OpenAPI Specs</h1>
-          <p style={styles.pageDesc}>Contratos OpenAPI generados desde dominios</p>
-        </div>
-        <Btn onClick={() => { resetForm(); setShowForm(true); }} style={{ marginLeft: 'auto' }}>
-          <Plus size={15} /> Nuevo Spec
-        </Btn>
-      </div>
+      <PageHeader
+        icon={<FileCode size={20} />}
+        title="OpenAPI Specs"
+        description="Contratos OpenAPI generados desde dominios"
+        actions={
+          <Button onClick={() => { resetForm(); setShowForm(true); }}>
+            <Plus size={15} style={{ marginRight: 6 }} /> Nuevo Spec
+          </Button>
+        }
+      />
 
       {showForm && (
         <Card title="Nuevo OpenAPI Spec" style={{ marginBottom: 24 }}>
           <form onSubmit={save}>
             <div style={styles.formRow}>
-              <div style={{ ...styles.field, flex: 2 }}>
-                <label style={styles.label}>Nombre del spec</label>
-                <input
-                  style={styles.input}
+              <div style={{ flex: 2 }}>
+                <TextInput
+                  label="Nombre del spec"
                   value={specName}
-                  onChange={(e) => setSpecName(e.target.value)}
+                  onChange={setSpecName}
                   placeholder="ej: patients-api"
                   required
                 />
               </div>
-              <div style={{ ...styles.field, flex: 2 }}>
-                <label style={styles.label}>Dominio</label>
-                <select
-                  style={styles.input}
+              <div style={{ flex: 2 }}>
+                <SelectInput
+                  label="Dominio"
                   value={selectedDomainId}
-                  onChange={(e) => onDomainChange(e.target.value)}
+                  onChange={onDomainChange}
+                  options={domainOptions}
                   required
-                >
-                  <option value="">-- Seleccionar dominio --</option>
-                  {domains.map((d) => (
-                    <option key={d.id} value={d.id}>{d.name} ({d.entities.length} entidades)</option>
-                  ))}
-                </select>
+                />
               </div>
             </div>
 
@@ -142,21 +140,25 @@ export default function OpenApiSpecs() {
                       <div
                         key={entity.name}
                         onClick={() => toggleEntity(entity.name)}
-                        style={{ ...styles.entityCheckItem, borderColor: checked ? '#003087' : '#d1d9e6', background: checked ? '#e8f0fe' : '#fff' }}
+                        style={{
+                          ...styles.entityCheckItem,
+                          borderColor: checked ? 'var(--jarvis-primary)' : 'var(--jarvis-border)',
+                          background: checked ? 'var(--jarvis-hover)' : '#fff',
+                        }}
                       >
                         <div style={{
                           width: 16, height: 16, borderRadius: 4, flexShrink: 0,
-                          border: `2px solid ${checked ? '#003087' : '#d1d9e6'}`,
-                          background: checked ? '#003087' : '#fff',
+                          border: `2px solid ${checked ? 'var(--jarvis-primary)' : 'var(--jarvis-border)'}`,
+                          background: checked ? 'var(--jarvis-primary)' : '#fff',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}>
                           {checked && <Check size={10} color="#fff" />}
                         </div>
-                        <Tag size={12} color={checked ? '#003087' : '#5a6a85'} />
-                        <span style={{ fontSize: 13, color: checked ? '#003087' : '#1a2a4a', fontWeight: checked ? 600 : 400 }}>
+                        <Tag size={12} color={checked ? 'var(--jarvis-primary)' : 'var(--jarvis-text-secondary)'} />
+                        <span style={{ fontSize: 13, color: checked ? 'var(--jarvis-primary)' : 'var(--jarvis-text)', fontWeight: checked ? 600 : 400 }}>
                           {entity.name}
                         </span>
-                        <span style={{ fontSize: 11, color: '#5a6a85', marginLeft: 'auto' }}>
+                        <span style={{ fontSize: 11, color: 'var(--jarvis-text-secondary)', marginLeft: 'auto' }}>
                           {entity.fields.length} campos
                         </span>
                       </div>
@@ -172,12 +174,14 @@ export default function OpenApiSpecs() {
             )}
 
             {selectedDomain && selectedDomain.entities.length === 0 && (
-              <p style={{ fontSize: 13, color: '#5a6a85', marginTop: 16 }}>Este dominio no tiene entidades configuradas.</p>
+              <p style={{ fontSize: 13, color: 'var(--jarvis-text-secondary)', marginTop: 16 }}>Este dominio no tiene entidades configuradas.</p>
             )}
 
             <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-              <Btn type="submit"><Check size={14} /> Generar Spec</Btn>
-              <Btn variant="ghost" onClick={resetForm} type="button"><X size={14} /> Cancelar</Btn>
+              <Button type="submit"><Check size={14} style={{ marginRight: 6 }} /> Generar Spec</Button>
+              <Button variant="ghost" onClick={resetForm} type="button">
+                <X size={14} style={{ marginRight: 6 }} /> Cancelar
+              </Button>
             </div>
           </form>
         </Card>
@@ -190,18 +194,18 @@ export default function OpenApiSpecs() {
           list.map((spec) => (
             <Card key={spec.id} style={{ position: 'relative' }}>
               <div style={styles.specHeader}>
-                <div style={styles.specIcon}><FileCode size={18} color="#003087" /></div>
+                <div style={styles.specIcon}><FileCode size={18} color="var(--jarvis-primary)" /></div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={styles.specName}>{spec.name}</div>
                   <div style={styles.specDomain}>{spec.domainName}</div>
                 </div>
                 <div style={{ display: 'flex', gap: 6 }}>
-                  <Btn size="sm" variant="secondary" onClick={() => download(spec.id, spec.name)}>
-                    <Download size={13} /> YAML
-                  </Btn>
-                  <Btn size="sm" variant="danger" onClick={() => remove(spec.id)}>
+                  <Button size="sm" variant="secondary" onClick={() => download(spec.id, spec.name)}>
+                    <Download size={13} style={{ marginRight: 4 }} /> YAML
+                  </Button>
+                  <Button size="sm" variant="danger" onClick={() => remove(spec.id)}>
                     <Trash2 size={13} />
-                  </Btn>
+                  </Button>
                 </div>
               </div>
 
@@ -230,29 +234,23 @@ export default function OpenApiSpecs() {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  pageHeader: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 },
-  pageTitle: { fontSize: 22, fontWeight: 700, color: '#003087' },
-  pageDesc: { fontSize: 13, color: '#5a6a85', marginTop: 2 },
   formRow: { display: 'flex', gap: 16 },
-  field: { display: 'flex', flexDirection: 'column', gap: 6 },
-  label: { fontSize: 13, fontWeight: 600, color: '#1a2a4a' },
-  input: { padding: '8px 12px', borderRadius: 8, border: '1.5px solid #d1d9e6', fontSize: 13, outline: 'none', background: '#fff' },
   sectionHeader: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
-  sectionTitle: { fontSize: 13, fontWeight: 700, color: '#003087' },
-  selectAllBtn: { fontSize: 12, color: '#003087', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 },
-  entityCheckGrid: { display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 260, overflowY: 'auto', border: '1.5px solid #d1d9e6', borderRadius: 8, padding: 8, background: '#fff' },
+  sectionTitle: { fontSize: 13, fontWeight: 700, color: 'var(--jarvis-primary)' },
+  selectAllBtn: { fontSize: 12, color: 'var(--jarvis-primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 },
+  entityCheckGrid: { display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 260, overflowY: 'auto', border: '1.5px solid var(--jarvis-border)', borderRadius: 8, padding: 8, background: '#fff' },
   entityCheckItem: { display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 8, border: '1.5px solid', cursor: 'pointer', transition: 'all 0.15s' },
-  selectionSummary: { marginTop: 10, padding: '8px 12px', background: '#e8f0fe', borderRadius: 8, fontSize: 12, color: '#003087', fontWeight: 600 },
+  selectionSummary: { marginTop: 10, padding: '8px 12px', background: 'var(--jarvis-hover)', borderRadius: 8, fontSize: 12, color: 'var(--jarvis-primary)', fontWeight: 600 },
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 },
-  empty: { color: '#5a6a85', fontSize: 14, textAlign: 'center', padding: '32px 0' },
+  empty: { color: 'var(--jarvis-text-secondary)', fontSize: 14, textAlign: 'center', padding: '32px 0' },
   specHeader: { display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 14 },
-  specIcon: { width: 40, height: 40, borderRadius: 10, background: '#e8f0fe', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  specName: { fontWeight: 700, fontSize: 15, color: '#003087', marginBottom: 2 },
-  specDomain: { fontSize: 11, color: '#5a6a85' },
+  specIcon: { width: 40, height: 40, borderRadius: 10, background: 'var(--jarvis-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  specName: { fontWeight: 700, fontSize: 15, color: 'var(--jarvis-primary)', marginBottom: 2 },
+  specDomain: { fontSize: 11, color: 'var(--jarvis-text-secondary)' },
   entitiesSection: { marginBottom: 12 },
-  entitiesLabel: { fontSize: 11, fontWeight: 700, color: '#5a6a85', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 },
+  entitiesLabel: { fontSize: 11, fontWeight: 700, color: 'var(--jarvis-text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 },
   entityChips: { display: 'flex', flexWrap: 'wrap', gap: 4 },
-  entityChip: { background: '#f4f6f9', color: '#0050b3', padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 500, display: 'flex', alignItems: 'center', gap: 4 },
-  specMeta: { borderTop: '1px solid #f0f2f5', paddingTop: 10, marginTop: 4 },
-  metaDate: { fontSize: 11, color: '#5a6a85' },
+  entityChip: { background: 'var(--jarvis-bg)', color: 'var(--jarvis-primary)', padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 500, display: 'flex', alignItems: 'center', gap: 4 },
+  specMeta: { borderTop: '1px solid var(--jarvis-border)', paddingTop: 10, marginTop: 4 },
+  metaDate: { fontSize: 11, color: 'var(--jarvis-text-secondary)' },
 };

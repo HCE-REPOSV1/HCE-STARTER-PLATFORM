@@ -1,24 +1,30 @@
-/* Clínica San Felipe - Paleta institucional */
+/* Jarvis Platform — Corporate color system */
 :root {
-  --csf-blue: #003087;
-  --csf-blue-mid: #0050b3;
-  --csf-blue-light: #1a73e8;
-  --csf-blue-pale: #e8f0fe;
-  --csf-white: #ffffff;
-  --csf-gray-light: #f4f6f9;
-  --csf-gray-mid: #d1d9e6;
-  --csf-gray-text: #5a6a85;
-  --csf-danger: #d32f2f;
-  --csf-success: #2e7d32;
-  --csf-warning: #f57c00;
+  --jarvis-primary: #1E4FA3;
+  --jarvis-navy: #1A3A6B;
+  --jarvis-blue-mid: #2B5BA8;
+  --jarvis-bg: #F7F9FC;
+  --jarvis-surface: #FFFFFF;
+  --jarvis-text: #1C2B4A;
+  --jarvis-text-secondary: #5A6A85;
+  --jarvis-border: #D0DBF0;
+  --jarvis-hover: #EEF2F9;
+  --jarvis-row-alt: #F4F7FB;
+  --jarvis-success: #27AE60;
+  --jarvis-error: #E53E3E;
+  --jarvis-warning: #F6A623;
+  --jarvis-info: #3498DB;
+  --jarvis-shadow: 0 2px 12px rgba(26,58,107,0.08);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  background: var(--csf-gray-light);
-  color: #1a2a4a;
+  margin: 0;
+  padding: 0;
+  font-family: 'IBM Plex Sans', 'Roboto', system-ui, sans-serif;
+  background: var(--jarvis-bg);
+  color: var(--jarvis-text);
 }
 
 button {

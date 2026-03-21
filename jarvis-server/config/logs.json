@@ -1,320 +1,6 @@
 [
   {
-    "timestamp": "2026-03-19T18:18:08.394Z",
-    "user": "admin",
-    "action": "CREATE_DOMAIN",
-    "details": {
-      "name": "Patients"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T18:18:18.350Z",
-    "user": "admin",
-    "action": "GENERATE_MICROSERVICE",
-    "details": {
-      "serviceName": "ds-patient",
-      "type": "UX"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T18:52:54.407Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "9c8384fe-dd86-4d39-b3f4-820859b0d2ea"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T18:53:11.698Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "9c8384fe-dd86-4d39-b3f4-820859b0d2ea"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T20:56:09.114Z",
-    "user": "admin",
-    "action": "DELETE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "9c8384fe-dd86-4d39-b3f4-820859b0d2ea"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T20:57:22.917Z",
-    "user": "admin",
-    "action": "CREATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "name": "billing"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T20:57:58.703Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "a320cbee-77ba-4fd0-aaa5-f0ca65190d3c"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T20:58:53.876Z",
-    "user": "admin",
-    "action": "CREATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "name": "clinical"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T20:59:38.728Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "e56c0963-b490-4461-8efc-d32a2b1540a1"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:02:39.676Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "e56c0963-b490-4461-8efc-d32a2b1540a1"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:03:39.807Z",
-    "user": "admin",
-    "action": "CREATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "name": "common"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:04:15.084Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "450f0899-2670-432e-8b79-f792ce934b1d"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:04:39.418Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "450f0899-2670-432e-8b79-f792ce934b1d"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:05:08.588Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "450f0899-2670-432e-8b79-f792ce934b1d"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:05:29.991Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "450f0899-2670-432e-8b79-f792ce934b1d"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:05:51.236Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "450f0899-2670-432e-8b79-f792ce934b1d"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:06:11.508Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "450f0899-2670-432e-8b79-f792ce934b1d"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:06:44.664Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "450f0899-2670-432e-8b79-f792ce934b1d"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:07:08.812Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "450f0899-2670-432e-8b79-f792ce934b1d"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:07:51.544Z",
-    "user": "admin",
-    "action": "CREATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "name": "encounter"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:08:29.796Z",
-    "user": "admin",
-    "action": "CREATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "name": "infraestructure"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:08:57.589Z",
-    "user": "admin",
-    "action": "CREATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "name": "organization"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:09:56.417Z",
-    "user": "admin",
-    "action": "CREATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "name": "patient"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:10:29.901Z",
-    "user": "admin",
-    "action": "CREATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "name": "practitioner"
-    }
-  },
-  {
-    "timestamp": "2026-03-19T21:11:09.628Z",
-    "user": "admin",
-    "action": "CREATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "name": "scheduling"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T01:13:58.396Z",
-    "user": "admin",
-    "action": "CREATE_DATASOURCE",
-    "module": "datasources",
-    "level": "INFO",
-    "details": {
-      "id": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77",
-      "database": "clinica"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T01:20:21.140Z",
-    "user": "admin",
-    "action": "CREATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "name": "pruebas_server"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T01:26:44.806Z",
-    "user": "admin",
-    "action": "TEST_DATASOURCE",
-    "module": "datasources",
-    "level": "INFO",
-    "details": {
-      "id": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77",
-      "success": true
-    }
-  },
-  {
-    "timestamp": "2026-03-20T01:28:55.832Z",
-    "user": "admin",
-    "action": "GENERATE_MICROSERVICE",
-    "module": "generator",
-    "level": "INFO",
-    "details": {
-      "serviceName": "ms-cn-pruebas-service",
-      "type": "CN",
-      "architecture": "hexagonal"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T01:38:17.758Z",
-    "user": "admin",
-    "action": "GENERATE_MICROSERVICE",
-    "module": "generator",
-    "level": "INFO",
-    "details": {
-      "serviceName": "ms-cn-pruebas-service",
-      "type": "CN",
-      "architecture": "hexagonal"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T01:42:50.516Z",
-    "user": "admin",
-    "action": "TEST_DATASOURCE",
-    "module": "datasources",
-    "level": "INFO",
-    "details": {
-      "id": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77",
-      "success": true
-    }
-  },
-  {
-    "timestamp": "2026-03-20T18:15:07.952Z",
+    "timestamp": "2026-03-20T23:51:48.992Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -322,7 +8,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:07.960Z",
+    "timestamp": "2026-03-20T23:51:49.000Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -330,7 +16,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:08.989Z",
+    "timestamp": "2026-03-20T23:52:05.059Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -338,7 +24,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:09.005Z",
+    "timestamp": "2026-03-20T23:52:05.064Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -346,7 +32,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:09.671Z",
+    "timestamp": "2026-03-20T23:54:32.154Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -354,7 +40,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:09.677Z",
+    "timestamp": "2026-03-20T23:54:32.159Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -362,7 +48,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:10.205Z",
+    "timestamp": "2026-03-20T23:54:39.521Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -370,7 +56,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:10.213Z",
+    "timestamp": "2026-03-20T23:54:39.526Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -378,7 +64,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:18.177Z",
+    "timestamp": "2026-03-20T23:54:46.231Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -386,7 +72,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:18.185Z",
+    "timestamp": "2026-03-20T23:54:46.236Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -394,7 +80,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:21.616Z",
+    "timestamp": "2026-03-20T23:56:09.595Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -402,7 +88,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:21.621Z",
+    "timestamp": "2026-03-20T23:56:09.600Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -410,7 +96,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:23.523Z",
+    "timestamp": "2026-03-20T23:56:14.420Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -418,7 +104,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:15:23.531Z",
+    "timestamp": "2026-03-20T23:56:14.424Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -426,7 +112,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:16:23.430Z",
+    "timestamp": "2026-03-20T23:56:17.700Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -434,7 +120,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:16:23.438Z",
+    "timestamp": "2026-03-20T23:56:17.706Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -442,18 +128,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:16:39.462Z",
-    "user": "admin",
-    "action": "CREATE_OPENAPI_SPEC",
-    "module": "system",
-    "level": "INFO",
-    "details": {
-      "name": "pruebas-api",
-      "domainId": "5e42f907-dafe-4360-a58a-7fcf651b232f"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T18:16:39.467Z",
+    "timestamp": "2026-03-20T23:57:57.192Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -461,7 +136,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:16:41.965Z",
+    "timestamp": "2026-03-20T23:57:57.198Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -469,7 +144,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:16:41.973Z",
+    "timestamp": "2026-03-20T23:58:23.905Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -477,7 +152,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:21:32.278Z",
+    "timestamp": "2026-03-20T23:58:23.914Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -485,7 +160,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:21:32.293Z",
+    "timestamp": "2026-03-20T23:59:35.753Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -493,7 +168,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:25:08.149Z",
+    "timestamp": "2026-03-20T23:59:35.761Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -501,7 +176,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:25:08.156Z",
+    "timestamp": "2026-03-21T00:00:53.298Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -509,7 +184,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:25:13.832Z",
+    "timestamp": "2026-03-21T00:00:53.304Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -517,7 +192,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:25:13.836Z",
+    "timestamp": "2026-03-21T00:00:57.764Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -525,29 +200,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T18:25:57.421Z",
-    "user": "admin",
-    "action": "GENERATE_MICROSERVICE",
-    "module": "generator",
-    "level": "INFO",
-    "details": {
-      "serviceName": "ms-cn-asd",
-      "type": "CN",
-      "architecture": "hexagonal"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T19:24:56.872Z",
-    "user": "admin",
-    "action": "UPDATE_DOMAIN",
-    "module": "domains",
-    "level": "INFO",
-    "details": {
-      "id": "5e42f907-dafe-4360-a58a-7fcf651b232f"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T19:24:58.989Z",
+    "timestamp": "2026-03-21T00:00:57.769Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -555,7 +208,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T19:24:58.999Z",
+    "timestamp": "2026-03-21T00:01:16.187Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -563,28 +216,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T19:25:37.175Z",
-    "user": "admin",
-    "action": "UPDATE_DATASOURCE",
-    "module": "datasources",
-    "level": "INFO",
-    "details": {
-      "id": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T19:25:43.186Z",
-    "user": "admin",
-    "action": "TEST_DATASOURCE",
-    "module": "datasources",
-    "level": "INFO",
-    "details": {
-      "id": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77",
-      "success": true
-    }
-  },
-  {
-    "timestamp": "2026-03-20T19:25:47.141Z",
+    "timestamp": "2026-03-21T00:01:16.193Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -592,7 +224,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T19:25:47.147Z",
+    "timestamp": "2026-03-21T00:08:49.848Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -600,7 +232,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T19:25:53.116Z",
+    "timestamp": "2026-03-21T00:08:49.861Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -608,7 +240,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T19:25:53.121Z",
+    "timestamp": "2026-03-21T00:08:58.247Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",
@@ -616,320 +248,7 @@
     "details": {}
   },
   {
-    "timestamp": "2026-03-20T19:25:56.402Z",
-    "user": "admin",
-    "action": "DELETE_OPENAPI_SPEC",
-    "module": "system",
-    "level": "WARN",
-    "details": {
-      "id": "60ce7aec-7c43-4e62-a541-0ada561c3105"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T19:25:56.412Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T19:26:09.181Z",
-    "user": "admin",
-    "action": "CREATE_OPENAPI_SPEC",
-    "module": "system",
-    "level": "INFO",
-    "details": {
-      "name": "pruebas-nuevas",
-      "domainId": "5e42f907-dafe-4360-a58a-7fcf651b232f"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T19:26:09.198Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T19:26:12.395Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T19:26:12.410Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T19:26:38.811Z",
-    "user": "admin",
-    "action": "GENERATE_MICROSERVICE",
-    "module": "generator",
-    "level": "INFO",
-    "details": {
-      "serviceName": "ms-cn-pruebas",
-      "type": "CN",
-      "architecture": "hexagonal"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T19:42:37.883Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T19:42:37.893Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T19:42:41.056Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T19:42:41.061Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T19:59:07.007Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T19:59:07.019Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:06:53.500Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:06:53.505Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:06:56.421Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:06:56.427Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:06:58.763Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:06:58.768Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:09:27.424Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:09:27.431Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:10:59.931Z",
-    "user": "admin",
-    "action": "GENERATE_MICROSERVICE",
-    "module": "generator",
-    "level": "INFO",
-    "details": {
-      "serviceName": "auth-pruebas-auth",
-      "type": "AA",
-      "architecture": "hexagonal"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T20:14:23.322Z",
-    "user": "admin",
-    "action": "GENERATE_MICROSERVICE",
-    "module": "generator",
-    "level": "INFO",
-    "details": {
-      "serviceName": "auth-pruebas-auth",
-      "type": "AA",
-      "architecture": "hexagonal"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T20:17:28.838Z",
-    "user": "admin",
-    "action": "GENERATE_MICROSERVICE",
-    "module": "generator",
-    "level": "INFO",
-    "details": {
-      "serviceName": "auth-asdfghj",
-      "type": "AA",
-      "architecture": "hexagonal"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T20:20:28.198Z",
-    "user": "admin",
-    "action": "GENERATE_MICROSERVICE",
-    "module": "generator",
-    "level": "INFO",
-    "details": {
-      "serviceName": "gw-qwesdf",
-      "type": "AG",
-      "architecture": "hexagonal"
-    }
-  },
-  {
-    "timestamp": "2026-03-20T20:24:54.793Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:24:54.802Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:25:02.647Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:25:02.657Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:46:17.189Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T20:46:17.195Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T21:10:07.087Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T21:10:07.093Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T21:10:17.953Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T21:10:17.958Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T21:10:31.596Z",
-    "user": "admin",
-    "action": "LIST_OPENAPI_SPECS",
-    "module": "system",
-    "level": "INFO",
-    "details": {}
-  },
-  {
-    "timestamp": "2026-03-20T21:10:31.601Z",
+    "timestamp": "2026-03-21T00:08:58.252Z",
     "user": "admin",
     "action": "LIST_OPENAPI_SPECS",
     "module": "system",

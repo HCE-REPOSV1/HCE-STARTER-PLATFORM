@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Globe, Plus, Trash2, Edit2, X, Check, Tag, PlusCircle, Lock } from 'lucide-react';
 import api from '../api/client';
-import Card from '../components/Card';
-import Btn from '../components/Btn';
+import { Button, Card, PageHeader, TextInput, SelectInput } from '@jarvis/design-system';
 
 interface EntityField {
   name: string; type: string; required: boolean;
@@ -106,46 +105,61 @@ export default function Domains() {
     setEntities(next);
   };
 
+  const datasourceOptions = [
+    { value: '', label: '-- Sin datasource --' },
+    ...datasources.map((ds) => ({ value: ds.id, label: `${ds.engine} — ${ds.database}` })),
+  ];
+
   return (
     <div>
-      <div style={styles.pageHeader}>
-        <Globe size={22} color="#003087" />
-        <div>
-          <h1 style={styles.pageTitle}>Domains</h1>
-          <p style={styles.pageDesc}>Gestión de dominios clínicos (modelo HL7-like)</p>
-        </div>
-        <Btn onClick={() => { resetForm(); setShowForm(true); }} style={{ marginLeft: 'auto' }}>
-          <Plus size={15} /> Nuevo dominio
-        </Btn>
-      </div>
+      <PageHeader
+        icon={<Globe size={20} />}
+        title="Domains"
+        description="Gestión de dominios clínicos (modelo HL7-like)"
+        actions={
+          <Button onClick={() => { resetForm(); setShowForm(true); }}>
+            <Plus size={15} style={{ marginRight: 6 }} /> Nuevo dominio
+          </Button>
+        }
+      />
 
       {showForm && (
         <Card title={editId ? 'Editar Dominio' : 'Nuevo Dominio'} style={{ marginBottom: 24 }}>
           <form onSubmit={save}>
             <div style={styles.formRow}>
-              <div style={{ ...styles.field, flex: 2 }}>
-                <label style={styles.label}>Nombre del dominio</label>
-                <input style={styles.input} value={domainName} onChange={(e) => setDomainName(e.target.value)} placeholder="ej: Patients" required />
+              <div style={{ flex: 2 }}>
+                <TextInput
+                  label="Nombre del dominio"
+                  value={domainName}
+                  onChange={setDomainName}
+                  placeholder="ej: Patients"
+                  required
+                />
               </div>
-              <div style={{ ...styles.field, flex: 1 }}>
-                <label style={styles.label}>Schema de BD</label>
-                <input style={styles.input} value={domainSchema} onChange={(e) => setDomainSchema(e.target.value)} placeholder="ej: clinica" />
+              <div style={{ flex: 1 }}>
+                <TextInput
+                  label="Schema de BD"
+                  value={domainSchema}
+                  onChange={setDomainSchema}
+                  placeholder="ej: clinica"
+                />
               </div>
-              <div style={{ ...styles.field, flex: 2 }}>
-                <label style={styles.label}>Datasource (opcional)</label>
-                <select style={styles.input} value={datasourceId} onChange={(e) => setDatasourceId(e.target.value)}>
-                  <option value="">-- Sin datasource --</option>
-                  {datasources.map((ds) => <option key={ds.id} value={ds.id}>{ds.engine} — {ds.database}</option>)}
-                </select>
+              <div style={{ flex: 2 }}>
+                <SelectInput
+                  label="Datasource (opcional)"
+                  value={datasourceId}
+                  onChange={setDatasourceId}
+                  options={datasourceOptions}
+                />
               </div>
             </div>
 
             <div style={{ marginTop: 20 }}>
               <div style={styles.sectionHeader}>
                 <span style={styles.sectionTitle}>Entidades del dominio</span>
-                <Btn size="sm" variant="secondary" onClick={addEntity} type="button">
-                  <PlusCircle size={13} /> Agregar entidad
-                </Btn>
+                <Button size="sm" variant="secondary" onClick={addEntity} type="button">
+                  <PlusCircle size={13} style={{ marginRight: 4 }} /> Agregar entidad
+                </Button>
               </div>
 
               {entities.map((entity, ei) => (
@@ -205,7 +219,7 @@ export default function Domains() {
                               disabled={fi === 0}
                               onChange={(e) => updateField(ei, fi, { required: e.target.checked })}
                             />
-                            <span style={{ marginLeft: 4, fontSize: 11, color: '#5a6a85' }}>not null</span>
+                            <span style={{ marginLeft: 4, fontSize: 11, color: 'var(--jarvis-text-secondary)' }}>not null</span>
                           </label>
                           {fi > 0 && (
                             <button type="button" style={styles.removeFieldBtn} onClick={() => removeField(ei, fi)}>
@@ -264,8 +278,8 @@ export default function Domains() {
             </div>
 
             <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-              <Btn type="submit"><Check size={14} /> Guardar dominio</Btn>
-              <Btn variant="ghost" onClick={resetForm} type="button"><X size={14} /> Cancelar</Btn>
+              <Button type="submit"><Check size={14} style={{ marginRight: 6 }} /> Guardar dominio</Button>
+              <Button variant="ghost" onClick={resetForm} type="button"><X size={14} style={{ marginRight: 6 }} /> Cancelar</Button>
             </div>
           </form>
         </Card>
@@ -281,15 +295,15 @@ export default function Domains() {
             return (
               <Card key={d.id} style={{ position: 'relative' }}>
                 <div style={styles.domainHeader}>
-                  <div style={styles.domainIcon}><Globe size={18} color="#003087" /></div>
+                  <div style={styles.domainIcon}><Globe size={18} color="var(--jarvis-primary)" /></div>
                   <div>
                     <div style={styles.domainName}>{d.name}</div>
                     {d.schema && <div style={styles.domainSchema}><code>{d.schema}</code></div>}
                     {ds && <div style={styles.domainDs}>{ds.engine} — {ds.database}</div>}
                   </div>
                   <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
-                    <Btn size="sm" variant="ghost" onClick={() => startEdit(d)}><Edit2 size={13} /></Btn>
-                    <Btn size="sm" variant="danger" onClick={() => remove(d.id)}><Trash2 size={13} /></Btn>
+                    <Button size="sm" variant="ghost" onClick={() => startEdit(d)}><Edit2 size={13} /></Button>
+                    <Button size="sm" variant="danger" onClick={() => remove(d.id)}><Trash2 size={13} /></Button>
                   </div>
                 </div>
 
@@ -303,9 +317,9 @@ export default function Domains() {
                       <div style={styles.entityPreviewFields}>
                         {userFields.map((f) => (
                           <span key={f.name} style={styles.fieldChip}>
-                            <span style={{ color: '#003087', fontWeight: 600 }}>{f.name}</span>
+                            <span style={{ color: 'var(--jarvis-primary)', fontWeight: 600 }}>{f.name}</span>
                             {f.isPk && <span style={styles.pkBadge}>PK</span>}
-                            <span style={{ color: '#5a6a85' }}>: {f.type}{f.size ? `(${f.size})` : ''}{f.required ? '' : '?'}</span>
+                            <span style={{ color: 'var(--jarvis-text-secondary)' }}>: {f.type}{f.size ? `(${f.size})` : ''}{f.required ? '' : '?'}</span>
                           </span>
                         ))}
                         <span style={styles.auditChip}><Lock size={9} /> +5 auditoría</span>
@@ -323,58 +337,53 @@ export default function Domains() {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  pageHeader: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 },
-  pageTitle: { fontSize: 22, fontWeight: 700, color: '#003087' },
-  pageDesc: { fontSize: 13, color: '#5a6a85', marginTop: 2 },
   formRow: { display: 'flex', gap: 16 },
-  field: { display: 'flex', flexDirection: 'column', gap: 6 },
-  label: { fontSize: 13, fontWeight: 600, color: '#1a2a4a' },
-  input: { padding: '8px 12px', borderRadius: 8, border: '1.5px solid #d1d9e6', fontSize: 13, outline: 'none', background: '#fff' },
   sectionHeader: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
-  sectionTitle: { fontSize: 13, fontWeight: 700, color: '#003087' },
+  sectionTitle: { fontSize: 13, fontWeight: 700, color: 'var(--jarvis-primary)' },
+  input: { padding: '8px 12px', borderRadius: 8, border: '1.5px solid var(--jarvis-border)', fontSize: 13, outline: 'none', background: '#fff' },
   entityBlock: {
-    background: '#f8faff', border: '1.5px solid #d1d9e6', borderRadius: 10,
+    background: '#f8faff', border: '1.5px solid var(--jarvis-border)', borderRadius: 10,
     padding: '14px 16px', marginBottom: 12, fontFamily: "'Fira Code', 'Consolas', monospace",
   },
   entityNameRow: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 },
-  entityDot: { width: 8, height: 8, borderRadius: '50%', background: '#003087', flexShrink: 0 },
-  entityNameInput: { width: 160, fontWeight: 700, color: '#003087', background: '#e8f0fe', border: '1.5px solid #b3c8f0' },
-  braceOpen: { color: '#5a6a85', fontSize: 16, fontWeight: 700 },
-  braceClose: { color: '#5a6a85', fontSize: 16, fontWeight: 700, marginTop: 4 },
-  removeEntityBtn: { marginLeft: 'auto', background: '#fdecea', border: 'none', borderRadius: 6, padding: '4px 6px', cursor: 'pointer', color: '#d32f2f', display: 'flex', alignItems: 'center' },
+  entityDot: { width: 8, height: 8, borderRadius: '50%', background: 'var(--jarvis-primary)', flexShrink: 0 },
+  entityNameInput: { width: 160, fontWeight: 700, color: 'var(--jarvis-primary)', background: 'var(--jarvis-hover)', border: '1.5px solid var(--jarvis-border)' },
+  braceOpen: { color: 'var(--jarvis-text-secondary)', fontSize: 16, fontWeight: 700 },
+  braceClose: { color: 'var(--jarvis-text-secondary)', fontSize: 16, fontWeight: 700, marginTop: 4 },
+  removeEntityBtn: { marginLeft: 'auto', background: '#FFEBEE', border: 'none', borderRadius: 6, padding: '4px 6px', cursor: 'pointer', color: 'var(--jarvis-error)', display: 'flex', alignItems: 'center' },
   fieldsArea: { paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 6 },
   fieldRow: { display: 'flex', alignItems: 'center', gap: 8 },
   pkRow: { display: 'flex', alignItems: 'center', gap: 12, marginTop: 4 },
-  pkToggle: { display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: '#0050b3', cursor: 'pointer', background: '#e8f0fe', padding: '3px 8px', borderRadius: 5, border: '1px solid #b3c8f0' },
+  pkToggle: { display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: 'var(--jarvis-primary)', cursor: 'pointer', background: 'var(--jarvis-hover)', padding: '3px 8px', borderRadius: 5, border: '1px solid var(--jarvis-border)' },
   fieldIndent: { width: 16, flexShrink: 0 },
   fieldNameInput: { width: 140 },
-  colon: { color: '#5a6a85', fontWeight: 700 },
-  fieldTypeSelect: { width: 100, color: '#0050b3' },
-  sizeInput: { width: 56, textAlign: 'center', color: '#5a6a85', padding: '8px 6px' },
+  colon: { color: 'var(--jarvis-text-secondary)', fontWeight: 700 },
+  fieldTypeSelect: { width: 100, color: 'var(--jarvis-primary)' },
+  sizeInput: { width: 56, textAlign: 'center', color: 'var(--jarvis-text-secondary)', padding: '8px 6px' },
   requiredLabel: { display: 'flex', alignItems: 'center', cursor: 'pointer', flexShrink: 0 },
-  removeFieldBtn: { background: 'none', border: 'none', cursor: 'pointer', color: '#d32f2f', padding: 2, display: 'flex', alignItems: 'center' },
+  removeFieldBtn: { background: 'none', border: 'none', cursor: 'pointer', color: 'var(--jarvis-error)', padding: 2, display: 'flex', alignItems: 'center' },
   addFieldBtn: {
     display: 'flex', alignItems: 'center', gap: 6, marginTop: 4,
-    background: 'none', border: '1px dashed #b3c8f0', borderRadius: 6,
-    padding: '5px 12px', fontSize: 12, color: '#0050b3', cursor: 'pointer',
+    background: 'none', border: '1px dashed var(--jarvis-border)', borderRadius: 6,
+    padding: '5px 12px', fontSize: 12, color: 'var(--jarvis-primary)', cursor: 'pointer',
   },
-  auditSection: { marginTop: 10, borderTop: '1px dashed #d1d9e6', paddingTop: 8 },
-  auditHeader: { display: 'flex', alignItems: 'center', gap: 5, fontSize: 10, fontWeight: 700, color: '#5a6a85', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 },
+  auditSection: { marginTop: 10, borderTop: '1px dashed var(--jarvis-border)', paddingTop: 8 },
+  auditHeader: { display: 'flex', alignItems: 'center', gap: 5, fontSize: 10, fontWeight: 700, color: 'var(--jarvis-text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 },
   auditRow: { display: 'flex', alignItems: 'center', gap: 8, opacity: 0.6 },
-  auditName: { fontSize: 12, color: '#5a6a85', width: 140 },
-  auditType: { fontSize: 12, color: '#0050b3', width: 100 },
+  auditName: { fontSize: 12, color: 'var(--jarvis-text-secondary)', width: 140 },
+  auditType: { fontSize: 12, color: 'var(--jarvis-primary)', width: 100 },
   auditNull: { fontSize: 11, color: '#9aabad', fontStyle: 'italic' },
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 },
-  empty: { color: '#5a6a85', fontSize: 14, textAlign: 'center', padding: '32px 0' },
+  empty: { color: 'var(--jarvis-text-secondary)', fontSize: 14, textAlign: 'center', padding: '32px 0' },
   domainHeader: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 },
-  domainIcon: { width: 40, height: 40, borderRadius: 10, background: '#e8f0fe', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  domainName: { fontWeight: 700, fontSize: 16, color: '#003087' },
-  domainSchema: { fontSize: 11, color: '#0050b3', marginTop: 2 },
-  domainDs: { fontSize: 11, color: '#5a6a85', marginTop: 2 },
+  domainIcon: { width: 40, height: 40, borderRadius: 10, background: 'var(--jarvis-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  domainName: { fontWeight: 700, fontSize: 16, color: 'var(--jarvis-primary)' },
+  domainSchema: { fontSize: 11, color: 'var(--jarvis-primary)', marginTop: 2 },
+  domainDs: { fontSize: 11, color: 'var(--jarvis-text-secondary)', marginTop: 2 },
   entityPreview: { marginBottom: 10 },
-  entityPreviewName: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: '#0050b3', marginBottom: 4 },
+  entityPreviewName: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: 'var(--jarvis-primary)', marginBottom: 4 },
   entityPreviewFields: { display: 'flex', flexWrap: 'wrap', gap: 4, paddingLeft: 16 },
-  fieldChip: { background: '#f4f6f9', padding: '2px 8px', borderRadius: 4, fontSize: 11, fontFamily: 'monospace', display: 'flex', alignItems: 'center', gap: 4 },
-  pkBadge: { background: '#003087', color: '#fff', fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 3 },
-  auditChip: { background: '#f0f2f5', color: '#9aabad', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontFamily: 'monospace', display: 'flex', alignItems: 'center', gap: 3 },
+  fieldChip: { background: 'var(--jarvis-bg)', padding: '2px 8px', borderRadius: 4, fontSize: 11, fontFamily: 'monospace', display: 'flex', alignItems: 'center', gap: 4 },
+  pkBadge: { background: 'var(--jarvis-primary)', color: '#fff', fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 3 },
+  auditChip: { background: 'var(--jarvis-row-alt)', color: '#9aabad', padding: '2px 8px', borderRadius: 4, fontSize: 10, fontFamily: 'monospace', display: 'flex', alignItems: 'center', gap: 3 },
 };

@@ -50,11 +50,13 @@ export default function Layout() {
     <div style={styles.shell}>
       {/* Sidebar */}
       <aside style={{ ...styles.sidebar, width: collapsed ? 64 : 230 }}>
-        <div style={styles.sidebarTop}>
-          <div style={styles.brand}>
-            <div style={styles.brandIcon}>J</div>
-            {!collapsed && <div><div style={styles.brandText}>Jarvis</div><div style={styles.brandSub}>Platform</div></div>}
-          </div>
+        <div style={{ ...styles.sidebarTop, justifyContent: collapsed ? 'center' : 'space-between' }}>
+          {!collapsed && (
+            <div style={styles.brand}>
+              <div style={styles.brandIcon}>J</div>
+              <div><div style={styles.brandText}>Jarvis</div><div style={styles.brandSub}>Platform</div></div>
+            </div>
+          )}
           <button style={styles.collapseBtn} onClick={() => setCollapsed(!collapsed)}>
             {collapsed ? <Menu size={15} /> : <X size={15} />}
           </button>
@@ -90,7 +92,11 @@ export default function Layout() {
           ))}
         </nav>
 
-        <button style={styles.logoutBtn} onClick={logout} title={collapsed ? 'Salir' : undefined}>
+        <button
+          style={{ ...styles.logoutBtn, justifyContent: collapsed ? 'center' : 'flex-start', margin: collapsed ? '12px auto' : 12, width: collapsed ? 40 : 'auto' }}
+          onClick={logout}
+          title={collapsed ? 'Salir' : undefined}
+        >
           <LogOut size={15} />
           {!collapsed && <span>Salir</span>}
         </button>
@@ -102,7 +108,7 @@ export default function Layout() {
           <div style={styles.headerLeft}>
             <span style={styles.headerTitle}>Jarvis Platform</span>
             <span style={styles.headerSep}>|</span>
-            <span style={styles.headerSub}>Clínica San Felipe</span>
+            <span style={styles.headerSub}>XXXXXXX</span>
           </div>
           <div style={styles.headerRight}>
             <span style={styles.headerDate}>{new Date().toLocaleDateString('es-PE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
@@ -117,10 +123,20 @@ export default function Layout() {
 
 const styles: Record<string, React.CSSProperties> = {
   shell: { display: 'flex', minHeight: '100vh' },
-  sidebar: { background: 'linear-gradient(180deg, #002060 0%, #003087 50%, #0050b3 100%)', color: '#fff', display: 'flex', flexDirection: 'column', transition: 'width 0.25s', flexShrink: 0, position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', overflowX: 'hidden' },
+  sidebar: {
+    background: 'linear-gradient(180deg, #1A3A6B 0%, #1E4FA3 60%, #2B5BA8 100%)',
+    color: '#fff', display: 'flex', flexDirection: 'column',
+    transition: 'width 0.25s', flexShrink: 0,
+    position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', overflowX: 'hidden',
+  },
   sidebarTop: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 12px 14px' },
   brand: { display: 'flex', alignItems: 'center', gap: 10 },
-  brandIcon: { width: 36, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 18, flexShrink: 0 },
+  brandIcon: {
+    width: 36, height: 36, borderRadius: 8,
+    background: 'rgba(255,255,255,0.2)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontWeight: 800, fontSize: 18, flexShrink: 0,
+  },
   brandText: { fontWeight: 800, fontSize: 16, letterSpacing: 0.5 },
   brandSub: { fontSize: 10, color: 'rgba(255,255,255,0.6)', letterSpacing: 1, textTransform: 'uppercase' },
   collapseBtn: { background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: 6, padding: 6, cursor: 'pointer', flexShrink: 0 },
@@ -133,13 +149,13 @@ const styles: Record<string, React.CSSProperties> = {
   navLabel: {},
   logoutBtn: { display: 'flex', alignItems: 'center', gap: 8, margin: 12, padding: '10px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.8)', fontSize: 13, cursor: 'pointer' },
   main: { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 },
-  header: { background: '#fff', borderBottom: '1px solid #d1d9e6', padding: '13px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 10 },
+  header: { background: '#fff', borderBottom: '1px solid #D0DBF0', padding: '13px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 10 },
   headerLeft: { display: 'flex', alignItems: 'center', gap: 10 },
-  headerTitle: { fontWeight: 700, color: '#003087', fontSize: 15 },
-  headerSep: { color: '#d1d9e6' },
-  headerSub: { fontSize: 13, color: '#5a6a85' },
+  headerTitle: { fontWeight: 700, color: '#1A3A6B', fontSize: 15 },
+  headerSep: { color: '#D0DBF0' },
+  headerSub: { fontSize: 13, color: '#5A6A85' },
   headerRight: { display: 'flex', alignItems: 'center', gap: 16 },
-  headerDate: { fontSize: 12, color: '#5a6a85' },
-  userBadge: { background: '#e8f0fe', color: '#003087', padding: '4px 12px', borderRadius: 20, fontSize: 13, fontWeight: 600 },
+  headerDate: { fontSize: 12, color: '#5A6A85' },
+  userBadge: { background: '#EEF2F9', color: '#1E4FA3', padding: '4px 12px', borderRadius: 20, fontSize: 13, fontWeight: 600 },
   content: { flex: 1, padding: 28, overflowY: 'auto' },
 };

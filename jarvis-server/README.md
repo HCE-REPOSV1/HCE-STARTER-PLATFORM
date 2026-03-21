@@ -1,8 +1,8 @@
-# Jarvis Server
+﻿# Jarvis Server
 
 > API backend de la plataforma Jarvis — Internal Developer Platform (IDP) para generación de microservicios NestJS.
 
-**Autor:** Clínica San Felipe — Equipo de Arquitectura de Software  
+**Autor:** XXXXXXX — Equipo de Arquitectura de Software  
 **Versión:** 0.0.1  
 **Stack:** NestJS 11 · TypeScript 5 · Node.js 20+
 
@@ -93,13 +93,13 @@ jarvis-server/
 C4Context
   title Jarvis Server — Contexto del sistema
 
-  Person(dev, "Desarrollador", "Equipo de desarrollo de Clínica San Felipe")
+  Person(dev, "Desarrollador", "Equipo de desarrollo de XXXXXXX")
   Person(admin, "Administrador", "Gestiona usuarios, templates y configuraciones")
 
   System(server, "Jarvis Server", "API REST NestJS — motor de generación de microservicios y gestión de la plataforma")
 
   System_Ext(ui, "Jarvis UI", "Portal web React que consume la API")
-  System_Ext(db, "Base de datos clínica", "PostgreSQL / MySQL con esquemas FHIR")
+  System_Ext(db, "Base de datos clÃ­nica", "PostgreSQL / MySQL con esquemas FHIR")
   System_Ext(git, "Repositorio Git", "GitHub / GitLab para push del código generado")
 
   Rel(dev, ui, "Usa el portal web", "HTTPS")
@@ -122,7 +122,7 @@ C4Container
   Container(server, "Jarvis Server", "NestJS 11 + TypeScript", "API REST. Puerto 3000")
   ContainerDb(config, "config/*.json", "File System (JSON)", "Persistencia ligera: dominios, usuarios, logs, generaciones, templates")
 
-  System_Ext(db, "Base de datos clínica", "PostgreSQL / MySQL")
+  System_Ext(db, "Base de datos clÃ­nica", "PostgreSQL / MySQL")
   System_Ext(git, "Repositorio Git", "GitHub / GitLab")
 
   Rel(dev, ui, "Usa", "HTTPS / Browser")

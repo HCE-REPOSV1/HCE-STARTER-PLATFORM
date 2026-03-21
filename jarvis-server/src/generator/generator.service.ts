@@ -1,4 +1,4 @@
-// generator.service.ts — Motor principal de generación de microservicios
+﻿// generator.service.ts — Motor principal de generación de microservicios
 // Soporta: UX (API First/OpenAPI), CN (BFF Canal), BS (BFF Negocio)
 // Genera: código fuente, Dockerfile, .env, README.md, openapi.yaml
 // Con TypeORM: entidades desde DB real, repositorios concretos, TypeOrmModule configurado

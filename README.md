@@ -1,8 +1,8 @@
-# Jarvis Platform
+﻿# Jarvis Platform
 
 > Internal Developer Platform (IDP) para generación automatizada de microservicios NestJS orientados a salud digital.
 
-**Autor:** Clínica San Felipe — Equipo de Arquitectura de Software  
+**Autor:** XXXXXXX — Equipo de Arquitectura de Software  
 **Proyecto:** Jarvis Platform  
 **Versión:** 1.0.0
 
@@ -10,7 +10,7 @@
 
 ## Acerca del proyecto
 
-Jarvis Platform es una plataforma de autoservicio para equipos de desarrollo de Clínica San Felipe. Permite generar microservicios NestJS completos a partir de la configuración de dominios clínicos, datasources y parámetros técnicos, sin necesidad de scaffolding manual.
+Jarvis Platform es una plataforma de autoservicio para equipos de desarrollo de XXXXXXX. Permite generar microservicios NestJS completos a partir de la configuración de dominios clínicos, datasources y parámetros técnicos, sin necesidad de scaffolding manual.
 
 Está inspirada en el concepto de IDP (Internal Developer Platform): estandarización de arquitectura, trazabilidad de generaciones y reducción del tiempo de bootstrap de nuevos servicios.
 
@@ -80,12 +80,12 @@ Accede a `http://localhost:5173` con `admin` / `admin123`.
 C4Context
   title Jarvis Platform — Contexto del sistema
 
-  Person(dev, "Desarrollador", "Equipo de desarrollo de Clínica San Felipe")
+  Person(dev, "Desarrollador", "Equipo de desarrollo de XXXXXXX")
   Person(admin, "Administrador", "Gestiona usuarios, templates y configuraciones")
 
   System(jarvis, "Jarvis Platform", "IDP para generación automatizada de microservicios NestJS orientados a salud digital")
 
-  System_Ext(db, "Base de datos clínica", "PostgreSQL / MySQL con esquemas FHIR")
+  System_Ext(db, "Base de datos clÃ­nica", "PostgreSQL / MySQL con esquemas FHIR")
   System_Ext(git, "Repositorio Git", "GitHub / GitLab para push automático del código generado")
 
   Rel(dev, jarvis, "Configura dominios y genera microservicios", "HTTPS")
@@ -109,7 +109,7 @@ C4Container
   Container(cli, "Jarvis CLI", "Node.js", "Core engine de generación de código y scaffolding de templates")
   ContainerDb(config, "config/*.json", "File System (JSON)", "Persistencia ligera: dominios, usuarios, logs, generaciones, templates")
 
-  System_Ext(db, "Base de datos clínica", "PostgreSQL / MySQL")
+  System_Ext(db, "Base de datos clÃ­nica", "PostgreSQL / MySQL")
   System_Ext(git, "Repositorio Git", "GitHub / GitLab")
 
   Rel(dev, ui, "Usa", "HTTPS / Browser")
@@ -196,7 +196,7 @@ Login
   │
   ├── Configuración
   │     ├── DataSources  → registrar conexiones BD
-  │     ├── Domains      → definir entidades clínicas (estilo FHIR)
+  │     ├── Domains      → definir entidades clÃ­nicas (estilo FHIR)
   │     ├── Templates    → gestionar catálogo de templates
   │     └── Users        → administrar equipo
   │

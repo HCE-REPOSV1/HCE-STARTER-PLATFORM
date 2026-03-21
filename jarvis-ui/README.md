@@ -1,8 +1,8 @@
-# Jarvis UI
+﻿# Jarvis UI
 
 > Interfaz web de la plataforma Jarvis — Internal Developer Platform (IDP) para generación de microservicios NestJS.
 
-**Autor:** Clínica San Felipe — Equipo de Arquitectura de Software  
+**Autor:** XXXXXXX — Equipo de Arquitectura de Software  
 **Versión:** 0.0.0  
 **Stack:** React 19 · Vite 8 · TypeScript 5 · lucide-react · react-router-dom v7
 
@@ -10,9 +10,9 @@
 
 ## Acerca del proyecto
 
-Jarvis UI es el portal web de la plataforma Jarvis. Permite a los equipos de desarrollo de Clínica San Felipe configurar dominios clínicos, datasources y generar microservicios NestJS completos desde una interfaz visual, sin necesidad de usar la línea de comandos.
+Jarvis UI es el portal web de la plataforma Jarvis. Permite a los equipos de desarrollo de XXXXXXX configurar dominios clínicos, datasources y generar microservicios NestJS completos desde una interfaz visual, sin necesidad de usar la línea de comandos.
 
-Paleta de colores institucional: `#003087` (azul Clínica San Felipe), `#ffffff` blanco, `#f4f6f9` gris claro.
+Paleta de colores institucional: `#003087` (azul XXXXXXX), `#ffffff` blanco, `#f4f6f9` gris claro.
 
 ---
 
@@ -97,7 +97,7 @@ jarvis-ui/
 C4Context
   title Jarvis UI — Contexto del sistema
 
-  Person(dev, "Desarrollador", "Equipo de desarrollo de Clínica San Felipe")
+  Person(dev, "Desarrollador", "Equipo de desarrollo de XXXXXXX")
   Person(admin, "Administrador", "Gestiona usuarios, templates y configuraciones")
 
   System(ui, "Jarvis UI", "Portal web React para configuración y generación de microservicios")
@@ -217,7 +217,7 @@ Flujo principal de la plataforma. Genera un microservicio completo en 5 pasos.
 - Selecciona el tipo:
   - `UX — Diseño`: genera solo el contrato OpenAPI/Swagger (`openapi.yaml`). Estrategia API First.
   - `CN — Canal`: genera microservicio NestJS BFF de integración con sistemas externos.
-  - `BS — Negocio`: genera microservicio NestJS BFF con lógica de negocio clínica.
+  - `BS — Negocio`: genera microservicio NestJS BFF con lógica de negocio clÃ­nica.
 - Selecciona el dominio clínico previamente creado.
 
 **Paso 2 — Configuración técnica**

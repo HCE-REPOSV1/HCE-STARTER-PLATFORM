@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../api/client';
 import { setUser } from '../store/auth';
+import { Button, TextInput, Card } from '@jarvis/design-system';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -27,39 +28,40 @@ export default function Login() {
 
   return (
     <div style={styles.page}>
-      <div style={styles.card}>
-        <div style={styles.logoArea}>
-          <div style={styles.logoCircle}>J</div>
-          <h1 style={styles.title}>Jarvis Platform</h1>
-          <p style={styles.subtitle}>Clínica San Felipe</p>
-        </div>
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.field}>
-            <label style={styles.label}>Usuario</label>
-            <input
-              style={styles.input}
-              type="text"
+      <div style={{ width: 380 }}>
+        <Card>
+          <div style={styles.logoArea}>
+            <div style={styles.logoCircle}>J</div>
+            <h1 style={styles.title}>Jarvis Platform</h1>
+            <p style={styles.subtitle}>XXXXXXX</p>
+          </div>
+          <form onSubmit={handleSubmit} style={styles.form}>
+            <TextInput
+              label="Usuario"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={setUsername}
               placeholder="admin"
               required
             />
-          </div>
-          <div style={styles.field}>
-            <label style={styles.label}>Contraseña</label>
-            <input
-              style={styles.input}
-              type="password"
+            <TextInput
+              label="Contraseña"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={setPassword}
               placeholder="••••••••"
+              type="password"
               required
             />
-          </div>
-          <button style={loading ? { ...styles.btn, opacity: 0.7 } : styles.btn} type="submit" disabled={loading}>
-            {loading ? 'Validando...' : 'Ingresar'}
-          </button>
-        </form>
+            <Button
+              type="submit"
+              variant="primary"
+              fullWidth
+              disabled={loading}
+              size="lg"
+            >
+              {loading ? 'Validando...' : 'Ingresar'}
+            </Button>
+          </form>
+        </Card>
       </div>
     </div>
   );
@@ -71,38 +73,17 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'linear-gradient(135deg, #003087 0%, #0050b3 60%, #1a73e8 100%)',
+    background: 'linear-gradient(135deg, #1A3A6B 0%, #1E4FA3 60%, #2B5BA8 100%)',
   },
-  card: {
-    background: '#fff',
-    borderRadius: 16,
-    padding: '48px 40px',
-    width: 380,
-    boxShadow: '0 20px 60px rgba(0,48,135,0.25)',
-  },
-  logoArea: { textAlign: 'center', marginBottom: 32 },
+  logoArea: { textAlign: 'center', marginBottom: 28 },
   logoCircle: {
     width: 64, height: 64, borderRadius: '50%',
-    background: 'linear-gradient(135deg, #003087, #1a73e8)',
+    background: 'linear-gradient(135deg, #1A3A6B, #1E4FA3)',
     color: '#fff', fontSize: 28, fontWeight: 700,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     margin: '0 auto 12px',
   },
-  title: { fontSize: 22, fontWeight: 700, color: '#003087' },
-  subtitle: { fontSize: 13, color: '#5a6a85', marginTop: 4 },
+  title: { fontSize: 22, fontWeight: 700, color: 'var(--jarvis-navy)', margin: 0 },
+  subtitle: { fontSize: 13, color: 'var(--jarvis-text-secondary)', marginTop: 4 },
   form: { display: 'flex', flexDirection: 'column', gap: 16 },
-  field: { display: 'flex', flexDirection: 'column', gap: 6 },
-  label: { fontSize: 13, fontWeight: 600, color: '#1a2a4a' },
-  input: {
-    padding: '10px 14px', borderRadius: 8,
-    border: '1.5px solid #d1d9e6', fontSize: 14,
-    outline: 'none', transition: 'border-color 0.2s',
-  },
-  btn: {
-    marginTop: 8, padding: '12px', borderRadius: 8,
-    background: 'linear-gradient(135deg, #003087, #1a73e8)',
-    color: '#fff', fontWeight: 700, fontSize: 15,
-    border: 'none', letterSpacing: 0.5,
-    transition: 'opacity 0.2s',
-  },
 };

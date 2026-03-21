@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Database, Plus, Trash2, TestTube, Edit2, X, Check } from 'lucide-react';
 import api from '../api/client';
-import Card from '../components/Card';
-import Btn from '../components/Btn';
+import { Button, Card, PageHeader, DataTable, TextInput, SelectInput, StatusBadge } from '@jarvis/design-system';
 
 interface DS {
   id: string; engine: string; host: string; port: number;
@@ -69,126 +68,149 @@ export default function DataSources() {
     else setForm(f => ({ ...f, engine }));
   };
 
+  const engineOptions = Object.keys(ENGINE_DEFAULTS).map((e) => ({ value: e, label: e }));
+
+  const columns = [
+    {
+      key: 'engine',
+      label: 'Motor',
+      render: (_: unknown, row: DS) => <StatusBadge label={row.engine} variant="primary" />,
+    },
+    { key: 'host', label: 'Host' },
+    { key: 'port', label: 'Puerto' },
+    { key: 'database', label: 'Database' },
+    {
+      key: 'schema',
+      label: 'Schema',
+      render: (_: unknown, row: DS) => (
+        <code style={{ background: 'var(--jarvis-bg)', padding: '2px 8px', borderRadius: 4, fontSize: 12, color: 'var(--jarvis-primary)' }}>
+          {row.schema || '—'}
+        </code>
+      ),
+    },
+    {
+      key: 'npmLibrary',
+      label: 'Librería',
+      render: (_: unknown, row: DS) => (
+        <code style={{ background: 'var(--jarvis-bg)', padding: '2px 8px', borderRadius: 4, fontSize: 12, color: 'var(--jarvis-primary)' }}>
+          {row.npmLibrary}
+        </code>
+      ),
+    },
+    {
+      key: 'actions',
+      label: 'Acciones',
+      render: (_: unknown, row: DS) => (
+        <div style={{ display: 'flex', gap: 6 }}>
+          <Button size="sm" variant="secondary" onClick={() => test(row.id)} disabled={testing === row.id}>
+            <TestTube size={13} style={{ marginRight: 4 }} />{testing === row.id ? 'Probando...' : 'Test'}
+          </Button>
+          <Button size="sm" variant="ghost" onClick={() => startEdit(row)}><Edit2 size={13} /></Button>
+          <Button size="sm" variant="danger" onClick={() => remove(row.id)}><Trash2 size={13} /></Button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div>
-      <div style={styles.pageHeader}>
-        <Database size={22} color="#003087" />
-        <div>
-          <h1 style={styles.pageTitle}>DataSources</h1>
-          <p style={styles.pageDesc}>Gestión de conexiones a bases de datos</p>
-        </div>
-        <Btn onClick={() => { setShowForm(true); setEditId(null); setForm({ ...EMPTY }); }} style={{ marginLeft: 'auto' }}>
-          <Plus size={15} /> Nueva conexión
-        </Btn>
-      </div>
+      <PageHeader
+        icon={<Database size={20} />}
+        title="DataSources"
+        description="Gestión de conexiones a bases de datos"
+        actions={
+          <Button onClick={() => { setShowForm(true); setEditId(null); setForm({ ...EMPTY }); }}>
+            <Plus size={15} style={{ marginRight: 6 }} /> Nueva conexión
+          </Button>
+        }
+      />
 
       {showForm && (
         <Card title={editId ? 'Editar Datasource' : 'Nueva Conexión'} style={{ marginBottom: 24 }}>
           <form onSubmit={save} style={styles.formGrid}>
-            {/* Motor — controla defaults del formulario */}
-            <div style={styles.field}>
-              <label style={styles.label}>Motor</label>
-              <select style={styles.input} value={form.engine} onChange={(e) => onEngineChange(e.target.value)} required>
-                {Object.keys(ENGINE_DEFAULTS).map(e => <option key={e} value={e}>{e}</option>)}
-              </select>
+            <div>
+              <SelectInput
+                label="Motor"
+                value={form.engine}
+                onChange={onEngineChange}
+                options={engineOptions}
+                required
+              />
             </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Host</label>
-              <input style={styles.input} value={form.host} onChange={(e) => setForm({ ...form, host: e.target.value })} placeholder="192.168.1.10" required />
-            </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Puerto</label>
-              <input style={styles.input} type="number" value={form.port} onChange={(e) => setForm({ ...form, port: Number(e.target.value) })} required />
-            </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Usuario</label>
-              <input style={styles.input} value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} required />
-            </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Password</label>
-              <input style={styles.input} type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
-            </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Database</label>
-              <input style={styles.input} value={form.database} onChange={(e) => setForm({ ...form, database: e.target.value })} placeholder="clinica" required />
-            </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Schema</label>
-              <input style={styles.input} value={form.schema ?? ''} onChange={(e) => setForm({ ...form, schema: e.target.value })} placeholder="dbo / public" />
-            </div>
-            {/* SQL Server: campo de instancia opcional */}
+            <TextInput
+              label="Host"
+              value={form.host}
+              onChange={(v) => setForm({ ...form, host: v })}
+              placeholder="192.168.1.10"
+              required
+            />
+            <TextInput
+              label="Puerto"
+              value={String(form.port)}
+              onChange={(v) => setForm({ ...form, port: Number(v) })}
+              type="number"
+              required
+            />
+            <TextInput
+              label="Usuario"
+              value={form.username}
+              onChange={(v) => setForm({ ...form, username: v })}
+              required
+            />
+            <TextInput
+              label="Password"
+              value={form.password}
+              onChange={(v) => setForm({ ...form, password: v })}
+              type="password"
+            />
+            <TextInput
+              label="Database"
+              value={form.database}
+              onChange={(v) => setForm({ ...form, database: v })}
+              placeholder="clinica"
+              required
+            />
+            <TextInput
+              label="Schema"
+              value={form.schema ?? ''}
+              onChange={(v) => setForm({ ...form, schema: v })}
+              placeholder="dbo / public"
+            />
             {form.engine === 'SQL Server' && (
-              <div style={styles.field}>
-                <label style={styles.label}>Instancia (opcional)</label>
-                <input style={styles.input} value={form.instanceName ?? ''} onChange={(e) => setForm({ ...form, instanceName: e.target.value })} placeholder="INST01" />
-              </div>
+              <TextInput
+                label="Instancia (opcional)"
+                value={form.instanceName ?? ''}
+                onChange={(v) => setForm({ ...form, instanceName: v })}
+                placeholder="INST01"
+              />
             )}
-            <div style={styles.field}>
-              <label style={styles.label}>Librería npm</label>
-              <input style={{ ...styles.input, background: '#f4f6f9', color: '#5a6a85' }} value={form.npmLibrary} readOnly />
-            </div>
+            <TextInput
+              label="Librería npm"
+              value={form.npmLibrary}
+              onChange={() => {}}
+              disabled
+            />
             <div style={{ gridColumn: '1/-1', display: 'flex', gap: 10, marginTop: 8 }}>
-              <Btn type="submit"><Check size={14} /> Guardar</Btn>
-              <Btn variant="ghost" onClick={() => { setShowForm(false); setEditId(null); }}><X size={14} /> Cancelar</Btn>
+              <Button type="submit"><Check size={14} style={{ marginRight: 6 }} /> Guardar</Button>
+              <Button variant="ghost" onClick={() => { setShowForm(false); setEditId(null); }}>
+                <X size={14} style={{ marginRight: 6 }} /> Cancelar
+              </Button>
             </div>
           </form>
         </Card>
       )}
 
       <Card title={`Conexiones configuradas (${list.length})`}>
-        {list.length === 0 ? (
-          <p style={styles.empty}>No hay datasources configurados.</p>
-        ) : (
-          <div style={styles.tableWrap}>
-            <table style={styles.table}>
-              <thead>
-                <tr>{['Motor', 'Host', 'Puerto', 'Database', 'Schema', 'Librería', 'Acciones'].map((h) => (
-                  <th key={h} style={styles.th}>{h}</th>
-                ))}</tr>
-              </thead>
-              <tbody>
-                {list.map((ds) => (
-                  <tr key={ds.id} style={styles.tr}>
-                    <td style={styles.td}><span style={styles.badge}>{ds.engine}</span></td>
-                    <td style={styles.td}>{ds.host}</td>
-                    <td style={styles.td}>{ds.port}</td>
-                    <td style={styles.td}>{ds.database}</td>
-                    <td style={styles.td}><code style={styles.code}>{ds.schema || '—'}</code></td>
-                    <td style={styles.td}><code style={styles.code}>{ds.npmLibrary}</code></td>
-                    <td style={styles.td}>
-                      <div style={{ display: 'flex', gap: 6 }}>
-                        <Btn size="sm" variant="secondary" onClick={() => test(ds.id)} disabled={testing === ds.id}>
-                          <TestTube size={13} />{testing === ds.id ? 'Probando...' : 'Test'}
-                        </Btn>
-                        <Btn size="sm" variant="ghost" onClick={() => startEdit(ds)}><Edit2 size={13} /></Btn>
-                        <Btn size="sm" variant="danger" onClick={() => remove(ds.id)}><Trash2 size={13} /></Btn>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <DataTable
+          columns={columns as Parameters<typeof DataTable>[0]['columns']}
+          rows={list as Record<string, unknown>[]}
+          emptyMessage="No hay datasources configurados."
+        />
       </Card>
     </div>
   );
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  pageHeader: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 },
-  pageTitle: { fontSize: 22, fontWeight: 700, color: '#003087' },
-  pageDesc: { fontSize: 13, color: '#5a6a85', marginTop: 2 },
   formGrid: { display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 16 },
-  field: { display: 'flex', flexDirection: 'column', gap: 6 },
-  label: { fontSize: 13, fontWeight: 600, color: '#1a2a4a' },
-  input: { padding: '9px 12px', borderRadius: 8, border: '1.5px solid #d1d9e6', fontSize: 14, outline: 'none' },
-  empty: { color: '#5a6a85', fontSize: 14, textAlign: 'center', padding: '32px 0' },
-  tableWrap: { overflowX: 'auto' },
-  table: { width: '100%', borderCollapse: 'collapse' },
-  th: { textAlign: 'left', padding: '10px 14px', fontSize: 12, fontWeight: 700, color: '#5a6a85', background: '#f4f6f9', borderBottom: '1px solid #d1d9e6', textTransform: 'uppercase', letterSpacing: 0.5 },
-  tr: { borderBottom: '1px solid #f0f2f5' },
-  td: { padding: '12px 14px', fontSize: 14, color: '#1a2a4a' },
-  badge: { background: '#e8f0fe', color: '#003087', padding: '3px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600 },
-  code: { background: '#f4f6f9', padding: '2px 8px', borderRadius: 4, fontSize: 12, color: '#0050b3' },
 };
