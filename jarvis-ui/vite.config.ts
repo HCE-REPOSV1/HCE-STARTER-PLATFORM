@@ -7,10 +7,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@jarvis/design-system': path.resolve(
-        __dirname,
-        '../../../jarvis-mf-platform/packages/design-system/index.ts'
-      ),
+      '@jarvis/design-system': path.resolve(__dirname, 'src/design-system/index.ts'),
     },
     dedupe: ['react', 'react-dom', '@mui/material', '@emotion/react', '@emotion/styled'],
   },
