@@ -5,7 +5,8 @@ export interface Domain { id: string; name: string; schema?: string; entities: D
 
 export interface Datasource {
   id: string; engine: string; host: string; port: number;
-  username: string; password: string; database: string; schema?: string; npmLibrary: string;
+  username: string; password: string; database: string; schema?: string;
+  instanceName?: string; npmLibrary: string;
   status?: 'active' | 'failed' | 'untested'; lastTestedAt?: string;
 }
 
@@ -27,7 +28,7 @@ export interface Template {
 }
 
 export interface Generation {
-  id: string; serviceName: string; type: 'UX' | 'CN' | 'BS';
+  id: string; serviceName: string; type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA';
   domainId: string; domainName: string; architecture: string; orm: string;
   status: 'success' | 'failed' | 'pending'; zipPath?: string;
   errorMessage?: string; createdBy: string; createdAt: string;

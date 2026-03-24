@@ -3,17 +3,8 @@ import toast from 'react-hot-toast';
 import { Globe, Plus, Trash2, Edit2, X, Check, Tag, PlusCircle, Lock } from 'lucide-react';
 import api from '../api/client';
 import { Button, Card, PageHeader, TextInput, SelectInput } from '@jarvis/design-system';
-
-interface EntityField {
-  name: string; type: string; required: boolean;
-  size?: number;
-  isPk?: boolean; isIdentity?: boolean; isUnique?: boolean;
-}
-interface DomainEntity { name: string; fields: EntityField[] }
-interface Domain { id: string; name: string; schema?: string; entities: DomainEntity[]; datasourceId?: string }
-interface DS { id: string; database: string; engine: string }
-
-const FIELD_TYPES = ['string', 'number', 'boolean', 'Date'];
+import { FIELD_TYPES } from '../utils/constants';
+import type { EntityField, DomainEntity, Domain, Datasource } from '../types';
 
 // Audit fields always appended to every entity on save — not editable by user
 const AUDIT_FIELDS: EntityField[] = [
@@ -33,7 +24,7 @@ const EMPTY_ENTITY = (): DomainEntity => ({
 
 export default function Domains() {
   const [list, setList] = useState<Domain[]>([]);
-  const [datasources, setDatasources] = useState<DS[]>([]);
+  const [datasources, setDatasources] = useState<Datasource[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [domainName, setDomainName] = useState('');
   const [domainSchema, setDomainSchema] = useState('');

@@ -254,5 +254,125 @@
     "module": "system",
     "level": "INFO",
     "details": {}
+  },
+  {
+    "timestamp": "2026-03-23T21:16:15.388Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-23T21:16:15.398Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-23T21:16:19.255Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-23T21:16:19.260Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-23T21:16:20.838Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-23T21:16:20.842Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-23T21:16:28.072Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-23T21:16:28.079Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-23T21:16:45.622Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "gw-pruebasdsssss",
+      "type": "AG",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-03-23T22:00:38.512Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-cn-wedrfg",
+      "type": "CN",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-03-24T05:18:45.097Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-24T05:18:45.106Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-24T14:10:18.812Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-03-24T14:10:19.454Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
   }
 ]

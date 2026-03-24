@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { UsersService, UserRole } from './users.service';
+﻿import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { UsersService } from './users.service';
+import type { UserRole } from './user.interface';
 import { LogsService } from '../logs/logs.service';
 
 @Controller('users')

@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Database, Plus, Trash2, TestTube, Edit2, X, Check } from 'lucide-react';
 import api from '../api/client';
 import { Button, Card, PageHeader, DataTable, TextInput, SelectInput, StatusBadge } from '@jarvis/design-system';
-
-interface DS {
-  id: string; engine: string; host: string; port: number;
-  username: string; password: string; database: string; schema?: string;
-  instanceName?: string; npmLibrary: string;
-}
+import { DB_ENGINE_OPTIONS } from '../utils/constants';
+import type { Datasource } from '../types';
 
 const ENGINE_DEFAULTS: Record<string, { port: number; npmLibrary: string; username: string; schema: string }> = {
   PostgreSQL:   { port: 5432,  npmLibrary: 'pg',     username: 'postgres', schema: 'public' },
@@ -16,10 +12,10 @@ const ENGINE_DEFAULTS: Record<string, { port: number; npmLibrary: string; userna
   'SQL Server': { port: 1433,  npmLibrary: 'mssql',   username: 'sa',       schema: 'dbo' },
 };
 
-const EMPTY: Omit<DS, 'id'> = { engine: 'PostgreSQL', host: 'localhost', port: 5432, username: 'postgres', password: '', database: '', schema: 'public', instanceName: '', npmLibrary: 'pg' };
+const EMPTY: Omit<Datasource, 'id'> = { engine: 'PostgreSQL', host: 'localhost', port: 5432, username: 'postgres', password: '', database: '', schema: 'public', instanceName: '', npmLibrary: 'pg' };
 
 export default function DataSources() {
-  const [list, setList] = useState<DS[]>([]);
+  const [list, setList] = useState<Datasource[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ ...EMPTY });
   const [editId, setEditId] = useState<string | null>(null);
@@ -57,7 +53,7 @@ export default function DataSources() {
     finally { setTesting(null); }
   };
 
-  const startEdit = (ds: DS) => {
+  const startEdit = (ds: Datasource) => {
     setForm({ engine: ds.engine, host: ds.host, port: ds.port, username: ds.username, password: ds.password, database: ds.database, schema: ds.schema ?? '', instanceName: ds.instanceName ?? '', npmLibrary: ds.npmLibrary });
     setEditId(ds.id); setShowForm(true);
   };
@@ -68,13 +64,13 @@ export default function DataSources() {
     else setForm(f => ({ ...f, engine }));
   };
 
-  const engineOptions = Object.keys(ENGINE_DEFAULTS).map((e) => ({ value: e, label: e }));
+  const engineOptions = [...DB_ENGINE_OPTIONS];
 
   const columns = [
     {
       key: 'engine',
       label: 'Motor',
-      render: (_: unknown, row: DS) => <StatusBadge label={row.engine} variant="primary" />,
+      render: (_: unknown, row: Datasource) => <StatusBadge label={row.engine} variant="primary" />,
     },
     { key: 'host', label: 'Host' },
     { key: 'port', label: 'Puerto' },
@@ -82,7 +78,7 @@ export default function DataSources() {
     {
       key: 'schema',
       label: 'Schema',
-      render: (_: unknown, row: DS) => (
+      render: (_: unknown, row: Datasource) => (
         <code style={{ background: 'var(--jarvis-bg)', padding: '2px 8px', borderRadius: 4, fontSize: 12, color: 'var(--jarvis-primary)' }}>
           {row.schema || '—'}
         </code>
@@ -91,7 +87,7 @@ export default function DataSources() {
     {
       key: 'npmLibrary',
       label: 'Librería',
-      render: (_: unknown, row: DS) => (
+      render: (_: unknown, row: Datasource) => (
         <code style={{ background: 'var(--jarvis-bg)', padding: '2px 8px', borderRadius: 4, fontSize: 12, color: 'var(--jarvis-primary)' }}>
           {row.npmLibrary}
         </code>
@@ -100,7 +96,7 @@ export default function DataSources() {
     {
       key: 'actions',
       label: 'Acciones',
-      render: (_: unknown, row: DS) => (
+      render: (_: unknown, row: Datasource) => (
         <div style={{ display: 'flex', gap: 6 }}>
           <Button size="sm" variant="secondary" onClick={() => test(row.id)} disabled={testing === row.id}>
             <TestTube size={13} style={{ marginRight: 4 }} />{testing === row.id ? 'Probando...' : 'Test'}

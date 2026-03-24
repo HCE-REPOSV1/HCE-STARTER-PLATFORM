@@ -1,22 +1,10 @@
-// templates.service.ts — Gestión de templates de generación
+﻿// templates.service.ts — Gestión de templates de generación
 // Permite registrar, versionar y consultar templates disponibles.
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-
-export type TemplateType = 'nestjs' | 'react' | 'openapi' | 'docker' | 'readme';
-
-export interface Template {
-  id: string;
-  name: string;
-  type: TemplateType;
-  version: string;
-  description: string;
-  path: string;       // relative path inside /templates folder
-  active: boolean;
-  createdAt: string;
-}
+import { TemplateType, Template } from './template.interface';
 
 @Injectable()
 export class TemplatesService {

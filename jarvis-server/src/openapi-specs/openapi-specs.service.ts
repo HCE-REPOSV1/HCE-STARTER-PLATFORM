@@ -1,24 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+﻿import { Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { DomainsService } from '../domains/domains.service';
-
-export interface OpenApiSpec {
-  id: string;
-  name: string;
-  domainId: string;
-  domainName: string;
-  selectedEntities: string[];
-  yaml: string;
-  createdAt: string;
-}
-
-export interface CreateOpenApiSpecDto {
-  name: string;
-  domainId: string;
-  selectedEntities: string[];
-}
+import { OpenApiSpec, CreateOpenApiSpecDto } from './openapi-spec.interface';
 
 @Injectable()
 export class OpenApiSpecsService {

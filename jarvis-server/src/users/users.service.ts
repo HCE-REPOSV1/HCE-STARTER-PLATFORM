@@ -1,20 +1,10 @@
-// users.service.ts — CRUD de usuarios con roles (ADMIN, DEV)
+﻿// users.service.ts — CRUD de usuarios con roles (ADMIN, DEV)
 // Persiste en config/users.json. Evolución futura: migrar a DB.
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-
-export type UserRole = 'ADMIN' | 'DEV';
-
-export interface User {
-  id: string;
-  username: string;
-  password: string;
-  role: UserRole;
-  active: boolean;
-  createdAt: string;
-}
+import { UserRole, User } from './user.interface';
 
 @Injectable()
 export class UsersService {

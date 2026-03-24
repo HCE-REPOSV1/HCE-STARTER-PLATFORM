@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { DatasourceService, Datasource } from './datasource.service';
+﻿import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { DatasourceService } from './datasource.service';
+import type { Datasource } from './datasource.interface';
 import { LogsService } from '../logs/logs.service';
 
 @Controller('datasources')

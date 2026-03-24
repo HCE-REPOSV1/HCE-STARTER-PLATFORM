@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Res } from '@nestjs/common';
+﻿import { Body, Controller, Delete, Get, Param, Post, Res } from '@nestjs/common';
 import type { Response } from 'express';
 import { OpenApiSpecsService } from './openapi-specs.service';
-import type { CreateOpenApiSpecDto } from './openapi-specs.service';
+import type { CreateOpenApiSpecDto } from './openapi-spec.interface';
 import { LogsService } from '../logs/logs.service';
 
 @Controller('openapi-specs')

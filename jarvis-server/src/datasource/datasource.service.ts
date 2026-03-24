@@ -1,35 +1,11 @@
-// datasource.service.ts — CRUD + introspección real de base de datos
+﻿// datasource.service.ts — CRUD + introspección real de base de datos
 // Soporta PostgreSQL (pg) y MySQL (mysql2) para listar tablas y columnas.
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-
-export interface Datasource {
-  id: string;
-  engine: string;       // PostgreSQL | MySQL | SQL Server
-  host: string;
-  port: number;
-  username: string;
-  password: string;
-  database: string;
-  schema?: string;        // DB schema (dbo for SQL Server, public for PostgreSQL)
-  instanceName?: string;  // SQL Server: nombre de instancia (ej: INST01)
-  npmLibrary: string;
-  status?: 'active' | 'failed' | 'untested';
-  lastTestedAt?: string;
-}
-
-export interface TableColumn {
-  name: string;
-  type: string;
-  nullable: boolean;
-}
-
-export interface TableInfo {
-  name: string;
-  columns: TableColumn[];
-}
+import { SQL_QUERIES } from '../utils/sql-queries.constants';
+import { Datasource, TableColumn, TableInfo } from './datasource.interface';
 
 // Map SQL types to TypeScript types (PostgreSQL, MySQL, SQL Server)
 const SQL_TO_TS: Record<string, string> = {
@@ -166,7 +142,7 @@ export class DatasourceService {
     await client.connect();
     const schema = ds.schema ?? 'public';
     const res = await client.query(
-      `SELECT table_name FROM information_schema.tables WHERE table_schema = $1 AND table_type = 'BASE TABLE' ORDER BY table_name`,
+      SQL_QUERIES.POSTGRES.GET_TABLES,
       [schema],
     );
     await client.end();
@@ -179,7 +155,7 @@ export class DatasourceService {
     await client.connect();
     const schema = ds.schema ?? 'public';
     const res = await client.query(
-      `SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = $1 AND table_name = $2 ORDER BY ordinal_position`,
+      SQL_QUERIES.POSTGRES.GET_COLUMNS,
       [schema, table],
     );
     await client.end();
@@ -196,7 +172,7 @@ export class DatasourceService {
   private async getMysqlTables(ds: Datasource): Promise<string[]> {
     const mysql = await import('mysql2/promise');
     const conn = await mysql.createConnection({ host: ds.host, port: ds.port, user: ds.username, password: ds.password, database: ds.database });
-    const [rows] = await conn.query(`SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND table_type = 'BASE TABLE' ORDER BY table_name`, [ds.database]) as any[];
+    const [rows] = await conn.query(SQL_QUERIES.MYSQL.GET_TABLES, [ds.database]) as any[];
     await conn.end();
     return rows.map((r: any) => r.table_name ?? r.TABLE_NAME);
   }
@@ -204,7 +180,7 @@ export class DatasourceService {
   private async getMysqlColumns(ds: Datasource, table: string): Promise<TableColumn[]> {
     const mysql = await import('mysql2/promise');
     const conn = await mysql.createConnection({ host: ds.host, port: ds.port, user: ds.username, password: ds.password, database: ds.database });
-    const [rows] = await conn.query(`SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = ? AND table_name = ? ORDER BY ordinal_position`, [ds.database, table]) as any[];
+    const [rows] = await conn.query(SQL_QUERIES.MYSQL.GET_COLUMNS, [ds.database, table]) as any[];
     await conn.end();
     return rows.map((r: any) => ({ name: r.column_name ?? r.COLUMN_NAME, type: sqlTypeToTs(r.data_type ?? r.DATA_TYPE), nullable: (r.is_nullable ?? r.IS_NULLABLE) === 'YES' }));
   }
@@ -248,9 +224,7 @@ export class DatasourceService {
     const sql = (mod as any).default ?? mod;
     const result = await pool.request()
       .input('schema', sql.NVarChar, ds.schema ?? 'dbo')
-      .query(
-        `SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = @schema ORDER BY TABLE_NAME`,
-      );
+      .query(SQL_QUERIES.SQLSERVER.GET_TABLES);
     await pool.close();
     return result.recordset.map((r: any) => r.TABLE_NAME);
   }
@@ -262,12 +236,7 @@ export class DatasourceService {
     const result = await pool.request()
       .input('table', sql.NVarChar, table)
       .input('schema', sql.NVarChar, ds.schema ?? 'dbo')
-      .query(
-        `SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE
-         FROM INFORMATION_SCHEMA.COLUMNS
-         WHERE TABLE_NAME = @table AND TABLE_SCHEMA = @schema
-         ORDER BY ORDINAL_POSITION`,
-      );
+      .query(SQL_QUERIES.SQLSERVER.GET_COLUMNS);
     await pool.close();
     return result.recordset.map((r: any) => ({
       name: r.COLUMN_NAME,

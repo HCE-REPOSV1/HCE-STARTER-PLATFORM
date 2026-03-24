@@ -6,24 +6,9 @@ import { Zap, Download, ChevronRight, ChevronLeft, Check, FileCode, Plus, X, Shi
 import api from '../api/client';
 import { Button, Card, PageHeader, TextInput } from '@jarvis/design-system';
 import type { Datasource, GenerateDto, OpenApiSpec, GatewayService } from '../types';
+import { ARCHITECTURE_OPTIONS as ARCH_OPTIONS, ORM_OPTIONS, AUTH_TYPE_OPTIONS as AUTH_OPTIONS } from '../utils/constants';
 
 const STEPS = ['Básico', 'Técnico', 'DataSource / Config', 'Preview', 'Generar'];
-
-const ARCH_OPTIONS = [
-  { value: 'hexagonal', label: 'Hexagonal', desc: 'Ports & Adapters — máxima separación' },
-  { value: 'clean',     label: 'Clean',     desc: 'Clean Architecture — capas independientes' },
-  { value: 'layered',   label: 'Layered',   desc: 'Capas tradicionales — más simple' },
-];
-const ORM_OPTIONS = [
-  { value: 'none',    label: 'Sin ORM', desc: 'Repositorios manuales' },
-  { value: 'typeorm', label: 'TypeORM', desc: 'ORM clásico para NestJS' },
-  { value: 'prisma',  label: 'Prisma',  desc: 'ORM moderno con schema' },
-];
-const AUTH_OPTIONS = [
-  { value: 'none',  label: 'Sin Auth', desc: 'Endpoints públicos' },
-  { value: 'jwt',   label: 'JWT',      desc: 'Bearer token stateless' },
-  { value: 'oauth', label: 'OAuth2',   desc: 'Delegación de identidad' },
-];
 const TYPE_OPTIONS = [
   { value: 'CN', label: 'CN — Canal',       desc: 'BFF Canal: microservicio de integración', badge: 'NestJS BFF',     color: 'var(--jarvis-primary)' },
   { value: 'BS', label: 'BS — Negocio',     desc: 'BFF Negocio: lógica de negocio',          badge: 'NestJS BFF',     color: 'var(--jarvis-primary)' },

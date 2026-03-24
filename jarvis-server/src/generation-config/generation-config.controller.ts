@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { GenerationConfigService, GenerationConfig } from './generation-config.service';
+﻿import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { GenerationConfigService } from './generation-config.service';
+import type { GenerationConfig } from './generation-config.interface';
 
 @Controller('generation-configs')
 export class GenerationConfigController {

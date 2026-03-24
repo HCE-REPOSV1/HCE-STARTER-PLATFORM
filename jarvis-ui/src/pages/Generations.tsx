@@ -5,12 +5,7 @@ import { History, Download, Trash2, RefreshCw } from 'lucide-react';
 import api from '../api/client';
 import { Button, Card, PageHeader, DataTable, StatusBadge } from '@jarvis/design-system';
 import type { Generation } from '../types';
-
-const STATUS_BADGE_MAP: Record<string, 'success' | 'error' | 'warning'> = {
-  success: 'success',
-  failed: 'error',
-  pending: 'warning',
-};
+import { GENERATION_STATUS_BADGE as STATUS_BADGE_MAP } from '../utils/constants';
 
 export default function Generations() {
   const [list, setList] = useState<Generation[]>([]);

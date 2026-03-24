@@ -1,38 +1,10 @@
-// generation-config.service.ts — Configuración avanzada de generación
+﻿// generation-config.service.ts — Configuración avanzada de generación
 // Permite definir arquitectura, ORM, API style, auth, observabilidad y Git.
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-
-export type Architecture = 'hexagonal' | 'clean' | 'layered';
-export type OrmType = 'typeorm' | 'prisma' | 'none';
-export type ApiStyle = 'rest' | 'graphql';
-export type AuthType = 'none' | 'jwt' | 'oauth';
-
-export interface Observability {
-  logs: boolean;
-  metrics: boolean;
-  tracing: boolean;
-}
-
-export interface GenerationConfig {
-  id: string;
-  name: string;
-  version: string;
-  architecture: Architecture;
-  orm: OrmType;
-  apiStyle: ApiStyle;
-  authType: AuthType;
-  observability: Observability;
-  gitEnabled: boolean;
-  gitRepoUrl?: string;
-  gitBranch: string;
-  datasourceId?: string;
-  domainId?: string;
-  createdBy: string;
-  createdAt: string;
-}
+import { Architecture, OrmType, ApiStyle, AuthType, Observability, GenerationConfig } from './generation-config.interface';
 
 const DEFAULT_OBS: Observability = { logs: true, metrics: false, tracing: false };
 

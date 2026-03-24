@@ -3,14 +3,7 @@ import toast from 'react-hot-toast';
 import { FileCode, Plus, Trash2, Download, Check, X, Tag } from 'lucide-react';
 import api from '../api/client';
 import { Button, Card, PageHeader, TextInput, SelectInput } from '@jarvis/design-system';
-
-interface EntityField { name: string; type: string; required: boolean }
-interface DomainEntity { name: string; fields: EntityField[] }
-interface Domain { id: string; name: string; entities: DomainEntity[] }
-interface OpenApiSpec {
-  id: string; name: string; domainId: string; domainName: string;
-  selectedEntities: string[]; yaml: string; createdAt: string;
-}
+import type { Domain, OpenApiSpec } from '../types';
 
 export default function OpenApiSpecs() {
   const [list, setList] = useState<OpenApiSpec[]>([]);

@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+﻿import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { TemplatesService } from './templates.service';
-import type { Template, TemplateType } from './templates.service';
+import type { Template, TemplateType } from './template.interface';
 
 @Controller('templates')
 export class TemplatesController {

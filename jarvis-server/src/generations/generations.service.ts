@@ -1,25 +1,9 @@
-// generations.service.ts — Historial de generaciones con estado y re-descarga
+﻿// generations.service.ts — Historial de generaciones con estado y re-descarga
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-
-export type GenerationStatus = 'success' | 'failed' | 'pending';
-
-export interface Generation {
-  id: string;
-  serviceName: string;
-  type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA';
-  domainId: string;
-  domainName: string;
-  architecture: string;
-  orm: string;
-  status: GenerationStatus;
-  zipPath?: string;       // absolute path to ZIP in temp dir
-  errorMessage?: string;
-  createdBy: string;
-  createdAt: string;
-}
+import { GenerationStatus, Generation } from './generation.interface';
 
 @Injectable()
 export class GenerationsService {

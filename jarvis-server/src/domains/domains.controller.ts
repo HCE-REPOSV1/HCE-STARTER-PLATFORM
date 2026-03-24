@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { DomainsService, Domain } from './domains.service';
+﻿import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { DomainsService } from './domains.service';
+import type { Domain } from './domain.interface';
 import { LogsService } from '../logs/logs.service';
 
 @Controller('domains')

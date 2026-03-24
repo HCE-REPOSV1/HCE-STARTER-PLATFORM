@@ -5,6 +5,7 @@ import { Users as UsersIcon, Plus, Edit2, Trash2, X, Check, ShieldCheck, ShieldO
 import api from '../api/client';
 import { Button, Card, PageHeader, DataTable, TextInput, SelectInput, StatusBadge } from '@jarvis/design-system';
 import type { User } from '../types';
+import { USER_ROLE_OPTIONS } from '../utils/constants';
 
 const EMPTY = { username: '', password: '', role: 'DEV' as const };
 
@@ -39,10 +40,7 @@ export default function Users() {
     toast.success(u.active ? 'Usuario desactivado' : 'Usuario activado'); load();
   };
 
-  const roleOptions = [
-    { value: 'ADMIN', label: 'ADMIN' },
-    { value: 'DEV', label: 'DEV' },
-  ];
+  const roleOptions = [...USER_ROLE_OPTIONS];
 
   const columns = [
     {

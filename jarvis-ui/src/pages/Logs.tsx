@@ -4,32 +4,12 @@ import { FileText, RefreshCw, Filter } from 'lucide-react';
 import api from '../api/client';
 import { Button, Card, PageHeader, DataTable, TextInput, SelectInput, StatusBadge } from '@jarvis/design-system';
 import type { LogEntry } from '../types';
-
-const LEVEL_BADGE_MAP: Record<string, 'info' | 'error' | 'warning'> = {
-  INFO: 'info',
-  ERROR: 'error',
-  WARN: 'warning',
-};
-
-const ACTION_COLORS: Record<string, string> = {
-  LOGIN: 'var(--jarvis-success)', LOGOUT: 'var(--jarvis-text-secondary)',
-  CREATE_DATASOURCE: 'var(--jarvis-primary)', UPDATE_DATASOURCE: 'var(--jarvis-warning)', DELETE_DATASOURCE: 'var(--jarvis-error)', TEST_DATASOURCE: 'var(--jarvis-info)',
-  CREATE_DOMAIN: 'var(--jarvis-primary)', UPDATE_DOMAIN: 'var(--jarvis-warning)', DELETE_DOMAIN: 'var(--jarvis-error)',
-  GENERATE_MICROSERVICE: 'var(--jarvis-navy)', GENERATE_MICROSERVICE_FAILED: 'var(--jarvis-error)',
-  CREATE_USER: 'var(--jarvis-primary)', UPDATE_USER: 'var(--jarvis-warning)', DELETE_USER: 'var(--jarvis-error)',
-};
-
-const MODULE_OPTIONS = [
-  { value: '', label: 'Todos' },
-  ...['auth', 'users', 'datasources', 'domains', 'generator', 'templates', 'system'].map((m) => ({ value: m, label: m })),
-];
-
-const LEVEL_OPTIONS = [
-  { value: '', label: 'Todos' },
-  { value: 'INFO', label: 'INFO' },
-  { value: 'WARN', label: 'WARN' },
-  { value: 'ERROR', label: 'ERROR' },
-];
+import {
+  LOG_LEVEL_BADGE as LEVEL_BADGE_MAP,
+  ACTION_COLORS,
+  MODULE_OPTIONS,
+  LOG_LEVEL_OPTIONS as LEVEL_OPTIONS,
+} from '../utils/constants';
 
 export default function Logs() {
   const [logs, setLogs] = useState<LogEntry[]>([]);

@@ -5,17 +5,9 @@ import { LayoutTemplate, Plus, Edit2, Trash2, X, Check } from 'lucide-react';
 import api from '../api/client';
 import { Button, Card, PageHeader, TextInput, SelectInput, StatusBadge } from '@jarvis/design-system';
 import type { Template } from '../types';
+import { TEMPLATE_TYPE_OPTIONS, TEMPLATE_TYPE_BADGE_MAP as TYPE_BADGE_MAP } from '../utils/constants';
 
 const EMPTY: Omit<Template, 'id' | 'createdAt'> = { name: '', type: 'nestjs', version: '1.0.0', description: '', path: '', active: true };
-const TYPES = ['nestjs', 'react', 'openapi', 'docker', 'readme'];
-
-const TYPE_BADGE_MAP: Record<string, 'primary' | 'info' | 'warning' | 'success' | 'neutral'> = {
-  nestjs: 'primary',
-  react: 'info',
-  openapi: 'warning',
-  docker: 'success',
-  readme: 'neutral',
-};
 
 export default function Templates() {
   const [list, setList] = useState<Template[]>([]);
@@ -40,7 +32,7 @@ export default function Templates() {
     await api.delete(`/templates/${id}`); toast.success('Eliminado'); load();
   };
 
-  const typeOptions = TYPES.map((t) => ({ value: t, label: t }));
+  const typeOptions = TEMPLATE_TYPE_OPTIONS;
 
   return (
     <div>

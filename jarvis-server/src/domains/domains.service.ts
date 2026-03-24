@@ -1,26 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+﻿import { Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-
-export interface EntityField {
-  name: string;
-  type: string;
-  required: boolean;
-}
-
-export interface DomainEntity {
-  name: string;
-  fields: EntityField[];
-}
-
-export interface Domain {
-  id: string;
-  name: string;
-  schema?: string;
-  entities: DomainEntity[];
-  datasourceId?: string;
-}
+import { EntityField, DomainEntity, Domain } from './domain.interface';
 
 @Injectable()
 export class DomainsService {

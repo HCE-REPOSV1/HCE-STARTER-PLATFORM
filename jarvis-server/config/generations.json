@@ -102,5 +102,31 @@
     "createdBy": "admin",
     "createdAt": "2026-03-20T20:20:28.139Z",
     "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\gw-qwesdf.zip"
+  },
+  {
+    "id": "2d4ed792-b134-43a1-83c7-2ca537dbfee9",
+    "serviceName": "ag-pruebasdsssss",
+    "type": "AG",
+    "domainId": "",
+    "domainName": "AG",
+    "architecture": "hexagonal",
+    "orm": "none",
+    "status": "success",
+    "createdBy": "admin",
+    "createdAt": "2026-03-23T21:16:45.532Z",
+    "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\gw-pruebasdsssss.zip"
+  },
+  {
+    "id": "19ddb8b0-cbad-4c3f-bf7e-2547be820e01",
+    "serviceName": "cn-wedrfg",
+    "type": "CN",
+    "domainId": "5e42f907-dafe-4360-a58a-7fcf651b232f",
+    "domainName": "pruebas_server",
+    "architecture": "hexagonal",
+    "orm": "typeorm",
+    "status": "success",
+    "createdBy": "admin",
+    "createdAt": "2026-03-23T22:00:38.396Z",
+    "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\ms-cn-wedrfg.zip"
   }
 ]
