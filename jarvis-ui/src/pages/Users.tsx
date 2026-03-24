@@ -140,8 +140,8 @@ export default function Users() {
 
       <Card title={`Usuarios (${list.length})`}>
         <DataTable
-          columns={columns as Parameters<typeof DataTable>[0]['columns']}
-          rows={list as Record<string, unknown>[]}
+          columns={columns}
+          rows={list}
           emptyMessage="No hay usuarios."
         />
       </Card>

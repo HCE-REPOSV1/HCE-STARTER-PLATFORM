@@ -112,8 +112,8 @@ export default function Generations() {
 
       <Card title={`Historial (${list.length})`}>
         <DataTable
-          columns={columns as Parameters<typeof DataTable>[0]['columns']}
-          rows={list as Record<string, unknown>[]}
+          columns={columns}
+          rows={list}
           emptyMessage="No hay generaciones registradas."
         />
       </Card>

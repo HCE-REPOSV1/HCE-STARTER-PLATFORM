@@ -56,19 +56,113 @@ jarvis-platform/
 
 ## Instalación rápida
 
+### Sin Docker (desarrollo local)
+
 ```bash
 # Backend
 cd jarvis-server
 npm install
-npm run start:dev
+npm run start:dev   # http://localhost:10400
 
 # Frontend (nueva terminal)
 cd jarvis-ui
 npm install
-npm run dev
+npm run dev         # http://localhost:10500
 ```
 
-Accede a `http://localhost:5173` con `admin` / `admin123`.
+El frontend usa el proxy de Vite: las llamadas a `/api` se redirigen automáticamente a `localhost:10400`.
+
+Accede a `http://localhost:10500` con `admin` / `admin123`.
+
+---
+
+## Docker
+
+### Requisitos
+- Docker Desktop (o Docker Engine + Compose Plugin)
+
+### Puertos
+
+| Servicio | Host | Interno |
+|----------|------|---------|
+| jarvis-ui (nginx) | `10500` | 80 |
+| jarvis-server (NestJS) | `10400` | 3000 |
+
+### Red Docker
+
+La red `jarvis-net` es creada automáticamente por Docker Compose al hacer `up`. No es necesario crearla manualmente. Solo como referencia, el comando equivalente sería:
+
+```bash
+docker network create jarvis-net
+```
+
+Para ver las redes existentes:
+
+```bash
+docker network ls
+```
+
+### Primera vez
+
+```bash
+docker compose up --build -d
+```
+
+- UI: `http://localhost:10500` — usuario `admin` / `admin123`
+- API (Swagger / Postman): `http://localhost:10400/api`
+
+### Flujo normal con cambios en código
+
+```bash
+docker compose down
+docker compose up --build -d
+```
+
+> La data **no se pierde** con estos comandos. El volumen `jarvis-config-data` persiste de forma independiente a los contenedores e imágenes.
+
+### Otros comandos útiles
+
+```bash
+docker compose logs -f              # logs en tiempo real
+docker compose logs -f jarvis-server
+docker compose logs -f jarvis-ui
+docker compose stop                 # detiene sin eliminar contenedores
+docker compose up -d                # levanta sin rebuild
+```
+
+### Persistencia de datos
+
+Toda la data (datasources, dominios, OpenAPI specs, historial, usuarios, templates) vive en el volumen Docker `jarvis-config-data`, montado en `/app/config` del contenedor.
+
+| Acción | ¿Se pierde la data? |
+|--------|-------------------|
+| `docker compose stop` | No |
+| `docker compose down` | No |
+| `docker compose up --build` | No |
+| `docker compose down --volumes` | **Sí** — borra el volumen |
+| `docker volume rm jarvis-config-data` | **Sí** — borrado manual |
+
+> **Regla:** nunca agregar `--volumes` al `down` salvo que se quiera resetear todo a cero.
+
+### Backup
+
+```bash
+./backup.sh   # genera jarvis-backup-FECHA.tar.gz en el directorio actual
+```
+
+### Arquitectura Docker
+
+```
+Browser
+  │
+  ├── :10500  → jarvis-ui (nginx)
+  │               ├── /        → archivos estáticos (React build)
+  │               └── /api/*   → proxy interno → jarvis-server:3000
+  │
+  └── :10400  → jarvis-server (NestJS) — acceso directo para Postman/Swagger
+```
+
+Ambos servicios comparten la red interna `jarvis-net`. El proxy de nginx resuelve el backend por nombre de contenedor (`jarvis-server`), sin pasar por el host.
 
 ---
 

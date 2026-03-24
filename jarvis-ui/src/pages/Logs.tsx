@@ -145,8 +145,8 @@ export default function Logs() {
 
       <Card title={`Eventos (${logs.length})`}>
         <DataTable
-          columns={columns as Parameters<typeof DataTable>[0]['columns']}
-          rows={logs as Record<string, unknown>[]}
+          columns={columns}
+          rows={logs}
           emptyMessage="No hay eventos."
         />
       </Card>

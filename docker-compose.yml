@@ -1,0 +1,40 @@
+services:
+  jarvis-server:
+    build:
+      context: ./jarvis-server
+    restart: unless-stopped
+    ports:
+      - "10400:10400"
+    environment:
+      NODE_ENV: production
+      ALLOWED_ORIGINS: "http://localhost:10500,http://localhost:5173"
+    volumes:
+      - jarvis-data:/app/config
+    networks:
+      - jarvis-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:10400/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  jarvis-ui:
+    build:
+      context: ./jarvis-ui
+    restart: unless-stopped
+    ports:
+      - "10500:80"
+    depends_on:
+      jarvis-server:
+        condition: service_healthy
+    networks:
+      - jarvis-net
+
+volumes:
+  jarvis-data:
+    name: jarvis-config-data
+
+networks:
+  jarvis-net:
+    driver: bridge

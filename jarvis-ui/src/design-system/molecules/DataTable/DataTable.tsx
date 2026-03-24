@@ -18,13 +18,13 @@ interface Column<T = unknown> {
   render?: (value: unknown, row: T) => ReactNode
 }
 
-interface Props<T = Record<string, unknown>> {
+interface Props<T = object> {
   columns: Column<T>[]
   rows: T[]
   emptyMessage?: string
 }
 
-export const DataTable = <T extends Record<string, unknown>>({
+export const DataTable = <T extends object>({
   columns,
   rows,
   emptyMessage = 'No hay datos disponibles.',
@@ -96,11 +96,11 @@ export const DataTable = <T extends Record<string, unknown>>({
                     }}
                   >
                     {col.render
-                      ? col.render(row[col.key], row)
+                      ? col.render((row as Record<string, unknown>)[col.key], row)
                       : (
                         <Box component="span">
-                          {row[col.key] !== undefined && row[col.key] !== null
-                            ? String(row[col.key])
+                          {(row as Record<string, unknown>)[col.key] !== undefined && (row as Record<string, unknown>)[col.key] !== null
+                            ? String((row as Record<string, unknown>)[col.key])
                             : '—'}
                         </Box>
                       )}

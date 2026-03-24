@@ -5,6 +5,12 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    port: 10500,
+    proxy: {
+      '/api': 'http://localhost:10400',
+    },
+  },
   resolve: {
     alias: {
       '@jarvis/design-system': path.resolve(__dirname, 'src/design-system/index.ts'),

@@ -9,7 +9,7 @@ interface Props {
   label?: string
   value: string
   onChange: (v: string) => void
-  options: Option[]
+  options: readonly Option[]
   disabled?: boolean
   fullWidth?: boolean
   size?: 'small' | 'medium'
