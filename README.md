@@ -1,9 +1,9 @@
-﻿# Jarvis Platform
+# Jarvis Platform
 
 > Internal Developer Platform (IDP) para generación automatizada de microservicios NestJS orientados a salud digital.
 
-**Autor:** XXXXXXX — Equipo de Arquitectura de Software  
-**Proyecto:** Jarvis Platform  
+**Autor:** XXXXXXX — Equipo de Arquitectura de Software
+**Proyecto:** Jarvis Platform
 **Versión:** 1.0.0
 
 ---
@@ -59,20 +59,19 @@ jarvis-platform/
 ### Sin Docker (desarrollo local)
 
 ```bash
-# Backend
-cd jarvis-server
-npm install
-npm run start:dev   # http://localhost:10400
+# Instalar todas las dependencias
+npm run install:all
 
-# Frontend (nueva terminal)
-cd jarvis-ui
-npm install
-npm run dev         # http://localhost:10500
+# Levantar backend + frontend juntos
+npm start
+# → http://localhost:10200      (API REST)
+# → http://localhost:10200/api  (Swagger UI)
+# → http://localhost:10201      (Frontend)
 ```
 
-El frontend usa el proxy de Vite: las llamadas a `/api` se redirigen automáticamente a `localhost:10400`.
+El frontend usa el proxy de Vite: las llamadas a `/api` se redirigen automáticamente a `localhost:10200`.
 
-Accede a `http://localhost:10500` con `admin` / `admin123`.
+Accede a `http://localhost:10201` con `admin` / `admin123`.
 
 ---
 
@@ -85,8 +84,8 @@ Accede a `http://localhost:10500` con `admin` / `admin123`.
 
 | Servicio | Host | Interno |
 |----------|------|---------|
-| jarvis-ui (nginx) | `10500` | 80 |
-| jarvis-server (NestJS) | `10400` | 3000 |
+| jarvis-ui (nginx) | `10201` | 80 |
+| jarvis-server (NestJS) | `10200` | 10200 |
 
 ### Red Docker
 
@@ -108,14 +107,15 @@ docker network ls
 docker compose up --build -d
 ```
 
-- UI: `http://localhost:10500` — usuario `admin` / `admin123`
-- API (Swagger / Postman): `http://localhost:10400/api`
+- UI: `http://localhost:10201` — usuario `admin` / `admin123`
+- API (Swagger / Postman): `http://localhost:10200/api`
 
 ### Flujo normal con cambios en código
 
 ```bash
 docker compose down
-docker compose up --build -d
+docker compose build
+docker compose up -d
 ```
 
 > La data **no se pierde** con estos comandos. El volumen `jarvis-config-data` persiste de forma independiente a los contenedores e imágenes.
@@ -155,11 +155,11 @@ Toda la data (datasources, dominios, OpenAPI specs, historial, usuarios, templat
 ```
 Browser
   │
-  ├── :10500  → jarvis-ui (nginx)
+  ├── :10201  → jarvis-ui (nginx)
   │               ├── /        → archivos estáticos (React build)
-  │               └── /api/*   → proxy interno → jarvis-server:3000
+  │               └── /api/*   → proxy interno → jarvis-server:10200
   │
-  └── :10400  → jarvis-server (NestJS) — acceso directo para Postman/Swagger
+  └── :10200  → jarvis-server (NestJS) — acceso directo para Postman/Swagger
 ```
 
 Ambos servicios comparten la red interna `jarvis-net`. El proxy de nginx resuelve el backend por nombre de contenedor (`jarvis-server`), sin pasar por el host.
@@ -179,7 +179,7 @@ C4Context
 
   System(jarvis, "Jarvis Platform", "IDP para generación automatizada de microservicios NestJS orientados a salud digital")
 
-  System_Ext(db, "Base de datos clÃ­nica", "PostgreSQL / MySQL con esquemas FHIR")
+  System_Ext(db, "Base de datos clínica", "PostgreSQL / MySQL con esquemas FHIR")
   System_Ext(git, "Repositorio Git", "GitHub / GitLab para push automático del código generado")
 
   Rel(dev, jarvis, "Configura dominios y genera microservicios", "HTTPS")
@@ -203,7 +203,7 @@ C4Container
   Container(cli, "Jarvis CLI", "Node.js", "Core engine de generación de código y scaffolding de templates")
   ContainerDb(config, "config/*.json", "File System (JSON)", "Persistencia ligera: dominios, usuarios, logs, generaciones, templates")
 
-  System_Ext(db, "Base de datos clÃ­nica", "PostgreSQL / MySQL")
+  System_Ext(db, "Base de datos clínica", "PostgreSQL / MySQL")
   System_Ext(git, "Repositorio Git", "GitHub / GitLab")
 
   Rel(dev, ui, "Usa", "HTTPS / Browser")
@@ -290,7 +290,7 @@ Login
   │
   ├── Configuración
   │     ├── DataSources  → registrar conexiones BD
-  │     ├── Domains      → definir entidades clÃ­nicas (estilo FHIR)
+  │     ├── Domains      → definir entidades clínicas (estilo FHIR)
   │     ├── Templates    → gestionar catálogo de templates
   │     └── Users        → administrar equipo
   │
