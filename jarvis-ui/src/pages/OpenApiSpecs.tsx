@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FileCode, Plus, Trash2, Download, Check, X, Tag } from 'lucide-react';
 import api from '../api/client';
-import { Button, Card, PageHeader, TextInput, SelectInput } from '@jarvis/design-system';
+import { Button, ContentCard, PageHeader, TextInput, SelectInput } from '@hce/design-system';
 import type { Domain, OpenApiSpec } from '../types';
 
 export default function OpenApiSpecs() {
@@ -85,7 +85,7 @@ export default function OpenApiSpecs() {
       />
 
       {showForm && (
-        <Card title="Nuevo OpenAPI Spec" style={{ marginBottom: 24 }}>
+        <ContentCard title="Nuevo OpenAPI Spec" style={{ marginBottom: 24 }}>
           <form onSubmit={save}>
             <div style={styles.formRow}>
               <div style={{ flex: 2 }}>
@@ -177,15 +177,15 @@ export default function OpenApiSpecs() {
               </Button>
             </div>
           </form>
-        </Card>
+        </ContentCard>
       )}
 
       <div style={styles.grid}>
         {list.length === 0 ? (
-          <Card><p style={styles.empty}>No hay OpenAPI Specs generados.</p></Card>
+          <ContentCard><p style={styles.empty}>No hay OpenAPI Specs generados.</p></ContentCard>
         ) : (
           list.map((spec) => (
-            <Card key={spec.id} style={{ position: 'relative' }}>
+            <ContentCard key={spec.id} style={{ position: 'relative' }}>
               <div style={styles.specHeader}>
                 <div style={styles.specIcon}><FileCode size={18} color="var(--jarvis-primary)" /></div>
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -218,7 +218,7 @@ export default function OpenApiSpecs() {
                   {new Date(spec.createdAt).toLocaleDateString('es-PE', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
-            </Card>
+            </ContentCard>
           ))
         )}
       </div>

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { History, Download, Trash2, RefreshCw } from 'lucide-react';
 import api from '../api/client';
-import { Button, Card, PageHeader, DataTable, StatusBadge } from '@jarvis/design-system';
+import { Button, ContentCard, PageHeader, DataTableSimple, StatusBadge } from '@hce/design-system';
 import type { Generation } from '../types';
 import { GENERATION_STATUS_BADGE as STATUS_BADGE_MAP } from '../utils/constants';
 
@@ -110,13 +110,13 @@ export default function Generations() {
         }
       />
 
-      <Card title={`Historial (${list.length})`}>
-        <DataTable
+      <ContentCard title={`Historial (${list.length})`}>
+        <DataTableSimple
           columns={columns}
           rows={list}
           emptyMessage="No hay generaciones registradas."
         />
-      </Card>
+      </ContentCard>
     </div>
   );
 }

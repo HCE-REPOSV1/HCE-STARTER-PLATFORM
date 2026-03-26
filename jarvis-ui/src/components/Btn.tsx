@@ -1,4 +1,4 @@
-import { Button } from '@jarvis/design-system'
+import { Button } from '@hce/design-system'
 import type { ReactNode, CSSProperties } from 'react'
 
 interface BtnProps {

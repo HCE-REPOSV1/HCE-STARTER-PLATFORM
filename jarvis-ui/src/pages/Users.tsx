@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Users as UsersIcon, Plus, Edit2, Trash2, X, Check, ShieldCheck, ShieldOff } from 'lucide-react';
 import api from '../api/client';
-import { Button, Card, PageHeader, DataTable, TextInput, SelectInput, StatusBadge } from '@jarvis/design-system';
+import { Button, ContentCard, PageHeader, DataTableSimple, TextInput, SelectInput, StatusBadge } from '@hce/design-system';
 import type { User } from '../types';
 import { USER_ROLE_OPTIONS } from '../utils/constants';
 
@@ -105,7 +105,7 @@ export default function Users() {
       />
 
       {showForm && (
-        <Card title={editId ? 'Editar Usuario' : 'Nuevo Usuario'} style={{ marginBottom: 24 }}>
+        <ContentCard title={editId ? 'Editar Usuario' : 'Nuevo Usuario'} style={{ marginBottom: 24 }}>
           <form onSubmit={save} style={styles.form}>
             {!editId && (
               <TextInput
@@ -135,16 +135,16 @@ export default function Users() {
               </Button>
             </div>
           </form>
-        </Card>
+        </ContentCard>
       )}
 
-      <Card title={`Usuarios (${list.length})`}>
-        <DataTable
+      <ContentCard title={`Usuarios (${list.length})`}>
+        <DataTableSimple
           columns={columns}
           rows={list}
           emptyMessage="No hay usuarios."
         />
-      </Card>
+      </ContentCard>
     </div>
   );
 }

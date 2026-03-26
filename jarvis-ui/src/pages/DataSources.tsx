@@ -2,7 +2,7 @@
 import toast from 'react-hot-toast';
 import { Database, Plus, Trash2, TestTube, Edit2, X, Check } from 'lucide-react';
 import api from '../api/client';
-import { Button, Card, PageHeader, DataTable, TextInput, SelectInput, StatusBadge } from '@jarvis/design-system';
+import { Button, ContentCard, PageHeader, DataTableSimple, TextInput, SelectInput, StatusBadge } from '@hce/design-system';
 import { DB_ENGINE_OPTIONS } from '../utils/constants';
 import type { Datasource } from '../types';
 
@@ -122,7 +122,7 @@ export default function DataSources() {
       />
 
       {showForm && (
-        <Card title={editId ? 'Editar Datasource' : 'Nueva Conexión'} style={{ marginBottom: 24 }}>
+        <ContentCard title={editId ? 'Editar Datasource' : 'Nueva Conexión'} style={{ marginBottom: 24 }}>
           <form onSubmit={save} style={styles.formGrid}>
             <div>
               <SelectInput
@@ -193,16 +193,16 @@ export default function DataSources() {
               </Button>
             </div>
           </form>
-        </Card>
+        </ContentCard>
       )}
 
-      <Card title={`Conexiones configuradas (${list.length})`}>
-        <DataTable
+      <ContentCard title={`Conexiones configuradas (${list.length})`}>
+        <DataTableSimple
           columns={columns}
           rows={list}
           emptyMessage="No hay datasources configurados."
         />
-      </Card>
+      </ContentCard>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Zap, Download, ChevronRight, ChevronLeft, Check, FileCode, Plus, X, Shield, Lock } from 'lucide-react';
 import api from '../api/client';
-import { Button, Card, PageHeader, TextInput } from '@jarvis/design-system';
+import { Button, ContentCard, PageHeader, TextInput } from '@hce/design-system';
 import type { Datasource, GenerateDto, OpenApiSpec, GatewayService } from '../types';
 import { ARCHITECTURE_OPTIONS as ARCH_OPTIONS, ORM_OPTIONS, AUTH_TYPE_OPTIONS as AUTH_OPTIONS } from '../utils/constants';
 
@@ -102,7 +102,7 @@ export default function Initialize() {
         ))}
       </div>
 
-      <Card>
+      <ContentCard>
         {/* ── Step 0: Datos básicos ─────────────────────────────── */}
         {step === 0 && (
           <div style={styles.stepContent}>
@@ -547,7 +547,7 @@ export default function Initialize() {
             </Button>
           )}
         </div>
-      </Card>
+      </ContentCard>
     </div>
   );
 }

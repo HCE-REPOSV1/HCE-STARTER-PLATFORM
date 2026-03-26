@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { LayoutTemplate, Plus, Edit2, Trash2, X, Check } from 'lucide-react';
 import api from '../api/client';
-import { Button, Card, PageHeader, TextInput, SelectInput, StatusBadge } from '@jarvis/design-system';
+import { Button, ContentCard, PageHeader, TextInput, SelectInput, StatusBadge } from '@hce/design-system';
 import type { Template } from '../types';
 import { TEMPLATE_TYPE_OPTIONS, TEMPLATE_TYPE_BADGE_MAP as TYPE_BADGE_MAP } from '../utils/constants';
 
@@ -48,7 +48,7 @@ export default function Templates() {
       />
 
       {showForm && (
-        <Card title={editId ? 'Editar Template' : 'Nuevo Template'} style={{ marginBottom: 24 }}>
+        <ContentCard title={editId ? 'Editar Template' : 'Nuevo Template'} style={{ marginBottom: 24 }}>
           <form onSubmit={save} style={styles.formGrid}>
             <TextInput label="Nombre" value={form.name} onChange={(v) => setForm({ ...form, name: v })} required />
             <SelectInput
@@ -69,12 +69,12 @@ export default function Templates() {
               </Button>
             </div>
           </form>
-        </Card>
+        </ContentCard>
       )}
 
       <div style={styles.grid}>
         {list.map((t) => (
-          <Card key={t.id}>
+          <ContentCard key={t.id}>
             <div style={styles.tHeader}>
               <StatusBadge label={t.type} variant={TYPE_BADGE_MAP[t.type] ?? 'neutral'} />
               <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
@@ -93,7 +93,7 @@ export default function Templates() {
               <span>v{t.version}</span>
               <StatusBadge label={t.active ? 'Activo' : 'Inactivo'} variant={t.active ? 'success' : 'error'} />
             </div>
-          </Card>
+          </ContentCard>
         ))}
       </div>
     </div>

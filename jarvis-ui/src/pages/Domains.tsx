@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Globe, Plus, Trash2, Edit2, X, Check, Tag, PlusCircle, Lock } from 'lucide-react';
 import api from '../api/client';
-import { Button, Card, PageHeader, TextInput, SelectInput } from '@jarvis/design-system';
+import { Button, ContentCard, PageHeader, TextInput, SelectInput } from '@hce/design-system';
 import { FIELD_TYPES } from '../utils/constants';
 import type { EntityField, DomainEntity, Domain, Datasource } from '../types';
 
@@ -115,7 +115,7 @@ export default function Domains() {
       />
 
       {showForm && (
-        <Card title={editId ? 'Editar Dominio' : 'Nuevo Dominio'} style={{ marginBottom: 24 }}>
+        <ContentCard title={editId ? 'Editar Dominio' : 'Nuevo Dominio'} style={{ marginBottom: 24 }}>
           <form onSubmit={save}>
             <div style={styles.formRow}>
               <div style={{ flex: 2 }}>
@@ -273,18 +273,18 @@ export default function Domains() {
               <Button variant="ghost" onClick={resetForm} type="button"><X size={14} style={{ marginRight: 6 }} /> Cancelar</Button>
             </div>
           </form>
-        </Card>
+        </ContentCard>
       )}
 
       {/* Domain cards */}
       <div style={styles.grid}>
         {list.length === 0 ? (
-          <Card><p style={styles.empty}>No hay dominios configurados.</p></Card>
+          <ContentCard><p style={styles.empty}>No hay dominios configurados.</p></ContentCard>
         ) : (
           list.map((d) => {
             const ds = datasources.find((x) => x.id === d.datasourceId);
             return (
-              <Card key={d.id} style={{ position: 'relative' }}>
+              <ContentCard key={d.id} style={{ position: 'relative' }}>
                 <div style={styles.domainHeader}>
                   <div style={styles.domainIcon}><Globe size={18} color="var(--jarvis-primary)" /></div>
                   <div>
@@ -318,7 +318,7 @@ export default function Domains() {
                     </div>
                   );
                 })}
-              </Card>
+              </ContentCard>
             );
           })
         )}

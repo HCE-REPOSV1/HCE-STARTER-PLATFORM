@@ -53,8 +53,8 @@ export default function Layout() {
         <div style={{ ...styles.sidebarTop, justifyContent: collapsed ? 'center' : 'space-between' }}>
           {!collapsed && (
             <div style={styles.brand}>
-              <div style={styles.brandIcon}>J</div>
-              <div><div style={styles.brandText}>Jarvis</div><div style={styles.brandSub}>Platform</div></div>
+              <div style={styles.brandIcon}>H</div>
+              <div><div style={styles.brandText}>HCE</div><div style={styles.brandSub}>Accelerator</div></div>
             </div>
           )}
           <button style={styles.collapseBtn} onClick={() => setCollapsed(!collapsed)}>
@@ -106,7 +106,7 @@ export default function Layout() {
       <div style={styles.main}>
         <header style={styles.header}>
           <div style={styles.headerLeft}>
-            <span style={styles.headerTitle}>Jarvis Platform</span>
+            <span style={styles.headerTitle}>HCE Accelerator</span>
             <span style={styles.headerSep}>|</span>
             <span style={styles.headerSub}>XXXXXXX</span>
           </div>

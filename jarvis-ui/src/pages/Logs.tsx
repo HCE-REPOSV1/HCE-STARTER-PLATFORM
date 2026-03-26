@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { FileText, RefreshCw, Filter } from 'lucide-react';
 import api from '../api/client';
-import { Button, Card, PageHeader, DataTable, TextInput, SelectInput, StatusBadge } from '@jarvis/design-system';
+import { Button, ContentCard, PageHeader, DataTableSimple, TextInput, SelectInput, StatusBadge } from '@hce/design-system';
 import type { LogEntry } from '../types';
 import {
   LOG_LEVEL_BADGE as LEVEL_BADGE_MAP,
@@ -109,7 +109,7 @@ export default function Logs() {
       />
 
       {showFilters && (
-        <Card style={{ marginBottom: 16 }}>
+        <ContentCard style={{ marginBottom: 16 }}>
           <div style={styles.filterGrid}>
             <TextInput
               label="Usuario"
@@ -140,16 +140,16 @@ export default function Logs() {
             <Button size="sm" onClick={load}>Aplicar filtros</Button>
             <Button size="sm" variant="ghost" onClick={clearFilters}>Limpiar</Button>
           </div>
-        </Card>
+        </ContentCard>
       )}
 
-      <Card title={`Eventos (${logs.length})`}>
-        <DataTable
+      <ContentCard title={`Eventos (${logs.length})`}>
+        <DataTableSimple
           columns={columns}
           rows={logs}
           emptyMessage="No hay eventos."
         />
-      </Card>
+      </ContentCard>
     </div>
   );
 }

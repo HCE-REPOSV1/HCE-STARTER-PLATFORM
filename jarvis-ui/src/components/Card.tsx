@@ -1,4 +1,4 @@
-import { Card as DSCard } from '@jarvis/design-system'
+import { ContentCard as DSCard } from '@hce/design-system'
 import type { ReactNode, CSSProperties } from 'react'
 
 interface CardProps {
