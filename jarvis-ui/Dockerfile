@@ -4,7 +4,7 @@ ARG VERDACCIO_URL=http://host.docker.internal:10100
 WORKDIR /app
 COPY package*.json .npmrc* ./
 RUN sed -i "s|http://localhost:10100|${VERDACCIO_URL}|g" .npmrc 2>/dev/null || true \
- && sed -i "s|http://localhost:4873|${VERDACCIO_URL}|g; s|http://localhost:10100|${VERDACCIO_URL}|g" package-lock.json 2>/dev/null || true \
+ && rm -f package-lock.json \
  && echo "registry=${VERDACCIO_URL}" >> .npmrc \
  && echo "replace-registry-host=always" >> .npmrc
 RUN npm install
