@@ -9,6 +9,7 @@ build/
 logs
 *.log
 npm-debug.log*
+!jarvis-server/src/logs/
 
 # environment
 .env
