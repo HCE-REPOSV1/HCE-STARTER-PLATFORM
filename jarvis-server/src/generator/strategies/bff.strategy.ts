@@ -17,10 +17,13 @@ export class BffStrategy extends GeneratorStrategyBase {
   }
 
   async generate(dir: string, name: string, dto: GenerateDto, domain?: Domain): Promise<void> {
-    const d   = domain!;
-    const arch = dto.architecture ?? DEFAULT_ARCHITECTURE;
-    const orm  = dto.orm          ?? DEFAULT_ORM;
-    const src  = path.join(dir, 'src');
+    const d        = domain!;
+    const arch     = dto.architecture ?? DEFAULT_ARCHITECTURE;
+    const orm      = dto.orm          ?? DEFAULT_ORM;
+    const src      = path.join(dir, 'src');
+    const withLogs = dto.observability?.logs === true;
+    const broker   = dto.kafkaBroker ?? 'localhost:9092';
+    const topic    = dto.kafkaTopic  ?? 'platform.logs';
 
     const entities = await new EntityResolver(this.datasourceService).resolve(dto, d);
     const { engine: dbEngine, instanceName: dbInstanceName } = new DbEngineResolver(this.datasourceService).resolve(dto);
@@ -43,7 +46,8 @@ export class BffStrategy extends GeneratorStrategyBase {
       this.writeDto(src, entity);
     }
 
-    this.writeAppModule(src, entities, dto, arch, orm, dbEngine, dbInstanceName);
+    if (withLogs) this.writeKafkaLoggerModule(src, name, broker, topic);
+    this.writeAppModule(src, entities, dto, arch, orm, dbEngine, dbInstanceName, withLogs, broker, topic);
     this.writeBffMain(src, name, dto.authType);
     this.writeBffPackageJson(dir, name, dto);
     this.writeBffTsConfig(dir);
@@ -52,6 +56,7 @@ export class BffStrategy extends GeneratorStrategyBase {
     fs.writeFileSync(path.join(dir, '.env.example'), this.buildEnvFile(name, dto, true));
     fs.writeFileSync(path.join(dir, 'Dockerfile'), this.buildDockerfile(name));
     fs.writeFileSync(path.join(dir, '.dockerignore'), 'node_modules\ndist\n.env\n*.zip\n');
+    fs.writeFileSync(path.join(dir, 'docker-compose.yml'), this.buildDockerCompose(name));
     fs.writeFileSync(path.join(dir, 'README.md'), this.buildReadme(name, d, dto.type, dto));
     fs.writeFileSync(path.join(dir, 'openapi.yaml'), this.buildOpenApiSpec(name, d));
   }
@@ -202,14 +207,181 @@ export class BffStrategy extends GeneratorStrategyBase {
     fs.writeFileSync(path.join(src, 'dto', `create-${entity.name}.dto.ts`), `export class Create${E}Dto {\n${fields}\n}\n`);
   }
 
+  // ─── Kafka Logger Module ──────────────────────────────────────
+  private writeKafkaLoggerModule(src: string, serviceName: string, broker: string, topic: string): void {
+    fs.mkdirSync(path.join(src, 'logger'), { recursive: true });
+
+    fs.writeFileSync(path.join(src, 'logger', 'kafka-logger.service.ts'), `import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Kafka, Producer, logLevel } from 'kafkajs';
+
+export interface AuditLogEntry {
+  // Audit context — propagado por el AG via headers
+  traceId?:   string;   // X-Trace-ID  → AUDIT_TRACE.trace_id
+  userId?:    string;   // X-User-ID   → AUDIT_EVENT.user_id
+  username?:  string;   // X-Username  → AUDIT_EVENT.username
+  sessionId?: string;   // X-Session-ID
+  // Datos del evento
+  level?:       string;
+  eventType?:   string;
+  action?:      string;
+  outcome?:     string;
+  message?:     string;
+  payload?:     Record<string, any>;
+}
+
+@Injectable()
+export class KafkaLoggerService implements OnModuleInit, OnModuleDestroy {
+  private producer!: Producer;
+
+  constructor(private readonly cfg: ConfigService) {}
+
+  async onModuleInit() {
+    const kafka = new Kafka({
+      clientId: '${serviceName}-logger',
+      brokers: (this.cfg.get<string>('KAFKA_BROKER', '${broker}')).split(','),
+      logLevel: logLevel.ERROR,
+    });
+    this.producer = kafka.producer();
+    await this.producer.connect();
+  }
+
+  async onModuleDestroy() {
+    await this.producer.disconnect();
+  }
+
+  async log(entry: AuditLogEntry): Promise<void> {
+    try {
+      await this.producer.send({
+        topic: this.cfg.get<string>('KAFKA_TOPIC', '${topic}'),
+        messages: [{
+          value: JSON.stringify({
+            source_system: '${serviceName}',
+            event_type:    entry.eventType  ?? 'SERVICE_CALL',
+            level:         entry.level      ?? 'INFO',
+            trace_id:      entry.traceId,
+            user_id:       entry.userId,
+            username:      entry.username,
+            session_id:    entry.sessionId,
+            action:        entry.action     ?? entry.message ?? '',
+            outcome:       entry.outcome    ?? 'SUCCESS',
+            message:       entry.message    ?? '',
+            payload:       entry.payload    ?? {},
+            timestamp:     new Date().toISOString(),
+          }),
+        }],
+      });
+    } catch {
+      // Fire and forget — nunca interrumpe el flujo de negocio
+    }
+  }
+
+  /**
+   * Extrae el contexto de audit de los headers HTTP entrantes.
+   * El AG inyecta estos headers en cada request proxiado.
+   * Usar en controllers/interceptors para propagar el contexto.
+   *
+   * @example
+   * const ctx = this.kafkaLogger.extractAuditContext(request.headers);
+   * await this.kafkaLogger.log({ ...ctx, action: 'crear-paciente', outcome: 'SUCCESS' });
+   */
+  extractAuditContext(headers: Record<string, any>): Pick<AuditLogEntry, 'traceId' | 'userId' | 'username' | 'sessionId'> {
+    return {
+      traceId:   headers['x-trace-id']   as string | undefined,
+      userId:    headers['x-user-id']    as string | undefined,
+      username:  headers['x-username']   as string | undefined,
+      sessionId: headers['x-session-id'] as string | undefined,
+    };
+  }
+}
+`);
+
+    fs.writeFileSync(path.join(src, 'logger', 'audit.interceptor.ts'), `import {
+  Injectable, NestInterceptor, ExecutionContext, CallHandler,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { KafkaLoggerService } from './kafka-logger.service';
+
+/**
+ * Interceptor de audit para microservicios CN/BS.
+ * Lee el contexto de audit inyectado por el AG (X-Trace-ID, X-User-ID, X-Username)
+ * y registra cada request/response en Kafka automáticamente.
+ *
+ * Registrado globalmente en app.module.ts vía APP_INTERCEPTOR.
+ * El desarrollador puede además inyectar KafkaLoggerService en sus
+ * servicios/use-cases para registrar eventos de negocio específicos.
+ */
+@Injectable()
+export class AuditInterceptor implements NestInterceptor {
+  constructor(private readonly logger: KafkaLoggerService) {}
+
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const req   = context.switchToHttp().getRequest();
+    const start = Date.now();
+
+    // Extraer contexto de audit propagado por el AG
+    const auditCtx = this.logger.extractAuditContext(req.headers);
+
+    return next.handle().pipe(
+      tap({
+        next: () => {
+          const res      = context.switchToHttp().getResponse();
+          const duration = Date.now() - start;
+          this.logger.log({
+            ...auditCtx,
+            eventType: 'SERVICE_CALL',
+            level:     res.statusCode < 400 ? 'INFO' : 'WARN',
+            action:    \`\${req.method} \${req.url}\`,
+            outcome:   res.statusCode < 400 ? 'SUCCESS' : 'FAILED',
+            message:   \`\${req.method} \${req.url} — \${res.statusCode} (\${duration}ms)\`,
+            payload:   { method: req.method, url: req.url, statusCode: res.statusCode, duration },
+          });
+        },
+        error: (err) => {
+          const duration = Date.now() - start;
+          this.logger.log({
+            ...auditCtx,
+            eventType: 'SERVICE_CALL',
+            level:     'ERROR',
+            action:    \`\${req.method} \${req.url}\`,
+            outcome:   'ERROR',
+            message:   \`\${req.method} \${req.url} — ERROR (\${duration}ms): \${err?.message}\`,
+            payload:   { method: req.method, url: req.url, duration, error: err?.message },
+          });
+        },
+      }),
+    );
+  }
+}
+`);
+
+    fs.writeFileSync(path.join(src, 'logger', 'kafka-logger.module.ts'), `import { Module } from '@nestjs/common';
+import { KafkaLoggerService } from './kafka-logger.service';
+import { AuditInterceptor } from './audit.interceptor';
+
+@Module({
+  providers: [KafkaLoggerService, AuditInterceptor],
+  exports:   [KafkaLoggerService, AuditInterceptor],
+})
+export class KafkaLoggerModule {}
+`);
+  }
+
   // ─── App Module ───────────────────────────────────────────────
   private writeAppModule(
     src: string, entities: GenEntity[], dto: GenerateDto,
     arch: string, orm: string, dbEngine: string, dbInstanceName?: string,
+    withLogs = false, _broker?: string, _topic?: string,
   ): void {
-    const isLayered = arch === 'layered';
-    const ctrlPath  = isLayered ? './controllers' : './infrastructure/controllers';
-    const comment   = dto.type === 'CN' ? '// BFF Canal' : '// BFF Negocio';
+    const isLayered       = arch === 'layered';
+    const ctrlPath        = isLayered ? './controllers' : './infrastructure/controllers';
+    const comment         = dto.type === 'CN' ? '// BFF Canal' : '// BFF Negocio';
+    const kafkaImportLine = withLogs
+      ? `\nimport { APP_INTERCEPTOR } from '@nestjs/core';\nimport { KafkaLoggerModule } from './logger/kafka-logger.module';\nimport { AuditInterceptor } from './logger/audit.interceptor';`
+      : '';
+    const kafkaModuleLine = withLogs ? `\n    KafkaLoggerModule,` : '';
+    const kafkaProvLine   = withLogs ? `\n  providers: [{ provide: APP_INTERCEPTOR, useClass: AuditInterceptor }],` : '';
 
     const ctrlImports = entities.map(e =>
       `import { ${this.pascal(e.name)}Controller } from '${ctrlPath}/${e.name}.controller';`
@@ -248,6 +420,7 @@ export class BffStrategy extends GeneratorStrategyBase {
         ctrlImports,
         entityImports,
         providerImports,
+        kafkaImportLine,
         ``,
         `@Module({`,
         `  imports: [`,
@@ -258,9 +431,11 @@ export class BffStrategy extends GeneratorStrategyBase {
         `      inject: [ConfigService],`,
         `    }),`,
         `    TypeOrmModule.forFeature([${entityList}]),`,
+        kafkaModuleLine,
         `  ],`,
         `  controllers: [${controllers}],`,
         `  providers: [${providers}],`,
+        kafkaProvLine,
         `})`,
         `export class AppModule {}`,
         ``,
@@ -281,87 +456,9 @@ export class BffStrategy extends GeneratorStrategyBase {
       }
       fs.writeFileSync(
         path.join(src, 'app.module.ts'),
-        `${comment}\nimport { Module } from '@nestjs/common';\n${ctrlImports}\n${svcImports}\n\n@Module({\n  controllers: [${controllers}],\n${providerLine}\n})\nexport class AppModule {}\n`,
+        `${comment}\nimport { Module } from '@nestjs/common';\n${ctrlImports}\n${svcImports}\n${kafkaImportLine}\n\n@Module({\n  imports: [${kafkaModuleLine}\n  ],\n  controllers: [${controllers}],\n${providerLine}\n${kafkaProvLine}\n})\nexport class AppModule {}\n`,
       );
     }
-  }
-
-  // ─── TypeORM config factory por motor ────────────────────────
-  private buildTypeOrmFactory(dbEngine: string, instanceName?: string): string {
-    const lines: string[] = [
-      `// db.config.ts — Configuración de base de datos`,
-      `// Las credenciales se leen desde variables de entorno en tiempo de ejecución`,
-      `//`,
-      `// ─── Fuentes de variables según ambiente ──────────────────`,
-      `// Local dev  : archivo .env (solo desarrollo)`,
-      `// Docker     : variables en docker run / docker-compose`,
-      `// Kubernetes : Secrets de K8s montados como env vars`,
-      `// Azure      : Azure Key Vault + App Configuration`,
-      `// AWS        : Secrets Manager + Parameter Store`,
-      `// HashiCorp  : Vault Agent Sidecar`,
-      `// ──────────────────────────────────────────────────────────`,
-      `import { ConfigService } from '@nestjs/config';`,
-      `import { TypeOrmModuleOptions } from '@nestjs/typeorm';`,
-      ``,
-      `export function dbConfig(cfg: ConfigService): TypeOrmModuleOptions {`,
-    ];
-
-    if (dbEngine === 'mssql') {
-      lines.push(
-        `  return {`,
-        `    type: 'mssql',`,
-        `    host:     cfg.get<string>('DB_HOST', 'localhost'),`,
-        `    port:     cfg.get<number>('DB_PORT', 1433),`,
-        `    username: cfg.get<string>('DB_USER'),`,
-        `    password: cfg.get<string>('DB_PASS'),`,
-        `    database: cfg.get<string>('DB_NAME'),`,
-        `    options: {`,
-        `      encrypt:                false,`,
-        `      trustServerCertificate: true,`,
-        `      connectTimeout:         30000,`,
-        instanceName
-          ? `      instanceName: cfg.get<string>('DB_INSTANCE', '${instanceName}'),`
-          : `      instanceName: cfg.get<string>('DB_INSTANCE') || undefined,`,
-        `    },`,
-        `    pool: { max: 25, min: 0 },`,
-        `    autoLoadEntities: true,`,
-        `    synchronize: false,`,
-        `    logging: cfg.get('NODE_ENV') === 'development',`,
-        `  };`,
-      );
-    } else if (dbEngine === 'mysql') {
-      lines.push(
-        `  return {`,
-        `    type: 'mysql',`,
-        `    host:     cfg.get<string>('DB_HOST', 'localhost'),`,
-        `    port:     cfg.get<number>('DB_PORT', 3306),`,
-        `    username: cfg.get<string>('DB_USER'),`,
-        `    password: cfg.get<string>('DB_PASS'),`,
-        `    database: cfg.get<string>('DB_NAME'),`,
-        `    autoLoadEntities: true,`,
-        `    synchronize: false,`,
-        `    logging: cfg.get('NODE_ENV') === 'development',`,
-        `  };`,
-      );
-    } else {
-      lines.push(
-        `  return {`,
-        `    type: 'postgres',`,
-        `    host:     cfg.get<string>('DB_HOST', 'localhost'),`,
-        `    port:     cfg.get<number>('DB_PORT', 5432),`,
-        `    username: cfg.get<string>('DB_USER'),`,
-        `    password: cfg.get<string>('DB_PASS'),`,
-        `    database: cfg.get<string>('DB_NAME'),`,
-        `    ssl: cfg.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,`,
-        `    autoLoadEntities: true,`,
-        `    synchronize: false,`,
-        `    logging: cfg.get('NODE_ENV') === 'development',`,
-        `  };`,
-      );
-    }
-
-    lines.push(`}`, ``);
-    return lines.join('\n');
   }
 
   // ─── main.ts ─────────────────────────────────────────────────
@@ -405,6 +502,9 @@ export class BffStrategy extends GeneratorStrategyBase {
       pkg.dependencies['@nestjs/jwt']      = '^10.0.0';
       pkg.dependencies['@nestjs/passport'] = '^10.0.0';
       pkg.dependencies['passport-jwt']     = 'latest';
+    }
+    if (dto.observability?.logs) {
+      pkg.dependencies['kafkajs'] = '^2.2.0';
     }
 
     if (dto.datasourceId) {
@@ -454,6 +554,13 @@ export class BffStrategy extends GeneratorStrategyBase {
         ``, `# JWT`,
         `JWT_SECRET=${val('change-me-in-production')}`,
         `JWT_EXPIRES_IN=${val('1d')}`,
+      );
+    }
+    if (dto.observability?.logs) {
+      lines.push(
+        ``, `# Kafka Logger`,
+        `KAFKA_BROKER=${val(dto.kafkaBroker ?? 'localhost:9092')}`,
+        `KAFKA_TOPIC=${val(dto.kafkaTopic   ?? 'platform.logs')}`,
       );
     }
     return lines.join('\n') + '\n';

@@ -28,7 +28,7 @@ export interface Template {
 }
 
 export interface Generation {
-  id: string; serviceName: string; type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA';
+  id: string; serviceName: string; type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA' | 'LG';
   domainId: string; domainName: string; architecture: string; orm: string;
   status: 'success' | 'failed' | 'pending'; zipPath?: string;
   errorMessage?: string; createdBy: string; createdAt: string;
@@ -42,7 +42,7 @@ export interface LogEntry {
 export interface GatewayService { name: string; url: string; protected: boolean }
 
 export interface GenerateDto {
-  name: string; type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA'; domainId: string; datasourceId?: string;
+  name: string; type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA' | 'LG'; domainId: string; datasourceId?: string;
   openApiSpecId?: string;
   architecture?: 'hexagonal' | 'clean' | 'layered';
   orm?: 'typeorm' | 'prisma' | 'none';
@@ -65,4 +65,10 @@ export interface GenerateDto {
   authPassword?: string;
   jwtExpiresIn?: string;
   jwtRefreshExpiresIn?: string;
+  externalAuthUrl?: string;
+  // LG — Logger / Kafka para CN, BS, AG
+  kafkaBroker?: string;
+  kafkaTopic?: string;
+  logStorage?: 'file' | 'postgres';
+  logPort?: number;
 }

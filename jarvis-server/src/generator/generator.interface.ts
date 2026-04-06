@@ -2,7 +2,7 @@ export interface GatewayService { name: string; url: string; protected: boolean;
 
 export interface GenerateDto {
   name: string;
-  type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA';
+  type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA' | 'LG';
   domainId: string;
   datasourceId?: string;
   selectedTables?: string[];
@@ -29,4 +29,10 @@ export interface GenerateDto {
   authPassword?: string;
   jwtExpiresIn?: string;
   jwtRefreshExpiresIn?: string;
+  externalAuthUrl?: string;
+  // LG — Logger Service / Kafka para CN, BS, AG
+  kafkaBroker?: string;
+  kafkaTopic?: string;
+  logStorage?: 'file' | 'postgres';
+  logPort?: number;
 }

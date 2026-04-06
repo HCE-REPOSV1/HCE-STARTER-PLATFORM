@@ -6,6 +6,7 @@ import { UxStrategy  } from './strategies/ux.strategy';
 import { BffStrategy } from './strategies/bff.strategy';
 import { AgStrategy  } from './strategies/ag.strategy';
 import { AaStrategy  } from './strategies/aa.strategy';
+import { LgStrategy  } from './strategies/lg.strategy';
 import { DomainsModule } from '../domains/domains.module';
 import { DatasourceModule } from '../datasource/datasource.module';
 import { GenerationsModule } from '../generations/generations.module';
@@ -18,6 +19,7 @@ import { GenerationsModule } from '../generations/generations.module';
     BffStrategy,
     AgStrategy,
     AaStrategy,
+    LgStrategy,
     GeneratorFactory,
     GeneratorService,
   ],

@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { Zap, Download, ChevronRight, ChevronLeft, Check, FileCode, Plus, X, Shield, Lock } from 'lucide-react';
+import { Zap, Download, ChevronRight, ChevronLeft, Check, FileCode, Plus, X, Shield, Lock, Rss } from 'lucide-react';
 import api from '../api/client';
 import { Button, ContentCard, PageHeader, TextInput } from '@hce/design-system';
-import type { Datasource, GenerateDto, OpenApiSpec, GatewayService } from '../types';
+import type { Datasource, GenerateDto, Generation, OpenApiSpec, GatewayService } from '../types';
 import { ARCHITECTURE_OPTIONS as ARCH_OPTIONS, ORM_OPTIONS, AUTH_TYPE_OPTIONS as AUTH_OPTIONS } from '../utils/constants';
 
 const STEPS = ['Básico', 'Técnico', 'DataSource / Config', 'Preview', 'Generar'];
@@ -14,6 +14,7 @@ const TYPE_OPTIONS = [
   { value: 'BS', label: 'BS — Negocio',     desc: 'BFF Negocio: lógica de negocio',          badge: 'NestJS BFF',     color: 'var(--jarvis-primary)' },
   { value: 'AG', label: 'AG — API Gateway', desc: 'Gateway con rate limit, proxy y JWT',      badge: 'API Gateway',    color: '#0d6e2b' },
   { value: 'AA', label: 'AA — Auth',        desc: 'Auth service con JWT + Refresh Token',     badge: 'JWT Auth',       color: '#7b1fa2' },
+  { value: 'LG', label: 'LG — Logger',      desc: 'Logger centralizado async vía Kafka',      badge: 'Kafka Consumer', color: '#b05c00' },
 ];
 
 const DEFAULT_GATEWAY_SVC = (): GatewayService => ({ name: '', url: '', protected: true });
@@ -28,7 +29,9 @@ const DEFAULT_DTO: GenerateDto = {
   rateLimitTtl: 60, rateLimitMax: 100, requestTimeout: 120000,
   allowedOrigins: '', useSsl: false, sslPort: 20100, serverName: '', certPath: '/app/certs',
   // AA
-  authUser: 'admin', authPassword: '', jwtExpiresIn: '4h', jwtRefreshExpiresIn: '7d',
+  authUser: 'admin', authPassword: '', jwtExpiresIn: '4h', jwtRefreshExpiresIn: '7d', externalAuthUrl: '',
+  // LG / Kafka
+  kafkaBroker: 'localhost:9092', kafkaTopic: 'platform.logs', logStorage: 'file', logPort: 10400,
 };
 
 export default function Initialize() {
@@ -36,12 +39,17 @@ export default function Initialize() {
   const [dto, setDto] = useState<GenerateDto>({ ...DEFAULT_DTO });
   const [datasources, setDatasources] = useState<Datasource[]>([]);
   const [openApiSpecs, setOpenApiSpecs] = useState<OpenApiSpec[]>([]);
+  const [loggerGenerations, setLoggerGenerations] = useState<Generation[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     api.get('/datasources').then((r) => setDatasources(r.data));
     api.get('/openapi-specs').then((r) => setOpenApiSpecs(r.data));
+    api.get('/generations').then((r) => {
+      const loggers = (r.data as Generation[]).filter((g) => g.type === 'LG' && g.status === 'success');
+      setLoggerGenerations(loggers);
+    });
   }, []);
 
   const patch = (p: Partial<GenerateDto>) => setDto((d) => ({ ...d, ...p }));
@@ -49,6 +57,8 @@ export default function Initialize() {
   const isGateway = dto.type === 'AG';
   const isAuth    = dto.type === 'AA';
   const isBff     = dto.type === 'CN' || dto.type === 'BS';
+  const isLogger  = dto.type === 'LG';
+  const needsKafka = (isBff || isGateway || isAuth) && dto.observability?.logs === true;
 
   const canNext = () => {
     if (step === 0) return dto.name.trim().length >= 2;
@@ -135,11 +145,17 @@ export default function Initialize() {
           <div style={styles.stepContent}>
             <h3 style={styles.stepTitle}>Configuración técnica</h3>
 
-            {/* AG / AA: arquitectura fija hexagonal */}
+            {/* AG / AA / LG: arquitectura fija */}
             {(isGateway || isAuth) && (
               <div style={styles.infoBox}>
                 <Shield size={14} style={{ flexShrink: 0 }} />
                 <span>Arquitectura <strong>Hexagonal</strong> fija para {isGateway ? 'API Gateway' : 'Auth Service'}. ORM y Auth configurados internamente.</span>
+              </div>
+            )}
+            {isLogger && (
+              <div style={{ ...styles.infoBox, borderColor: '#b05c00', background: '#fff8f0' }}>
+                <Rss size={14} style={{ flexShrink: 0, color: '#b05c00' }} />
+                <span style={{ color: '#7a3d00' }}>Microservicio <strong>Logger centralizado</strong> — consume mensajes Kafka y los persiste. Configurar broker y topic en el paso siguiente.</span>
               </div>
             )}
 
@@ -188,18 +204,71 @@ export default function Initialize() {
               </div>
             )}
 
-            {/* Todos los tipos: observabilidad + git */}
-            <div style={styles.field}>
-              <label style={styles.label}>Observabilidad</label>
-              <div style={{ display: 'flex', gap: 16 }}>
-                {(['logs', 'metrics', 'tracing'] as const).map((k) => (
-                  <label key={k} style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: 13 }}>
-                    <input type="checkbox" checked={dto.observability?.[k] ?? false} onChange={(e) => patch({ observability: { ...dto.observability!, [k]: e.target.checked } })} />
-                    {k.charAt(0).toUpperCase() + k.slice(1)}
-                  </label>
-                ))}
+            {/* Todos los tipos (excepto LG): observabilidad + git */}
+            {!isLogger && (
+              <div style={styles.field}>
+                <label style={styles.label}>Observabilidad</label>
+                <div style={{ display: 'flex', gap: 16 }}>
+                  {(['logs', 'metrics', 'tracing'] as const).map((k) => (
+                    <label key={k} style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: 13 }}>
+                      <input type="checkbox" checked={dto.observability?.[k] ?? false} onChange={(e) => patch({ observability: { ...dto.observability!, [k]: e.target.checked } })} />
+                      {k.charAt(0).toUpperCase() + k.slice(1)}
+                    </label>
+                  ))}
+                </div>
+
+                {/* Kafka Logger — se muestra cuando logs=true en CN/BS/AG */}
+                {needsKafka && (
+                  <div style={{ marginTop: 12, padding: '12px 14px', background: '#fff8f0', border: '1.5px solid #f0b070', borderRadius: 10 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#b05c00', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <Rss size={13} /> Kafka Logger
+                    </div>
+                    {loggerGenerations.length > 0 && (
+                      <div style={styles.field}>
+                        <label style={styles.label}>Usar logger generado</label>
+                        <select
+                          style={styles.inputNative}
+                          value=""
+                          onChange={(e) => {
+                            const lg = loggerGenerations.find((g) => g.id === e.target.value);
+                            if (lg) {
+                              // Extraer broker y topic del nombre del servicio generado
+                              // (el usuario puede sobrescribir manualmente abajo)
+                              patch({ kafkaTopic: `platform.logs` });
+                            }
+                          }}
+                        >
+                          <option value="">-- Configurar manualmente --</option>
+                          {loggerGenerations.map((g) => (
+                            <option key={g.id} value={g.id}>{g.serviceName}</option>
+                          ))}
+                        </select>
+                        <p style={styles.hint}>Al seleccionar un logger existente completa los campos. Puedes editarlos manualmente.</p>
+                      </div>
+                    )}
+                    <div style={styles.twoCol}>
+                      <div style={styles.field}>
+                        <TextInput
+                          label="Kafka Broker (KAFKA_BROKER)"
+                          value={dto.kafkaBroker ?? 'localhost:9092'}
+                          onChange={(v) => patch({ kafkaBroker: v })}
+                          placeholder="localhost:9092"
+                        />
+                      </div>
+                      <div style={styles.field}>
+                        <TextInput
+                          label="Kafka Topic (KAFKA_TOPIC)"
+                          value={dto.kafkaTopic ?? 'platform.logs'}
+                          onChange={(v) => patch({ kafkaTopic: v })}
+                          placeholder="platform.logs"
+                        />
+                      </div>
+                    </div>
+                    <p style={styles.hint}>Todos los servicios del mismo ecosistema deben compartir el mismo broker y topic que el Logger generado.</p>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
             <div style={styles.field}>
               <label style={{ ...styles.label, display: 'flex', alignItems: 'center', gap: 8 }}>
                 <input type="checkbox" checked={dto.gitEnabled} onChange={(e) => patch({ gitEnabled: e.target.checked })} />
@@ -396,33 +465,158 @@ export default function Initialize() {
               </>
             )}
 
-            {/* AA: auth config */}
-            {isAuth && (
+            {/* LG: logger config */}
+            {isLogger && (
               <>
-                <h3 style={styles.stepTitle}>Configuración Auth Service</h3>
-                <div style={{ ...styles.infoBox, marginBottom: 20 }}>
-                  <Lock size={13} style={{ flexShrink: 0 }} />
-                  <span>Autenticación con usuario y contraseña fijos (sin base de datos ni AD). Las credenciales se almacenan en el <code>.env</code> del servicio generado.</span>
+                <h3 style={styles.stepTitle}>Configuración Logger Service</h3>
+                <div style={styles.twoCol}>
+                  <div style={styles.field}>
+                    <TextInput
+                      label="Kafka Broker (KAFKA_BROKER)"
+                      value={dto.kafkaBroker ?? 'localhost:9092'}
+                      onChange={(v) => patch({ kafkaBroker: v })}
+                      placeholder="localhost:9092"
+                    />
+                    <p style={styles.hint}>Para múltiples brokers separar con coma.</p>
+                  </div>
+                  <div style={styles.field}>
+                    <TextInput
+                      label="Kafka Topic (KAFKA_TOPIC)"
+                      value={dto.kafkaTopic ?? 'platform.logs'}
+                      onChange={(v) => patch({ kafkaTopic: v })}
+                      placeholder="platform.logs"
+                    />
+                    <p style={styles.hint}>Debe coincidir con el topic configurado en los productores.</p>
+                  </div>
                 </div>
                 <div style={styles.twoCol}>
                   <div style={styles.field}>
                     <TextInput
-                      label="Usuario por defecto (AUTH_USER)"
-                      value={dto.authUser ?? ''}
-                      onChange={(v) => patch({ authUser: v })}
-                      placeholder="admin"
+                      label="Puerto HTTP (PORT)"
+                      value={String(dto.logPort ?? 10400)}
+                      onChange={(v) => patch({ logPort: Number(v) })}
+                      type="number"
                     />
+                    <p style={styles.hint}>Endpoint de consulta: GET /logs</p>
                   </div>
                   <div style={styles.field}>
-                    <TextInput
-                      label="Contraseña por defecto (AUTH_PASSWORD)"
-                      value={dto.authPassword ?? ''}
-                      onChange={(v) => patch({ authPassword: v })}
-                      placeholder="•••••••••"
-                      type="password"
-                    />
+                    <label style={styles.label}>Almacenamiento de logs</label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {[
+                        { value: 'file',     label: 'Archivo JSON', desc: 'Logs en /app/data/logs.json (simple)' },
+                        { value: 'postgres', label: 'Base de datos', desc: 'Tablas de auditoría con TypeORM (PostgreSQL, MySQL, SQL Server)' },
+                      ].map((o) => (
+                        <label key={o.value} style={styles.radioRow}>
+                          <input type="radio" name="logStorage" value={o.value} checked={(dto.logStorage ?? 'file') === o.value} onChange={() => patch({ logStorage: o.value as 'file' | 'postgres' })} />
+                          <span style={styles.radioLabel}>{o.label}</span>
+                          <span style={styles.radioDesc}>{o.desc}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 </div>
+                {/* Datasource para la BD de auditoría */}
+                <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid var(--jarvis-border)' }}>
+                  <div style={styles.field}>
+                    <label style={styles.label}>Datasource de auditoría (opcional)</label>
+                    <select style={styles.inputNative} value={dto.datasourceId} onChange={(e) => patch({ datasourceId: e.target.value })}>
+                      <option value="">-- Sin datasource (credenciales manuales en .env) --</option>
+                      {datasources.map((ds) => (
+                        <option key={ds.id} value={ds.id}>{ds.engine} — {ds.database} @ {ds.host} ({ds.status ?? 'untested'})</option>
+                      ))}
+                    </select>
+                    <p style={styles.hint}>
+                      Al seleccionar un datasource las credenciales de BD se copian automáticamente al <code>.env</code> generado.
+                      Soporta PostgreSQL, MySQL y SQL Server.
+                    </p>
+                  </div>
+                  {dto.datasourceId && (() => {
+                    const ds = datasources.find((d) => d.id === dto.datasourceId);
+                    return ds ? (
+                      <div style={{ ...styles.infoBox, borderColor: '#1565c0', background: '#e8f0fe' }}>
+                        <Shield size={13} style={{ flexShrink: 0, color: '#1565c0' }} />
+                        <span style={{ color: '#0d47a1', fontSize: 13 }}>
+                          Motor detectado: <strong>{ds.engine}</strong> — las tablas de auditoría (<code>lg_user</code>, <code>lg_auth_session</code>, <code>lg_audit_event</code>…) se crean automáticamente en el primer arranque.
+                        </span>
+                      </div>
+                    ) : null;
+                  })()}
+                  {!dto.datasourceId && (
+                    <div style={{ ...styles.infoBox, borderColor: '#1565c0', background: '#e8f0fe' }}>
+                      <Shield size={13} style={{ flexShrink: 0, color: '#1565c0' }} />
+                      <span style={{ color: '#0d47a1', fontSize: 13 }}>Sin datasource se usará PostgreSQL por defecto. Configura <code>DB_HOST</code>, <code>DB_USER</code>, <code>DB_PASS</code> y <code>DB_NAME</code> en el <code>.env</code> generado.</span>
+                    </div>
+                  )}
+                </div>
+                <div style={{ marginTop: 12 }}>
+                  <label style={styles.label}>Endpoints generados</label>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
+                    {['GET /audit/events', 'GET /audit/trace/:id', 'GET /audit/session/:id', 'GET /audit/health'].map((e) => (
+                      <span key={e} style={{ ...styles.specEntityChip, background: '#fff3e0', color: '#b05c00' }}>{e}</span>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* AA: auth config */}
+            {isAuth && (
+              <>
+                <h3 style={styles.stepTitle}>Configuración Auth Service</h3>
+
+                {/* Servicio externo de autenticación */}
+                <div style={styles.field}>
+                  <TextInput
+                    label="Servicio externo de autenticación — EXTERNAL_AUTH_URL (opcional)"
+                    value={dto.externalAuthUrl ?? ''}
+                    onChange={(v) => patch({ externalAuthUrl: v })}
+                    placeholder="http://mac-service:8080"
+                  />
+                  <p style={styles.hint}>
+                    Si se configura, el auth generado delega la validación a este endpoint (<code>POST /validate</code>).
+                    El JWT incluirá los claims retornados (userId, username, roles).
+                    Dejar vacío para usar credenciales locales del <code>.env</code>.
+                  </p>
+                </div>
+
+                {/* Credenciales locales — solo si no hay servicio externo */}
+                {!dto.externalAuthUrl && (
+                  <>
+                    <div style={{ ...styles.infoBox, marginBottom: 20 }}>
+                      <Lock size={13} style={{ flexShrink: 0 }} />
+                      <span>Sin servicio externo: autenticación local contra variables de entorno. Las credenciales se almacenan en el <code>.env</code> del servicio generado.</span>
+                    </div>
+                    <div style={styles.twoCol}>
+                      <div style={styles.field}>
+                        <TextInput
+                          label="Usuario por defecto (AUTH_USER)"
+                          value={dto.authUser ?? ''}
+                          onChange={(v) => patch({ authUser: v })}
+                          placeholder="admin"
+                        />
+                      </div>
+                      <div style={styles.field}>
+                        <TextInput
+                          label="Contraseña por defecto (AUTH_PASSWORD)"
+                          value={dto.authPassword ?? ''}
+                          onChange={(v) => patch({ authPassword: v })}
+                          placeholder="•••••••••"
+                          type="password"
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+                {dto.externalAuthUrl && (
+                  <div style={{ ...styles.infoBox, background: '#e8f5e9', borderColor: '#81c784', marginBottom: 20 }}>
+                    <Shield size={13} style={{ flexShrink: 0, color: '#2e7d32' }} />
+                    <span style={{ color: '#1b5e20' }}>
+                      Se generará <code>ExternalAuthDao</code> con manejo de:
+                      timeout (504), servicio caído (503), credenciales inválidas (401) y 1 reintento automático (500ms).
+                      Adaptar <code>mapUser()</code> al contrato de tu servicio.
+                    </span>
+                  </div>
+                )}
                 <div style={styles.twoCol}>
                   <div style={styles.field}>
                     <TextInput
@@ -477,8 +671,17 @@ export default function Initialize() {
               {isAuth && <PreviewRow label="Arquitectura"    value="Hexagonal (fijo)" />}
               {isAuth && <PreviewRow label="Access Token"    value={dto.jwtExpiresIn ?? '4h'} />}
               {isAuth && <PreviewRow label="Refresh Token"   value={dto.jwtRefreshExpiresIn ?? '7d'} />}
-              {isAuth && <PreviewRow label="Auth User"       value={dto.authUser ?? 'admin'} />}
-              <PreviewRow label="Git" value={dto.gitEnabled ? dto.gitRepoUrl || 'Habilitado' : 'No'} />
+              {isAuth && !dto.externalAuthUrl && <PreviewRow label="Auth User"    value={dto.authUser ?? 'admin'} />}
+              {isAuth && dto.externalAuthUrl  && <PreviewRow label="External Auth" value={dto.externalAuthUrl} />}
+              {isAuth && dto.externalAuthUrl  && <PreviewRow label="Error handling" value="Timeout 5s · Retry 1x · 503/504/401" />}
+              {isLogger && <PreviewRow label="Kafka Broker"  value={dto.kafkaBroker ?? 'localhost:9092'} />}
+              {isLogger && <PreviewRow label="Kafka Topic"   value={dto.kafkaTopic  ?? 'platform.logs'} />}
+              {isLogger && <PreviewRow label="Puerto HTTP"   value={String(dto.logPort ?? 10400)} />}
+              {isLogger && selectedDs && <PreviewRow label="BD Auditoría" value={`${selectedDs.engine} — ${selectedDs.database} @ ${selectedDs.host}`} />}
+              {isLogger && !selectedDs && <PreviewRow label="BD Auditoría" value="PostgreSQL (credenciales en .env)" />}
+              {needsKafka && <PreviewRow label="Kafka Broker" value={dto.kafkaBroker ?? 'localhost:9092'} />}
+              {needsKafka && <PreviewRow label="Kafka Topic"  value={dto.kafkaTopic  ?? 'platform.logs'} />}
+              {!isLogger && <PreviewRow label="Git" value={dto.gitEnabled ? dto.gitRepoUrl || 'Habilitado' : 'No'} />}
             </div>
 
             {/* Gateway services table */}
@@ -522,9 +725,10 @@ export default function Initialize() {
             <h3 style={{ fontSize: 20, fontWeight: 700, color: 'var(--jarvis-primary)', marginBottom: 8 }}>Listo para generar</h3>
             <p style={{ color: 'var(--jarvis-text-secondary)', marginBottom: 32, fontSize: 14 }}>
               Se generará <strong>{dto.type.toLowerCase()}-{dto.name}.zip</strong>
-              {isBff && <> con arquitectura <strong>{dto.architecture}</strong></>}
-              {isGateway && <> con <strong>{(dto.gatewayServices ?? []).length} servicios</strong> y rate limit <strong>{dto.rateLimitMax} req/{dto.rateLimitTtl}s</strong></>}
+              {isBff && <> con arquitectura <strong>{dto.architecture}</strong>{needsKafka && <> + Logger Kafka <strong>{dto.kafkaBroker}</strong></>}</>}
+              {isGateway && <> con <strong>{(dto.gatewayServices ?? []).length} servicios</strong> y rate limit <strong>{dto.rateLimitMax} req/{dto.rateLimitTtl}s</strong>{needsKafka && <> + Logger Kafka</>}</>}
               {isAuth && <> con JWT <strong>{dto.jwtExpiresIn}</strong> + Refresh <strong>{dto.jwtRefreshExpiresIn}</strong></>}
+              {isLogger && <> consumiendo topic <strong>{dto.kafkaTopic}</strong> desde <strong>{dto.kafkaBroker}</strong></>}
             </p>
             <Button onClick={handleGenerate} disabled={loading} size="lg">
               <Download size={18} style={{ marginRight: 8 }} />
@@ -572,7 +776,7 @@ const styles: Record<string, React.CSSProperties> = {
   field:            { display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 },
   label:            { fontSize: 13, fontWeight: 600, color: 'var(--jarvis-text)' },
   inputNative:      { padding: '9px 12px', borderRadius: 8, border: '1.5px solid var(--jarvis-border)', fontSize: 14, outline: 'none' },
-  optGrid:          { display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 12 },
+  optGrid:          { display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 },
   optGrid3:         { display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 },
   optCard:          { padding: '14px 16px', borderRadius: 10, border: '2px solid', cursor: 'pointer', transition: 'all 0.15s' },
   optLabel:         { fontWeight: 700, fontSize: 14, color: 'var(--jarvis-primary)', marginBottom: 4 },

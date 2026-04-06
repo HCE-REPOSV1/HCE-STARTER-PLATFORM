@@ -47,6 +47,33 @@ export abstract class GeneratorStrategyBase implements IGeneratorStrategy {
     );
   }
 
+  protected buildDockerCompose(name: string, defaultPort = 3000, extraPorts: number[] = [], healthPath = '/health'): string {
+    const allPorts = [defaultPort, ...extraPorts];
+    const portLines = allPorts.map((p, i) => {
+      const varName = i === 0 ? 'PORT' : 'PORT_' + p;
+      return `      - "\${${varName}:-${p}}:\${${varName}:-${p}}"`;
+    }).join('\n');
+
+    return `# docker-compose.yml — ${name}
+# Uso: docker compose up -d  |  docker compose down  |  docker compose build
+
+services:
+  ${name}:
+    build: .
+    ports:
+${portLines}
+    env_file: .env
+    environment:
+      NODE_ENV: production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:\${PORT:-${defaultPort}}${healthPath} || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+`;
+  }
+
   protected buildDockerfile(name: string): string {
     return `# Dockerfile — ${name}
 # Multi-stage build generado por Jarvis Platform
@@ -138,6 +165,87 @@ docker run -p 3000:3000 --env-file .env ${name}
 
 Disponible en: \`http://localhost:3000/api/docs\`
 `;
+  }
+
+  /**
+   * Genera el contenido de db.config.ts adaptado al motor de BD detectado.
+   * Reutilizable por BffStrategy y LgStrategy.
+   */
+  protected buildTypeOrmFactory(dbEngine: string, instanceName?: string): string {
+    const lines: string[] = [
+      `// db.config.ts — Configuración de base de datos`,
+      `// Las credenciales se leen desde variables de entorno en tiempo de ejecución`,
+      `//`,
+      `// ─── Fuentes de variables según ambiente ──────────────────`,
+      `// Local dev  : archivo .env (solo desarrollo)`,
+      `// Docker     : variables en docker run / docker-compose`,
+      `// Kubernetes : Secrets de K8s montados como env vars`,
+      `// Azure      : Azure Key Vault + App Configuration`,
+      `// AWS        : Secrets Manager + Parameter Store`,
+      `// HashiCorp  : Vault Agent Sidecar`,
+      `// ──────────────────────────────────────────────────────────`,
+      `import { ConfigService } from '@nestjs/config';`,
+      `import { TypeOrmModuleOptions } from '@nestjs/typeorm';`,
+      ``,
+      `export function dbConfig(cfg: ConfigService): TypeOrmModuleOptions {`,
+    ];
+
+    if (dbEngine === 'mssql') {
+      lines.push(
+        `  return {`,
+        `    type: 'mssql',`,
+        `    host:     cfg.get<string>('DB_HOST', 'localhost'),`,
+        `    port:     cfg.get<number>('DB_PORT', 1433),`,
+        `    username: cfg.get<string>('DB_USER'),`,
+        `    password: cfg.get<string>('DB_PASS'),`,
+        `    database: cfg.get<string>('DB_NAME'),`,
+        `    options: {`,
+        `      encrypt:                false,`,
+        `      trustServerCertificate: true,`,
+        `      connectTimeout:         30000,`,
+        instanceName
+          ? `      instanceName: cfg.get<string>('DB_INSTANCE', '${instanceName}'),`
+          : `      instanceName: cfg.get<string>('DB_INSTANCE') || undefined,`,
+        `    },`,
+        `    pool: { max: 25, min: 0 },`,
+        `    autoLoadEntities: true,`,
+        `    synchronize: false,`,
+        `    logging: cfg.get('NODE_ENV') === 'development',`,
+        `  };`,
+      );
+    } else if (dbEngine === 'mysql') {
+      lines.push(
+        `  return {`,
+        `    type: 'mysql',`,
+        `    host:     cfg.get<string>('DB_HOST', 'localhost'),`,
+        `    port:     cfg.get<number>('DB_PORT', 3306),`,
+        `    username: cfg.get<string>('DB_USER'),`,
+        `    password: cfg.get<string>('DB_PASS'),`,
+        `    database: cfg.get<string>('DB_NAME'),`,
+        `    autoLoadEntities: true,`,
+        `    synchronize: false,`,
+        `    logging: cfg.get('NODE_ENV') === 'development',`,
+        `  };`,
+      );
+    } else {
+      lines.push(
+        `  return {`,
+        `    type: 'postgres',`,
+        `    host:     cfg.get<string>('DB_HOST', 'localhost'),`,
+        `    port:     cfg.get<number>('DB_PORT', 5432),`,
+        `    username: cfg.get<string>('DB_USER'),`,
+        `    password: cfg.get<string>('DB_PASS'),`,
+        `    database: cfg.get<string>('DB_NAME'),`,
+        `    ssl: cfg.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,`,
+        `    autoLoadEntities: true,`,
+        `    synchronize: false,`,
+        `    logging: cfg.get('NODE_ENV') === 'development',`,
+        `  };`,
+      );
+    }
+
+    lines.push(`}`, ``);
+    return lines.join('\n');
   }
 
   protected buildOpenApiSpec(name: string, domain: Domain): string {
