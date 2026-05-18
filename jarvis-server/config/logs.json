@@ -694,5 +694,270 @@
     "module": "system",
     "level": "INFO",
     "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T19:08:33.878Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T19:08:34.206Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T19:10:01.044Z",
+    "user": "admin",
+    "action": "CREATE_DATASOURCE",
+    "module": "datasources",
+    "level": "INFO",
+    "details": {
+      "id": "e63c8221-37ea-4200-9b94-0f5f50e3eebc",
+      "database": "HCE_CORE"
+    }
+  },
+  {
+    "timestamp": "2026-04-23T19:10:05.137Z",
+    "user": "admin",
+    "action": "TEST_DATASOURCE",
+    "module": "datasources",
+    "level": "INFO",
+    "details": {
+      "id": "e63c8221-37ea-4200-9b94-0f5f50e3eebc",
+      "success": true
+    }
+  },
+  {
+    "timestamp": "2026-04-23T19:20:35.040Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T19:20:35.355Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T19:20:40.579Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T19:20:40.894Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T19:20:43.190Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T19:20:43.501Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T22:23:47.196Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T22:23:47.444Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T22:24:29.637Z",
+    "user": "admin",
+    "action": "CREATE_OPENAPI_SPEC",
+    "module": "system",
+    "level": "INFO",
+    "details": {
+      "name": "practitioner-api",
+      "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2"
+    }
+  },
+  {
+    "timestamp": "2026-04-23T22:24:29.970Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T22:24:36.459Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T22:24:36.782Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-23T22:24:59.813Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-bs-practitioner-service",
+      "type": "BS",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-04-24T15:57:10.422Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-24T15:57:12.666Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-24T15:57:25.028Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-24T15:57:25.615Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-24T19:02:25.825Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-24T19:02:26.161Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-25T15:54:25.211Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-25T15:54:25.701Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-25T15:54:46.556Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-25T15:54:46.865Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-29T18:01:25.046Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-29T18:01:41.839Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-29T18:07:57.680Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-04-29T18:08:31.765Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-media-media-service",
+      "type": "MS",
+      "architecture": "hexagonal"
+    }
   }
 ]

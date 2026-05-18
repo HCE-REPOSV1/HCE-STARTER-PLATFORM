@@ -5,9 +5,10 @@ export const TYPE_PREFIX: Record<string, string> = {
   AG: 'gw',
   AA: 'auth',
   LG: 'ms-lg',
+  MS: 'ms-media',
 };
 
-export const TYPES_WITHOUT_DOMAIN = ['AG', 'AA', 'LG'] as const;
+export const TYPES_WITHOUT_DOMAIN = ['AG', 'AA', 'LG', 'MS'] as const;
 
 export const DEFAULT_ARCHITECTURE = 'hexagonal' as const;
 export const DEFAULT_ORM = 'none' as const;

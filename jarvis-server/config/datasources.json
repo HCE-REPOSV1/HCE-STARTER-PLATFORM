@@ -12,5 +12,19 @@
     "npmLibrary": "mssql",
     "lastTestedAt": "2026-03-20T19:25:43.185Z",
     "schema": "dbo"
+  },
+  {
+    "id": "e63c8221-37ea-4200-9b94-0f5f50e3eebc",
+    "status": "active",
+    "engine": "SQL Server",
+    "host": "192.168.42.40",
+    "port": 1433,
+    "username": "aplicacion_dev",
+    "password": "4ppd3v2025$",
+    "database": "HCE_CORE",
+    "schema": "dbo",
+    "instanceName": "INST01",
+    "npmLibrary": "mssql",
+    "lastTestedAt": "2026-04-23T19:10:05.134Z"
   }
 ]

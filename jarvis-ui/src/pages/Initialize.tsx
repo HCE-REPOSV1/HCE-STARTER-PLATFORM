@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { Zap, Download, ChevronRight, ChevronLeft, Check, FileCode, Plus, X, Shield, Lock, Rss } from 'lucide-react';
+import { Zap, Download, ChevronRight, ChevronLeft, Check, FileCode, Plus, X, Shield, Lock, Rss, FolderOpen } from 'lucide-react';
 import api from '../api/client';
 import { Button, ContentCard, PageHeader, TextInput } from '@hce/design-system';
 import type { Datasource, GenerateDto, Generation, OpenApiSpec, GatewayService } from '../types';
@@ -15,6 +15,7 @@ const TYPE_OPTIONS = [
   { value: 'AG', label: 'AG — API Gateway', desc: 'Gateway con rate limit, proxy y JWT',      badge: 'API Gateway',    color: '#0d6e2b' },
   { value: 'AA', label: 'AA — Auth',        desc: 'Auth service con JWT + Refresh Token',     badge: 'JWT Auth',       color: '#7b1fa2' },
   { value: 'LG', label: 'LG — Logger',      desc: 'Logger centralizado async vía Kafka',      badge: 'Kafka Consumer', color: '#b05c00' },
+  { value: 'MS', label: 'MS — Media',       desc: 'Carga y descarga de archivos (multer)',    badge: 'File Service',   color: '#00838f' },
 ];
 
 const DEFAULT_GATEWAY_SVC = (): GatewayService => ({ name: '', url: '', protected: true });
@@ -58,7 +59,8 @@ export default function Initialize() {
   const isAuth    = dto.type === 'AA';
   const isBff     = dto.type === 'CN' || dto.type === 'BS';
   const isLogger  = dto.type === 'LG';
-  const needsKafka = (isBff || isGateway || isAuth) && dto.observability?.logs === true;
+  const isMedia   = dto.type === 'MS';
+  const needsKafka = (isBff || isGateway || isAuth || isMedia) && dto.observability?.logs === true;
 
   const canNext = () => {
     if (step === 0) return dto.name.trim().length >= 2;
@@ -158,6 +160,15 @@ export default function Initialize() {
                 <span style={{ color: '#7a3d00' }}>Microservicio <strong>Logger centralizado</strong> — consume mensajes Kafka y los persiste. Configurar broker y topic en el paso siguiente.</span>
               </div>
             )}
+            {isMedia && (
+              <div style={{ ...styles.infoBox, borderColor: '#00838f', background: '#e0f7fa' }}>
+                <FolderOpen size={14} style={{ flexShrink: 0, color: '#00838f' }} />
+                <span style={{ color: '#006064' }}>
+                  <strong>Media Service</strong> — carga y descarga de archivos (imágenes, documentos, etc.) usando Multer.
+                  No requiere dominio ni datasource. El almacenamiento es en disco local (configurable vía <code>UPLOADS_DIR</code>).
+                </span>
+              </div>
+            )}
 
             {/* BFF: selección de arquitectura */}
             {isBff && (
@@ -204,7 +215,7 @@ export default function Initialize() {
               </div>
             )}
 
-            {/* Todos los tipos (excepto LG): observabilidad + git */}
+            {/* Todos los tipos (excepto LG): observabilidad */}
             {!isLogger && (
               <div style={styles.field}>
                 <label style={styles.label}>Observabilidad</label>
@@ -265,34 +276,41 @@ export default function Initialize() {
                       </div>
                     </div>
                     <p style={styles.hint}>Todos los servicios del mismo ecosistema deben compartir el mismo broker y topic que el Logger generado.</p>
+                    {isMedia && (
+                      <div style={{ marginTop: 8, fontSize: 12, color: '#7a3d00' }}>
+                        <strong>Eventos auditados:</strong> FILE_UPLOAD · FILE_DOWNLOAD · FILE_DELETE + todos los requests HTTP vía AuditInterceptor.
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
             )}
-            <div style={styles.field}>
-              <label style={{ ...styles.label, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <input type="checkbox" checked={dto.gitEnabled} onChange={(e) => patch({ gitEnabled: e.target.checked })} />
-                Integración Git
-              </label>
-              {dto.gitEnabled && (
-                <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-                  <div style={{ flex: 3 }}>
-                    <TextInput
-                      value={dto.gitRepoUrl ?? ''}
-                      onChange={(v) => patch({ gitRepoUrl: v })}
-                      placeholder="https://github.com/org/repo.git"
-                    />
+            {!isLogger && !isMedia && (
+              <div style={styles.field}>
+                <label style={{ ...styles.label, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <input type="checkbox" checked={dto.gitEnabled} onChange={(e) => patch({ gitEnabled: e.target.checked })} />
+                  Integración Git
+                </label>
+                {dto.gitEnabled && (
+                  <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+                    <div style={{ flex: 3 }}>
+                      <TextInput
+                        value={dto.gitRepoUrl ?? ''}
+                        onChange={(v) => patch({ gitRepoUrl: v })}
+                        placeholder="https://github.com/org/repo.git"
+                      />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <TextInput
+                        value={dto.gitBranch ?? ''}
+                        onChange={(v) => patch({ gitBranch: v })}
+                        placeholder="main"
+                      />
+                    </div>
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <TextInput
-                      value={dto.gitBranch ?? ''}
-                      onChange={(v) => patch({ gitBranch: v })}
-                      placeholder="main"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -559,6 +577,42 @@ export default function Initialize() {
               </>
             )}
 
+            {/* MS: media service config */}
+            {isMedia && (
+              <>
+                <h3 style={styles.stepTitle}>Configuración Media Service</h3>
+                <div style={{ ...styles.infoBox, borderColor: '#00838f', background: '#e0f7fa', marginBottom: 20 }}>
+                  <FolderOpen size={14} style={{ flexShrink: 0, color: '#00838f' }} />
+                  <span style={{ color: '#006064' }}>
+                    No requiere dominio ni datasource. Las variables de entorno se configuran en el <code>.env</code> generado.
+                  </span>
+                </div>
+                <div style={{ marginTop: 4 }}>
+                  <label style={styles.label}>Endpoints generados</label>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+                    {[
+                      'POST /files/upload',
+                      'GET /files',
+                      'GET /files/:id',
+                      'GET /files/:id/download',
+                      'DELETE /files/:id',
+                    ].map((e) => (
+                      <span key={e} style={{ ...styles.specEntityChip, background: '#e0f7fa', color: '#00838f' }}>{e}</span>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ marginTop: 20 }}>
+                  <label style={styles.label}>Variables de entorno (.env)</label>
+                  <div style={{ marginTop: 8, background: 'var(--jarvis-bg)', borderRadius: 8, padding: '12px 16px', fontFamily: 'monospace', fontSize: 12, color: 'var(--jarvis-text)', lineHeight: 1.8 }}>
+                    <div><strong>UPLOADS_DIR</strong>=./uploads</div>
+                    <div><strong>MAX_FILE_SIZE_MB</strong>=50</div>
+                    <div><strong>ALLOWED_TYPES</strong>=  <span style={{ color: 'var(--jarvis-text-secondary)' }}># vacío = todos (ej: image/jpeg,application/pdf)</span></div>
+                  </div>
+                  <p style={styles.hint}>Edita estas variables en el <code>.env</code> generado para ajustar límites y tipos permitidos.</p>
+                </div>
+              </>
+            )}
+
             {/* AA: auth config */}
             {isAuth && (
               <>
@@ -679,9 +733,15 @@ export default function Initialize() {
               {isLogger && <PreviewRow label="Puerto HTTP"   value={String(dto.logPort ?? 10400)} />}
               {isLogger && selectedDs && <PreviewRow label="BD Auditoría" value={`${selectedDs.engine} — ${selectedDs.database} @ ${selectedDs.host}`} />}
               {isLogger && !selectedDs && <PreviewRow label="BD Auditoría" value="PostgreSQL (credenciales en .env)" />}
+              {isMedia && <PreviewRow label="Storage"        value="Disk local (./uploads)" />}
+              {isMedia && <PreviewRow label="Max file size"  value="50 MB (configurable)" />}
+              {isMedia && <PreviewRow label="MIME filter"    value="Todos (configurable en .env)" />}
+              {isMedia && needsKafka && <PreviewRow label="Kafka Broker"  value={dto.kafkaBroker ?? 'localhost:9092'} />}
+              {isMedia && needsKafka && <PreviewRow label="Kafka Topic"   value={dto.kafkaTopic  ?? 'platform.logs'} />}
+              {isMedia && needsKafka && <PreviewRow label="Audit events"  value="FILE_UPLOAD · FILE_DOWNLOAD · FILE_DELETE" />}
               {needsKafka && <PreviewRow label="Kafka Broker" value={dto.kafkaBroker ?? 'localhost:9092'} />}
               {needsKafka && <PreviewRow label="Kafka Topic"  value={dto.kafkaTopic  ?? 'platform.logs'} />}
-              {!isLogger && <PreviewRow label="Git" value={dto.gitEnabled ? dto.gitRepoUrl || 'Habilitado' : 'No'} />}
+              {!isLogger && !isMedia && <PreviewRow label="Git" value={dto.gitEnabled ? dto.gitRepoUrl || 'Habilitado' : 'No'} />}
             </div>
 
             {/* Gateway services table */}
@@ -729,6 +789,8 @@ export default function Initialize() {
               {isGateway && <> con <strong>{(dto.gatewayServices ?? []).length} servicios</strong> y rate limit <strong>{dto.rateLimitMax} req/{dto.rateLimitTtl}s</strong>{needsKafka && <> + Logger Kafka</>}</>}
               {isAuth && <> con JWT <strong>{dto.jwtExpiresIn}</strong> + Refresh <strong>{dto.jwtRefreshExpiresIn}</strong></>}
               {isLogger && <> consumiendo topic <strong>{dto.kafkaTopic}</strong> desde <strong>{dto.kafkaBroker}</strong></>}
+              {isMedia && !needsKafka && <> con upload/download de archivos (Multer disk storage)</>}
+              {isMedia && needsKafka && <> con upload/download de archivos + audit Kafka (<strong>{dto.kafkaBroker}</strong>)</>}
             </p>
             <Button onClick={handleGenerate} disabled={loading} size="lg">
               <Download size={18} style={{ marginRight: 8 }} />

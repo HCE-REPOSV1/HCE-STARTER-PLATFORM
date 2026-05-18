@@ -651,5 +651,269 @@
       }
     ],
     "datasourceId": "d0eeaa8e-804c-4b3e-bd14-8583ff9dac77"
+  },
+  {
+    "id": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "name": "hce_core",
+    "datasourceId": "e63c8221-37ea-4200-9b94-0f5f50e3eebc",
+    "entities": [
+      {
+        "name": "FileServerConfig",
+        "fields": [
+          { "name": "config_id",           "type": "number",  "required": true  },
+          { "name": "profile_name",        "type": "string",  "required": true,  "size": 50  },
+          { "name": "base_url",            "type": "string",  "required": true,  "size": 500 },
+          { "name": "is_default",          "type": "boolean", "required": true  },
+          { "name": "config_description",  "type": "string",  "required": false, "size": 255 },
+          { "name": "user_create",         "type": "string",  "required": true,  "size": 20  },
+          { "name": "user_modify",         "type": "string",  "required": false, "size": 20  },
+          { "name": "date_create",         "type": "Date",    "required": true  },
+          { "name": "date_modify",         "type": "Date",    "required": false },
+          { "name": "is_active",           "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "TenantIdentity",
+        "fields": [
+          { "name": "tenant_identity_id",  "type": "number",  "required": true  },
+          { "name": "tenant_uuid",         "type": "string",  "required": true  },
+          { "name": "tenant_code",         "type": "string",  "required": true,  "size": 50  },
+          { "name": "tenant_name",         "type": "string",  "required": true,  "size": 255 },
+          { "name": "country_code",        "type": "string",  "required": true,  "size": 3   },
+          { "name": "timezone",            "type": "string",  "required": true,  "size": 50  },
+          { "name": "fhir_version",        "type": "string",  "required": true,  "size": 10  },
+          { "name": "environment",         "type": "string",  "required": true,  "size": 10  },
+          { "name": "system_version",      "type": "string",  "required": true,  "size": 20  },
+          { "name": "provisioned_at",      "type": "Date",    "required": true  },
+          { "name": "user_create",         "type": "string",  "required": true,  "size": 20  },
+          { "name": "user_modify",         "type": "string",  "required": false, "size": 20  },
+          { "name": "date_create",         "type": "Date",    "required": true  },
+          { "name": "date_modify",         "type": "Date",    "required": false },
+          { "name": "is_active",           "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "Organisation",
+        "fields": [
+          { "name": "organisation_id",     "type": "number",  "required": true  },
+          { "name": "organisation_uuid",   "type": "string",  "required": true  },
+          { "name": "legacy_id",           "type": "string",  "required": false, "size": 50  },
+          { "name": "organisation_name",   "type": "string",  "required": true,  "size": 255 },
+          { "name": "type_code",           "type": "string",  "required": false, "size": 50  },
+          { "name": "type_display",        "type": "string",  "required": false, "size": 150 },
+          { "name": "active_fhir",         "type": "boolean", "required": true  },
+          { "name": "user_create",         "type": "string",  "required": true,  "size": 20  },
+          { "name": "user_modify",         "type": "string",  "required": false, "size": 20  },
+          { "name": "date_create",         "type": "Date",    "required": true  },
+          { "name": "date_modify",         "type": "Date",    "required": false },
+          { "name": "is_active",           "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "Speciality",
+        "fields": [
+          { "name": "speciality_id",          "type": "number",  "required": true  },
+          { "name": "fhir_code",              "type": "string",  "required": true,  "size": 50  },
+          { "name": "fhir_system",            "type": "string",  "required": true,  "size": 255 },
+          { "name": "fhir_display",           "type": "string",  "required": true,  "size": 200 },
+          { "name": "local_name",             "type": "string",  "required": true,  "size": 200 },
+          { "name": "legacy_speciality_id",   "type": "string",  "required": false, "size": 50  },
+          { "name": "user_create",            "type": "string",  "required": true,  "size": 20  },
+          { "name": "user_modify",            "type": "string",  "required": false, "size": 20  },
+          { "name": "date_create",            "type": "Date",    "required": true  },
+          { "name": "date_modify",            "type": "Date",    "required": false },
+          { "name": "is_active",              "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "Location",
+        "fields": [
+          { "name": "location_id",            "type": "number",  "required": true  },
+          { "name": "location_uuid",          "type": "string",  "required": true  },
+          { "name": "organisation_id",        "type": "number",  "required": true  },
+          { "name": "identifier_value",       "type": "string",  "required": false, "size": 50  },
+          { "name": "location_status",        "type": "string",  "required": true,  "size": 10  },
+          { "name": "location_name",          "type": "string",  "required": true,  "size": 200 },
+          { "name": "location_alias",         "type": "string",  "required": false, "size": 100 },
+          { "name": "location_description",   "type": "string",  "required": false, "size": 500 },
+          { "name": "location_mode",          "type": "string",  "required": true,  "size": 10  },
+          { "name": "type_code",              "type": "string",  "required": false, "size": 50  },
+          { "name": "type_display",           "type": "string",  "required": false, "size": 150 },
+          { "name": "physical_type_code",     "type": "string",  "required": false, "size": 10  },
+          { "name": "physical_type_display",  "type": "string",  "required": false, "size": 100 },
+          { "name": "address_line_1",         "type": "string",  "required": false, "size": 255 },
+          { "name": "address_line_2",         "type": "string",  "required": false, "size": 255 },
+          { "name": "address_city",           "type": "string",  "required": false, "size": 100 },
+          { "name": "address_district",       "type": "string",  "required": false, "size": 100 },
+          { "name": "address_state",          "type": "string",  "required": false, "size": 100 },
+          { "name": "address_postal_code",    "type": "string",  "required": false, "size": 20  },
+          { "name": "address_country",        "type": "string",  "required": true,  "size": 3   },
+          { "name": "position_longitude",     "type": "number",  "required": false },
+          { "name": "position_latitude",      "type": "number",  "required": false },
+          { "name": "telecom_phone",          "type": "string",  "required": false, "size": 20  },
+          { "name": "telecom_email",          "type": "string",  "required": false, "size": 255 },
+          { "name": "legacy_location_id",     "type": "string",  "required": false, "size": 50  },
+          { "name": "user_create",            "type": "string",  "required": true,  "size": 20  },
+          { "name": "user_modify",            "type": "string",  "required": false, "size": 20  },
+          { "name": "date_create",            "type": "Date",    "required": true  },
+          { "name": "date_modify",            "type": "Date",    "required": false },
+          { "name": "is_active",              "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "Practitioner",
+        "fields": [
+          { "name": "practitioner_id",          "type": "number",  "required": true  },
+          { "name": "practitioner_uuid",        "type": "string",  "required": true  },
+          { "name": "ad_username",              "type": "string",  "required": true,  "size": 100 },
+          { "name": "identifier_value",         "type": "string",  "required": false, "size": 50  },
+          { "name": "identifier_system",        "type": "string",  "required": false, "size": 255 },
+          { "name": "identifier_type_code",     "type": "string",  "required": false, "size": 20  },
+          { "name": "name_family",              "type": "string",  "required": true,  "size": 100 },
+          { "name": "name_given",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "name_prefix",              "type": "string",  "required": false, "size": 30  },
+          { "name": "name_suffix",              "type": "string",  "required": false, "size": 30  },
+          { "name": "gender",                   "type": "string",  "required": false, "size": 10  },
+          { "name": "birth_date",               "type": "Date",    "required": false },
+          { "name": "active_fhir",              "type": "boolean", "required": true  },
+          { "name": "communication_language",   "type": "string",  "required": false, "size": 10  },
+          { "name": "legacy_practitioner_id",   "type": "string",  "required": false, "size": 50  },
+          { "name": "user_create",              "type": "string",  "required": true,  "size": 20  },
+          { "name": "user_modify",              "type": "string",  "required": false, "size": 20  },
+          { "name": "date_create",              "type": "Date",    "required": true  },
+          { "name": "date_modify",              "type": "Date",    "required": false },
+          { "name": "is_active",                "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "PractitionerRole",
+        "fields": [
+          { "name": "role_id",            "type": "number",  "required": true  },
+          { "name": "role_uuid",          "type": "string",  "required": true  },
+          { "name": "practitioner_id",    "type": "number",  "required": true  },
+          { "name": "organisation_id",    "type": "number",  "required": true  },
+          { "name": "speciality_id",      "type": "number",  "required": true  },
+          { "name": "location_id",        "type": "number",  "required": false },
+          { "name": "role_code",          "type": "string",  "required": false, "size": 50  },
+          { "name": "role_display",       "type": "string",  "required": false, "size": 150 },
+          { "name": "period_start",       "type": "Date",    "required": false },
+          { "name": "period_end",         "type": "Date",    "required": false },
+          { "name": "active_fhir",        "type": "boolean", "required": true  },
+          { "name": "user_create",        "type": "string",  "required": true,  "size": 20  },
+          { "name": "user_modify",        "type": "string",  "required": false, "size": 20  },
+          { "name": "date_create",        "type": "Date",    "required": true  },
+          { "name": "date_modify",        "type": "Date",    "required": false },
+          { "name": "is_active",          "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "PractitionerAddress",
+        "fields": [
+          { "name": "address_id",          "type": "number",  "required": true  },
+          { "name": "practitioner_id",     "type": "number",  "required": true  },
+          { "name": "address_use",         "type": "string",  "required": true,  "size": 10  },
+          { "name": "address_type",        "type": "string",  "required": true,  "size": 10  },
+          { "name": "address_text",        "type": "string",  "required": false, "size": 500 },
+          { "name": "address_line_1",      "type": "string",  "required": false, "size": 255 },
+          { "name": "address_line_2",      "type": "string",  "required": false, "size": 255 },
+          { "name": "address_city",        "type": "string",  "required": false, "size": 100 },
+          { "name": "address_district",    "type": "string",  "required": false, "size": 100 },
+          { "name": "address_state",       "type": "string",  "required": false, "size": 100 },
+          { "name": "address_postal_code", "type": "string",  "required": false, "size": 20  },
+          { "name": "address_country",     "type": "string",  "required": true,  "size": 3   },
+          { "name": "period_start",        "type": "Date",    "required": false },
+          { "name": "period_end",          "type": "Date",    "required": false },
+          { "name": "user_create",         "type": "string",  "required": true,  "size": 20  },
+          { "name": "user_modify",         "type": "string",  "required": false, "size": 20  },
+          { "name": "date_create",         "type": "Date",    "required": true  },
+          { "name": "date_modify",         "type": "Date",    "required": false },
+          { "name": "is_active",           "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "PractitionerContactPoint",
+        "fields": [
+          { "name": "contact_point_id",  "type": "number",  "required": true  },
+          { "name": "practitioner_id",   "type": "number",  "required": true  },
+          { "name": "contact_system",    "type": "string",  "required": true,  "size": 10  },
+          { "name": "contact_value",     "type": "string",  "required": true,  "size": 255 },
+          { "name": "contact_use",       "type": "string",  "required": false, "size": 10  },
+          { "name": "contact_rank",      "type": "number",  "required": false },
+          { "name": "period_start",      "type": "Date",    "required": false },
+          { "name": "period_end",        "type": "Date",    "required": false },
+          { "name": "user_create",       "type": "string",  "required": true,  "size": 20  },
+          { "name": "user_modify",       "type": "string",  "required": false, "size": 20  },
+          { "name": "date_create",       "type": "Date",    "required": true  },
+          { "name": "date_modify",       "type": "Date",    "required": false },
+          { "name": "is_active",         "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "PractitionerMedia",
+        "fields": [
+          { "name": "media_id",               "type": "number",  "required": true  },
+          { "name": "practitioner_id",        "type": "number",  "required": true  },
+          { "name": "file_server_config_id",  "type": "number",  "required": true  },
+          { "name": "content_type",           "type": "string",  "required": true,  "size": 100  },
+          { "name": "media_file_name",        "type": "string",  "required": true,  "size": 255  },
+          { "name": "relative_path",          "type": "string",  "required": true,  "size": 1000 },
+          { "name": "media_type",             "type": "string",  "required": true,  "size": 30   },
+          { "name": "media_title",            "type": "string",  "required": false, "size": 255  },
+          { "name": "file_size_bytes",        "type": "number",  "required": false },
+          { "name": "file_hash",              "type": "string",  "required": false, "size": 64   },
+          { "name": "is_primary",             "type": "boolean", "required": true  },
+          { "name": "attachment_date",        "type": "Date",    "required": false },
+          { "name": "user_create",            "type": "string",  "required": true,  "size": 20   },
+          { "name": "user_modify",            "type": "string",  "required": false, "size": 20   },
+          { "name": "date_create",            "type": "Date",    "required": true  },
+          { "name": "date_modify",            "type": "Date",    "required": false },
+          { "name": "is_active",              "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "DomainEventOutbox",
+        "fields": [
+          { "name": "event_id",        "type": "number",  "required": true  },
+          { "name": "event_uuid",      "type": "string",  "required": true  },
+          { "name": "event_type",      "type": "string",  "required": true,  "size": 100  },
+          { "name": "aggregate_type",  "type": "string",  "required": true,  "size": 100  },
+          { "name": "aggregate_id",    "type": "string",  "required": true,  "size": 50   },
+          { "name": "event_payload",   "type": "string",  "required": true  },
+          { "name": "event_status",    "type": "string",  "required": true,  "size": 20   },
+          { "name": "occurred_at",     "type": "Date",    "required": true  },
+          { "name": "processed_at",    "type": "Date",    "required": false },
+          { "name": "retry_count",     "type": "number",  "required": true  },
+          { "name": "last_error",      "type": "string",  "required": false, "size": 1000 },
+          { "name": "user_create",     "type": "string",  "required": true,  "size": 20   },
+          { "name": "user_modify",     "type": "string",  "required": false, "size": 20   },
+          { "name": "date_create",     "type": "Date",    "required": true  },
+          { "name": "date_modify",     "type": "Date",    "required": false },
+          { "name": "is_active",       "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "LegacySyncLog",
+        "fields": [
+          { "name": "sync_log_id",        "type": "number",  "required": true  },
+          { "name": "event_uuid",         "type": "string",  "required": false },
+          { "name": "sync_direction",     "type": "string",  "required": true,  "size": 10   },
+          { "name": "entity_type",        "type": "string",  "required": true,  "size": 100  },
+          { "name": "entity_id_hce",      "type": "string",  "required": false, "size": 50   },
+          { "name": "entity_id_legacy",   "type": "string",  "required": false, "size": 50   },
+          { "name": "sync_operation",     "type": "string",  "required": true,  "size": 10   },
+          { "name": "sync_result",        "type": "string",  "required": true,  "size": 10   },
+          { "name": "result_detail",      "type": "string",  "required": false, "size": 1000 },
+          { "name": "payload_sent",       "type": "string",  "required": false },
+          { "name": "payload_received",   "type": "string",  "required": false },
+          { "name": "sync_started_at",    "type": "Date",    "required": true  },
+          { "name": "sync_finished_at",   "type": "Date",    "required": false },
+          { "name": "user_create",        "type": "string",  "required": true,  "size": 20   },
+          { "name": "user_modify",        "type": "string",  "required": false, "size": 20   },
+          { "name": "date_create",        "type": "Date",    "required": true  },
+          { "name": "date_modify",        "type": "Date",    "required": false },
+          { "name": "is_active",          "type": "boolean", "required": true  }
+        ]
+      }
+    ]
   }
 ]

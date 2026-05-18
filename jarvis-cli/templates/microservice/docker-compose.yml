@@ -1,0 +1,22 @@
+# docker-compose.yml — {{SERVICE_NAME}}
+# Uso: docker compose up -d  |  docker compose down  |  docker compose build
+
+services:
+  {{SERVICE_NAME}}:
+    build: .
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+      - "${SSL_PORT:-3443}:${SSL_PORT:-3443}"
+    env_file: .env
+    environment:
+      NODE_ENV: production
+    volumes:
+      - ${CERT_PATH:-/app/certs}:${CERT_PATH:-/app/certs}:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:${PORT:-3000}/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

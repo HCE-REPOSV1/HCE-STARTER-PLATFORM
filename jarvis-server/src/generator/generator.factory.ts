@@ -5,6 +5,7 @@ import { BffStrategy } from './strategies/bff.strategy';
 import { AgStrategy  } from './strategies/ag.strategy';
 import { AaStrategy  } from './strategies/aa.strategy';
 import { LgStrategy  } from './strategies/lg.strategy';
+import { MsStrategy  } from './strategies/ms.strategy';
 
 @Injectable()
 export class GeneratorFactory {
@@ -16,6 +17,7 @@ export class GeneratorFactory {
     private readonly ag:  AgStrategy,
     private readonly aa:  AaStrategy,
     private readonly lg:  LgStrategy,
+    private readonly ms:  MsStrategy,
   ) {
     this.map = {
       UX: this.ux,
@@ -24,6 +26,7 @@ export class GeneratorFactory {
       AG: this.ag,
       AA: this.aa,
       LG: this.lg,
+      MS: this.ms,
     };
   }
 

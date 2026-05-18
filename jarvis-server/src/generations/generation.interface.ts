@@ -3,7 +3,7 @@ export type GenerationStatus = 'success' | 'failed' | 'pending';
 export interface Generation {
   id: string;
   serviceName: string;
-  type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA' | 'LG';
+  type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA' | 'LG' | 'MS';
   domainId: string;
   domainName: string;
   architecture: string;

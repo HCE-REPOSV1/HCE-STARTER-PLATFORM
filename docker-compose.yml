@@ -9,7 +9,7 @@ services:
       NODE_ENV: production
       ALLOWED_ORIGINS: "http://localhost:10201,http://localhost:5173"
     volumes:
-      - jarvis-data:/app/config
+      - ./jarvis-server/config:/app/config
     networks:
       - jarvis-net
     healthcheck:
@@ -34,10 +34,6 @@ services:
         condition: service_healthy
     networks:
       - jarvis-net
-
-volumes:
-  jarvis-data:
-    name: jarvis-config-data
 
 networks:
   jarvis-net:

@@ -2,7 +2,7 @@ export interface GatewayService { name: string; url: string; protected: boolean;
 
 export interface GenerateDto {
   name: string;
-  type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA' | 'LG';
+  type: 'UX' | 'CN' | 'BS' | 'AG' | 'AA' | 'LG' | 'MS';
   domainId: string;
   datasourceId?: string;
   selectedTables?: string[];

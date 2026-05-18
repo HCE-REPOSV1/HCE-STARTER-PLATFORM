@@ -128,5 +128,31 @@
     "createdBy": "admin",
     "createdAt": "2026-03-23T22:00:38.396Z",
     "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\ms-cn-wedrfg.zip"
+  },
+  {
+    "id": "2b5a49c3-33c6-43a5-85b1-548f42b4e926",
+    "serviceName": "bs-practitioner-service",
+    "type": "BS",
+    "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "domainName": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "architecture": "hexagonal",
+    "orm": "typeorm",
+    "status": "success",
+    "createdBy": "admin",
+    "createdAt": "2026-04-23T22:24:59.414Z",
+    "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\ms-bs-practitioner-service.zip"
+  },
+  {
+    "id": "15f42107-9ccb-464c-8385-2ca34de1b066",
+    "serviceName": "ms-media-service",
+    "type": "MS",
+    "domainId": "",
+    "domainName": "",
+    "architecture": "hexagonal",
+    "orm": "none",
+    "status": "success",
+    "createdBy": "admin",
+    "createdAt": "2026-04-29T18:08:31.650Z",
+    "zipPath": "/tmp/ms-media-media-service.zip"
   }
 ]

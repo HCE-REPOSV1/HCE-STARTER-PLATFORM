@@ -248,6 +248,144 @@ Disponible en: \`http://localhost:3000/api/docs\`
     return lines.join('\n');
   }
 
+  protected writeKafkaLoggerModule(src: string, serviceName: string, broker: string, topic: string): void {
+    fs.mkdirSync(path.join(src, 'logger'), { recursive: true });
+
+    fs.writeFileSync(path.join(src, 'logger', 'kafka-logger.service.ts'), `import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Kafka, Producer, logLevel } from 'kafkajs';
+
+export interface AuditLogEntry {
+  traceId?:   string;
+  userId?:    string;
+  username?:  string;
+  sessionId?: string;
+  level?:       string;
+  eventType?:   string;
+  action?:      string;
+  outcome?:     string;
+  message?:     string;
+  payload?:     Record<string, any>;
+}
+
+@Injectable()
+export class KafkaLoggerService implements OnModuleInit, OnModuleDestroy {
+  private producer!: Producer;
+
+  constructor(private readonly cfg: ConfigService) {}
+
+  async onModuleInit() {
+    const kafka = new Kafka({
+      clientId: '${serviceName}-logger',
+      brokers: (this.cfg.get<string>('KAFKA_BROKER', '${broker}')).split(','),
+      logLevel: logLevel.ERROR,
+    });
+    this.producer = kafka.producer();
+    await this.producer.connect();
+  }
+
+  async onModuleDestroy() {
+    await this.producer.disconnect();
+  }
+
+  async log(entry: AuditLogEntry): Promise<void> {
+    try {
+      await this.producer.send({
+        topic: this.cfg.get<string>('KAFKA_TOPIC', '${topic}'),
+        messages: [{
+          value: JSON.stringify({
+            source_system: '${serviceName}',
+            event_type:    entry.eventType  ?? 'SERVICE_CALL',
+            level:         entry.level      ?? 'INFO',
+            trace_id:      entry.traceId,
+            user_id:       entry.userId,
+            username:      entry.username,
+            session_id:    entry.sessionId,
+            action:        entry.action     ?? entry.message ?? '',
+            outcome:       entry.outcome    ?? 'SUCCESS',
+            message:       entry.message    ?? '',
+            payload:       entry.payload    ?? {},
+            timestamp:     new Date().toISOString(),
+          }),
+        }],
+      });
+    } catch {
+      // Fire and forget — nunca interrumpe el flujo de negocio
+    }
+  }
+
+  extractAuditContext(headers: Record<string, any>): Pick<AuditLogEntry, 'traceId' | 'userId' | 'username' | 'sessionId'> {
+    return {
+      traceId:   headers['x-trace-id']   as string | undefined,
+      userId:    headers['x-user-id']    as string | undefined,
+      username:  headers['x-username']   as string | undefined,
+      sessionId: headers['x-session-id'] as string | undefined,
+    };
+  }
+}
+`);
+
+    fs.writeFileSync(path.join(src, 'logger', 'audit.interceptor.ts'), `import {
+  Injectable, NestInterceptor, ExecutionContext, CallHandler,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { KafkaLoggerService } from './kafka-logger.service';
+
+@Injectable()
+export class AuditInterceptor implements NestInterceptor {
+  constructor(private readonly logger: KafkaLoggerService) {}
+
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const req   = context.switchToHttp().getRequest();
+    const start = Date.now();
+    const auditCtx = this.logger.extractAuditContext(req.headers);
+
+    return next.handle().pipe(
+      tap({
+        next: () => {
+          const res      = context.switchToHttp().getResponse();
+          const duration = Date.now() - start;
+          this.logger.log({
+            ...auditCtx,
+            eventType: 'SERVICE_CALL',
+            level:     res.statusCode < 400 ? 'INFO' : 'WARN',
+            action:    \`\${req.method} \${req.url}\`,
+            outcome:   res.statusCode < 400 ? 'SUCCESS' : 'FAILED',
+            message:   \`\${req.method} \${req.url} — \${res.statusCode} (\${duration}ms)\`,
+            payload:   { method: req.method, url: req.url, statusCode: res.statusCode, duration },
+          });
+        },
+        error: (err) => {
+          const duration = Date.now() - start;
+          this.logger.log({
+            ...auditCtx,
+            eventType: 'SERVICE_CALL',
+            level:     'ERROR',
+            action:    \`\${req.method} \${req.url}\`,
+            outcome:   'ERROR',
+            message:   \`\${req.method} \${req.url} — ERROR (\${duration}ms): \${err?.message}\`,
+            payload:   { method: req.method, url: req.url, duration, error: err?.message },
+          });
+        },
+      }),
+    );
+  }
+}
+`);
+
+    fs.writeFileSync(path.join(src, 'logger', 'kafka-logger.module.ts'), `import { Module } from '@nestjs/common';
+import { KafkaLoggerService } from './kafka-logger.service';
+import { AuditInterceptor } from './audit.interceptor';
+
+@Module({
+  providers: [KafkaLoggerService, AuditInterceptor],
+  exports:   [KafkaLoggerService, AuditInterceptor],
+})
+export class KafkaLoggerModule {}
+`);
+  }
+
   protected buildOpenApiSpec(name: string, domain: Domain): string {
     const lines: string[] = [
       `openapi: "3.0.3"`,
