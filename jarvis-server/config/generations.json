@@ -154,5 +154,70 @@
     "createdBy": "admin",
     "createdAt": "2026-04-29T18:08:31.650Z",
     "zipPath": "/tmp/ms-media-media-service.zip"
+  },
+  {
+    "id": "f3e1fdd5-bf37-49b3-b364-62d54cb3ca81",
+    "serviceName": "bs-patient-service",
+    "type": "BS",
+    "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "domainName": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "architecture": "hexagonal",
+    "orm": "typeorm",
+    "status": "success",
+    "createdBy": "admin",
+    "createdAt": "2026-06-01T20:08:41.778Z",
+    "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\ms-bs-patient-service.zip"
+  },
+  {
+    "id": "cc75529c-2c8e-4ede-b37e-6ea5f4250d6f",
+    "serviceName": "bs-triage-service",
+    "type": "BS",
+    "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "domainName": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "architecture": "hexagonal",
+    "orm": "typeorm",
+    "status": "success",
+    "createdBy": "admin",
+    "createdAt": "2026-06-01T20:09:19.276Z",
+    "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\ms-bs-triage-service.zip"
+  },
+  {
+    "id": "3b85775f-acfb-4e57-9d5e-36ce7a092b05",
+    "serviceName": "bs-encounter",
+    "type": "BS",
+    "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "domainName": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "architecture": "hexagonal",
+    "orm": "typeorm",
+    "status": "success",
+    "createdBy": "admin",
+    "createdAt": "2026-06-01T20:09:45.458Z",
+    "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\ms-bs-encounter.zip"
+  },
+  {
+    "id": "7116d540-f5a0-4b94-8cc9-74e37fc2f193",
+    "serviceName": "bs-beds-service",
+    "type": "BS",
+    "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "domainName": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "architecture": "hexagonal",
+    "orm": "typeorm",
+    "status": "success",
+    "createdBy": "admin",
+    "createdAt": "2026-06-01T20:10:03.543Z",
+    "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\ms-bs-beds-service.zip"
+  },
+  {
+    "id": "ad45b24e-d10c-4150-91ba-b323619cb9c7",
+    "serviceName": "bs-cie10-service",
+    "type": "BS",
+    "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "domainName": "1301559e-73b5-4caf-a227-b6a7eab7b3c2",
+    "architecture": "hexagonal",
+    "orm": "typeorm",
+    "status": "success",
+    "createdBy": "admin",
+    "createdAt": "2026-06-01T20:10:36.605Z",
+    "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\ms-bs-cie10-service.zip"
   }
 ]

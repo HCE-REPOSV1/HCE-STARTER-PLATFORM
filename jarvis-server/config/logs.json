@@ -959,5 +959,240 @@
       "type": "MS",
       "architecture": "hexagonal"
     }
+  },
+  {
+    "timestamp": "2026-06-01T20:04:44.770Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:04:44.794Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:04:57.479Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:04:57.793Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:05:57.307Z",
+    "user": "admin",
+    "action": "CREATE_OPENAPI_SPEC",
+    "module": "system",
+    "level": "INFO",
+    "details": {
+      "name": "patients-api",
+      "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2"
+    }
+  },
+  {
+    "timestamp": "2026-06-01T20:05:57.569Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:07:08.555Z",
+    "user": "admin",
+    "action": "CREATE_OPENAPI_SPEC",
+    "module": "system",
+    "level": "INFO",
+    "details": {
+      "name": "triages-api",
+      "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2"
+    }
+  },
+  {
+    "timestamp": "2026-06-01T20:07:08.816Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:07:22.545Z",
+    "user": "admin",
+    "action": "CREATE_OPENAPI_SPEC",
+    "module": "system",
+    "level": "INFO",
+    "details": {
+      "name": "beds-api",
+      "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2"
+    }
+  },
+  {
+    "timestamp": "2026-06-01T20:07:22.864Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:07:46.741Z",
+    "user": "admin",
+    "action": "CREATE_OPENAPI_SPEC",
+    "module": "system",
+    "level": "INFO",
+    "details": {
+      "name": "encounter-api",
+      "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2"
+    }
+  },
+  {
+    "timestamp": "2026-06-01T20:07:47.056Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:07:59.879Z",
+    "user": "admin",
+    "action": "CREATE_OPENAPI_SPEC",
+    "module": "system",
+    "level": "INFO",
+    "details": {
+      "name": "cie10-api",
+      "domainId": "1301559e-73b5-4caf-a227-b6a7eab7b3c2"
+    }
+  },
+  {
+    "timestamp": "2026-06-01T20:08:00.204Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:08:07.168Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:08:07.496Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:08:42.504Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-bs-patient-service",
+      "type": "BS",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-06-01T20:09:19.944Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-bs-triage-service",
+      "type": "BS",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-06-01T20:09:46.149Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-bs-encounter",
+      "type": "BS",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-06-01T20:10:04.185Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-bs-beds-service",
+      "type": "BS",
+      "architecture": "hexagonal"
+    }
+  },
+  {
+    "timestamp": "2026-06-01T20:10:13.173Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:10:13.439Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:10:19.575Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:10:19.890Z",
+    "user": "admin",
+    "action": "LIST_OPENAPI_SPECS",
+    "module": "system",
+    "level": "INFO",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-06-01T20:10:37.278Z",
+    "user": "admin",
+    "action": "GENERATE_MICROSERVICE",
+    "module": "generator",
+    "level": "INFO",
+    "details": {
+      "serviceName": "ms-bs-cie10-service",
+      "type": "BS",
+      "architecture": "hexagonal"
+    }
   }
 ]

@@ -913,6 +913,265 @@
           { "name": "date_modify",        "type": "Date",    "required": false },
           { "name": "is_active",          "type": "boolean", "required": true  }
         ]
+      },
+      {
+        "name": "PractitionerIdentifier",
+        "fields": [
+          { "name": "identifier_id",            "type": "number",  "required": true  },
+          { "name": "practitioner_id",          "type": "number",  "required": true  },
+          { "name": "identifier_use",           "type": "string",  "required": true,  "size": 10  },
+          { "name": "identifier_type_code",     "type": "string",  "required": true,  "size": 20  },
+          { "name": "identifier_type_system",   "type": "string",  "required": true,  "size": 255 },
+          { "name": "identifier_type_display",  "type": "string",  "required": false, "size": 150 },
+          { "name": "identifier_system",        "type": "string",  "required": true,  "size": 255 },
+          { "name": "identifier_value",         "type": "string",  "required": true,  "size": 100 },
+          { "name": "period_start",             "type": "Date",    "required": false },
+          { "name": "period_end",               "type": "Date",    "required": false },
+          { "name": "user_create",              "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",              "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",              "type": "Date",    "required": true  },
+          { "name": "date_modify",              "type": "Date",    "required": false },
+          { "name": "is_active",                "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "Patient",
+        "fields": [
+          { "name": "patient_id",           "type": "number",  "required": true  },
+          { "name": "patient_uuid",         "type": "string",  "required": true  },
+          { "name": "document_type",        "type": "string",  "required": true,  "size": 10  },
+          { "name": "document_number",      "type": "string",  "required": true,  "size": 20  },
+          { "name": "first_name",           "type": "string",  "required": false, "size": 100 },
+          { "name": "last_name_father",     "type": "string",  "required": false, "size": 100 },
+          { "name": "last_name_mother",     "type": "string",  "required": false, "size": 100 },
+          { "name": "birth_date",           "type": "Date",    "required": false },
+          { "name": "gender",               "type": "string",  "required": false, "size": 10  },
+          { "name": "blood_type",           "type": "string",  "required": false, "size": 5   },
+          { "name": "phone",                "type": "string",  "required": false, "size": 20  },
+          { "name": "email",                "type": "string",  "required": false, "size": 100 },
+          { "name": "is_unknown_patient",   "type": "boolean", "required": true  },
+          { "name": "ni_correlative",       "type": "number",  "required": false },
+          { "name": "is_reniec_verified",   "type": "boolean", "required": true  },
+          { "name": "is_sic_synced",        "type": "boolean", "required": true  },
+          { "name": "legacy_patient_id",    "type": "string",  "required": false, "size": 50  },
+          { "name": "user_create",          "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",          "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",          "type": "Date",    "required": true  },
+          { "name": "date_modify",          "type": "Date",    "required": false },
+          { "name": "is_active",            "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "Encounter",
+        "fields": [
+          { "name": "encounter_id",         "type": "number",  "required": true  },
+          { "name": "encounter_uuid",       "type": "string",  "required": true  },
+          { "name": "sic_attention_id",     "type": "string",  "required": false, "size": 50  },
+          { "name": "patient_id",           "type": "number",  "required": true  },
+          { "name": "practitioner_id",      "type": "number",  "required": false },
+          { "name": "location_id",          "type": "number",  "required": false },
+          { "name": "encounter_class",      "type": "string",  "required": true,  "size": 10  },
+          { "name": "encounter_status",     "type": "string",  "required": true,  "size": 20  },
+          { "name": "admission_source",     "type": "string",  "required": true,  "size": 20  },
+          { "name": "admission_datetime",   "type": "Date",    "required": true  },
+          { "name": "discharge_datetime",   "type": "Date",    "required": false },
+          { "name": "discharge_reason",     "type": "string",  "required": false, "size": 200 },
+          { "name": "legacy_hospital_id",   "type": "string",  "required": false, "size": 50  },
+          { "name": "user_create",          "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",          "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",          "type": "Date",    "required": true  },
+          { "name": "date_modify",          "type": "Date",    "required": false },
+          { "name": "is_active",            "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "AllergyIntolerance",
+        "fields": [
+          { "name": "allergy_intolerance_id",    "type": "number",  "required": true  },
+          { "name": "allergy_intolerance_uuid",  "type": "string",  "required": true  },
+          { "name": "patient_id",                "type": "number",  "required": true  },
+          { "name": "encounter_id",              "type": "number",  "required": false },
+          { "name": "has_allergies",             "type": "string",  "required": true,  "size": 1   },
+          { "name": "food_allergies",            "type": "string",  "required": false, "size": 500 },
+          { "name": "other_allergies",           "type": "string",  "required": false, "size": 500 },
+          { "name": "declared_at",               "type": "Date",    "required": true  },
+          { "name": "user_create",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",               "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",               "type": "Date",    "required": true  },
+          { "name": "date_modify",               "type": "Date",    "required": false },
+          { "name": "is_active",                 "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "AllergySubstance",
+        "fields": [
+          { "name": "allergy_substance_id",      "type": "number",  "required": true  },
+          { "name": "allergy_substance_uuid",    "type": "string",  "required": true  },
+          { "name": "allergy_intolerance_id",    "type": "number",  "required": true  },
+          { "name": "active_principle_id",       "type": "number",  "required": true  },
+          { "name": "user_create",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",               "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",               "type": "Date",    "required": true  },
+          { "name": "date_modify",               "type": "Date",    "required": false },
+          { "name": "is_active",                 "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "Cie10",
+        "fields": [
+          { "name": "cie10_id",                  "type": "number",  "required": true  },
+          { "name": "cie10_uuid",                "type": "string",  "required": true  },
+          { "name": "cie10_code",                "type": "string",  "required": true,  "size": 10  },
+          { "name": "cie10_description",         "type": "string",  "required": true,  "size": 500 },
+          { "name": "cie10_description_search",  "type": "string",  "required": false, "size": 500 },
+          { "name": "category_code",             "type": "string",  "required": false, "size": 7   },
+          { "name": "is_billable",               "type": "boolean", "required": true  },
+          { "name": "user_create",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",               "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",               "type": "Date",    "required": true  },
+          { "name": "date_modify",               "type": "Date",    "required": false },
+          { "name": "is_active",                 "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "ActivePrinciple",
+        "fields": [
+          { "name": "active_principle_id",       "type": "number",  "required": true  },
+          { "name": "active_principle_uuid",     "type": "string",  "required": true  },
+          { "name": "atc_code",                  "type": "string",  "required": false, "size": 10  },
+          { "name": "substance_name",            "type": "string",  "required": true,  "size": 200 },
+          { "name": "substance_name_search",     "type": "string",  "required": false, "size": 200 },
+          { "name": "user_create",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",               "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",               "type": "Date",    "required": true  },
+          { "name": "date_modify",               "type": "Date",    "required": false },
+          { "name": "is_active",                 "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "Triage",
+        "fields": [
+          { "name": "triage_id",                 "type": "number",  "required": true  },
+          { "name": "triage_uuid",               "type": "string",  "required": true  },
+          { "name": "patient_id",                "type": "number",  "required": true  },
+          { "name": "encounter_id",              "type": "number",  "required": false },
+          { "name": "practitioner_id",           "type": "number",  "required": false },
+          { "name": "cie10_id",                  "type": "number",  "required": false },
+          { "name": "isolation_required",        "type": "boolean", "required": true  },
+          { "name": "is_pregnant",               "type": "boolean", "required": false },
+          { "name": "fur_enabled",               "type": "boolean", "required": true  },
+          { "name": "fur_date",                  "type": "Date",    "required": false },
+          { "name": "chief_complaint_code",      "type": "string",  "required": false, "size": 10  },
+          { "name": "comments",                  "type": "string",  "required": false, "size": 500 },
+          { "name": "illness_duration",          "type": "number",  "required": false },
+          { "name": "illness_duration_unit",     "type": "string",  "required": false, "size": 10  },
+          { "name": "pain_scale_eva",            "type": "number",  "required": false },
+          { "name": "triage_level",              "type": "number",  "required": false },
+          { "name": "triage_level_suggested",    "type": "number",  "required": false },
+          { "name": "triage_datetime",           "type": "Date",    "required": true  },
+          { "name": "user_create",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",               "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",               "type": "Date",    "required": true  },
+          { "name": "date_modify",               "type": "Date",    "required": false },
+          { "name": "is_active",                 "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "VitalSign",
+        "fields": [
+          { "name": "vital_sign_id",             "type": "number",  "required": true  },
+          { "name": "vital_sign_uuid",           "type": "string",  "required": true  },
+          { "name": "triage_id",                 "type": "number",  "required": true  },
+          { "name": "trauma_shock_flag",         "type": "boolean", "required": true  },
+          { "name": "impossible_capture_flag",   "type": "boolean", "required": true  },
+          { "name": "weight_kg",                 "type": "number",  "required": false },
+          { "name": "height_cm",                 "type": "number",  "required": false },
+          { "name": "bmi",                       "type": "number",  "required": false },
+          { "name": "systolic_pressure",         "type": "number",  "required": false },
+          { "name": "diastolic_pressure",        "type": "number",  "required": false },
+          { "name": "oxygen_saturation",         "type": "number",  "required": false },
+          { "name": "heart_rate",                "type": "number",  "required": false },
+          { "name": "respiratory_rate",          "type": "number",  "required": false },
+          { "name": "temperature_c",             "type": "number",  "required": false },
+          { "name": "measured_at",               "type": "Date",    "required": true  },
+          { "name": "user_create",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",               "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",               "type": "Date",    "required": true  },
+          { "name": "date_modify",               "type": "Date",    "required": false },
+          { "name": "is_active",                 "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "GlasgowScale",
+        "fields": [
+          { "name": "glasgow_id",                "type": "number",  "required": true  },
+          { "name": "glasgow_uuid",              "type": "string",  "required": true  },
+          { "name": "triage_id",                 "type": "number",  "required": true  },
+          { "name": "ocular_response",           "type": "number",  "required": false },
+          { "name": "verbal_response",           "type": "number",  "required": false },
+          { "name": "motor_response",            "type": "number",  "required": false },
+          { "name": "total_score",               "type": "number",  "required": false },
+          { "name": "measured_at",               "type": "Date",    "required": true  },
+          { "name": "user_create",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",               "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",               "type": "Date",    "required": true  },
+          { "name": "date_modify",               "type": "Date",    "required": false },
+          { "name": "is_active",                 "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "FastScale",
+        "fields": [
+          { "name": "fast_id",                   "type": "number",  "required": true  },
+          { "name": "fast_uuid",                 "type": "string",  "required": true  },
+          { "name": "triage_id",                 "type": "number",  "required": true  },
+          { "name": "face_flag",                 "type": "boolean", "required": false },
+          { "name": "arm_flag",                  "type": "boolean", "required": false },
+          { "name": "speech_flag",               "type": "boolean", "required": false },
+          { "name": "time_flag",                 "type": "boolean", "required": false },
+          { "name": "measured_at",               "type": "Date",    "required": true  },
+          { "name": "user_create",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",               "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",               "type": "Date",    "required": true  },
+          { "name": "date_modify",               "type": "Date",    "required": false },
+          { "name": "is_active",                 "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "Bed",
+        "fields": [
+          { "name": "bed_id",                    "type": "number",  "required": true  },
+          { "name": "bed_uuid",                  "type": "string",  "required": true  },
+          { "name": "location_id",               "type": "number",  "required": true  },
+          { "name": "bed_code",                  "type": "string",  "required": true,  "size": 20  },
+          { "name": "bed_label",                 "type": "string",  "required": false, "size": 100 },
+          { "name": "bed_type",                  "type": "string",  "required": true,  "size": 20  },
+          { "name": "service_code",              "type": "string",  "required": false, "size": 20  },
+          { "name": "bed_status",                "type": "string",  "required": true,  "size": 20  },
+          { "name": "user_create",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",               "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",               "type": "Date",    "required": true  },
+          { "name": "date_modify",               "type": "Date",    "required": false },
+          { "name": "is_active",                 "type": "boolean", "required": true  }
+        ]
+      },
+      {
+        "name": "BedAssignment",
+        "fields": [
+          { "name": "bed_assignment_id",         "type": "number",  "required": true  },
+          { "name": "bed_assignment_uuid",       "type": "string",  "required": true  },
+          { "name": "encounter_id",              "type": "number",  "required": true  },
+          { "name": "bed_id",                    "type": "number",  "required": true  },
+          { "name": "assignment_status",         "type": "string",  "required": true,  "size": 20  },
+          { "name": "assigned_at",               "type": "Date",    "required": true  },
+          { "name": "released_at",               "type": "Date",    "required": false },
+          { "name": "assigned_by",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_create",               "type": "string",  "required": true,  "size": 100 },
+          { "name": "user_modify",               "type": "string",  "required": false, "size": 100 },
+          { "name": "date_create",               "type": "Date",    "required": true  },
+          { "name": "date_modify",               "type": "Date",    "required": false },
+          { "name": "is_active",                 "type": "boolean", "required": true  }
+        ]
       }
     ]
   }
