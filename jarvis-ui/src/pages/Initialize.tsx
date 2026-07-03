@@ -215,6 +215,42 @@ export default function Initialize() {
               </div>
             )}
 
+            {/* BFF: SSL */}
+            {isBff && (
+              <div style={{ ...styles.field, marginTop: 8 }}>
+                <label style={{ ...styles.label, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <input type="checkbox" checked={dto.useSsl} onChange={(e) => patch({ useSsl: e.target.checked })} />
+                  Habilitar SSL / HTTPS
+                </label>
+                {dto.useSsl && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 8, padding: '12px 14px', background: '#f0fff4', borderRadius: 8, border: '1px solid #b7ebcd' }}>
+                    <div style={styles.twoCol}>
+                      <div style={styles.field}>
+                        <TextInput label="Puerto HTTP" value="3000" onChange={() => {}} disabled />
+                      </div>
+                      <div style={styles.field}>
+                        <TextInput
+                          label="Puerto HTTPS (SSL_PORT)"
+                          value={String(dto.sslPort)}
+                          onChange={(v) => patch({ sslPort: Number(v) })}
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                    <div style={styles.field}>
+                      <TextInput
+                        label="Ruta certificados (CERT_PATH)"
+                        value={dto.certPath ?? ''}
+                        onChange={(v) => patch({ certPath: v })}
+                        placeholder="/app/certs"
+                      />
+                      <p style={styles.hint}>Se leen <code>server.key</code> y <code>server.crt</code> desde esta ruta. Se configura en el .env del servicio generado.</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Todos los tipos (excepto LG): observabilidad */}
             {!isLogger && (
               <div style={styles.field}>
@@ -717,6 +753,8 @@ export default function Initialize() {
               {isBff && <PreviewRow label="Auth"         value={dto.authType ?? '—'} />}
               {isBff && <PreviewRow label="DataSource"   value={selectedDs ? `${selectedDs.engine} — ${selectedDs.database}` : 'Ninguno'} />}
               {isBff && selectedSpec && <PreviewRow label="OpenAPI Spec" value={`${selectedSpec.name} (${selectedSpec.selectedEntities.length} entidades)`} />}
+              {isBff && <PreviewRow label="SSL"          value={dto.useSsl ? `Sí — Puerto ${dto.sslPort}` : 'No'} />}
+              {isBff && <PreviewRow label="Cert Path"    value={dto.useSsl ? (dto.certPath ?? '/app/certs') : '—'} />}
               {isGateway && <PreviewRow label="Arquitectura" value="Hexagonal (fijo)" />}
               {isGateway && <PreviewRow label="Rate Limit"   value={`${dto.rateLimitMax} req / ${dto.rateLimitTtl}s`} />}
               {isGateway && <PreviewRow label="SSL"          value={dto.useSsl ? `Sí — Puerto ${dto.sslPort}` : 'No'} />}

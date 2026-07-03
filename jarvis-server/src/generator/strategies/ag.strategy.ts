@@ -476,6 +476,31 @@ services:
       retries: 3
 `);
 
+    // docker-compose.dev.yml — desarrollo local (sin Vault, USE_SSL=false por defecto)
+    fs.writeFileSync(path.join(dir, 'docker-compose.dev.yml'), `# docker-compose.dev.yml — ${name} (desarrollo local)
+# Uso: docker compose -f docker-compose.dev.yml up -d
+# Diferencia con docker-compose.yml (producción): NODE_ENV=development.
+# El API Gateway no lleva BD propia — solo proxea a los microservicios definidos en .env.
+
+services:
+  ${name}:
+    build: .
+    ports:
+      - "\${PORT:-${httpPort}}:\${PORT:-${httpPort}}"
+      - "\${SSL_PORT:-${sslPort}}:\${SSL_PORT:-${sslPort}}"
+    env_file: .env
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./certs:/app/certs:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:\${PORT:-${httpPort}}/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+`);
+
     // README
     const svcTable = svcs.map(s => `| /${s.name} | ${s.url} | ${s.protected ? '✓ JWT' : 'Público'} |`).join('\n');
     fs.writeFileSync(path.join(dir, 'README.md'),

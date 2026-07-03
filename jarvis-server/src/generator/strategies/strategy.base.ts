@@ -74,6 +74,100 @@ ${portLines}
 `;
   }
 
+  /**
+   * docker-compose.dev.yml — desarrollo local.
+   * A diferencia de docker-compose.yml (producción, asume infra externa ya provisionada),
+   * levanta un contenedor "db" local con credenciales por defecto cuando el servicio usa
+   * Postgres/MySQL, y corre con NODE_ENV=development.
+   */
+  protected buildDockerComposeDev(
+    name: string,
+    defaultPort = 3000,
+    extraPorts: number[] = [],
+    healthPath = '/health',
+    dbEngine?: string,
+  ): string {
+    const allPorts = [defaultPort, ...extraPorts];
+    const portLines = allPorts.map((p, i) => {
+      const varName = i === 0 ? 'PORT' : 'PORT_' + p;
+      return `      - "\${${varName}:-${p}}:\${${varName}:-${p}}"`;
+    }).join('\n');
+
+    const dbName = name.replace(/-/g, '_');
+    let dbService = '';
+    let dependsOn = '';
+    let volumes   = '';
+
+    if (dbEngine === 'postgres') {
+      dbService = `
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: \${DB_USER:-dev}
+      POSTGRES_PASSWORD: \${DB_PASS:-dev}
+      POSTGRES_DB: \${DB_NAME:-${dbName}}
+    ports:
+      - "\${DB_PORT:-5432}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \${DB_USER:-dev}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+`;
+      dependsOn = `\n    depends_on:\n      db:\n        condition: service_healthy`;
+      volumes   = `\n\nvolumes:\n  db_data:`;
+    } else if (dbEngine === 'mysql') {
+      dbService = `
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: \${DB_PASS:-dev}
+      MYSQL_DATABASE: \${DB_NAME:-${dbName}}
+      MYSQL_USER: \${DB_USER:-dev}
+      MYSQL_PASSWORD: \${DB_PASS:-dev}
+    ports:
+      - "\${DB_PORT:-3306}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+`;
+      dependsOn = `\n    depends_on:\n      db:\n        condition: service_healthy`;
+      volumes   = `\n\nvolumes:\n  db_data:`;
+    } else if (dbEngine === 'mssql') {
+      dbService = `\n  # SQL Server corre fuera de este compose — apunta DB_HOST a tu instancia local/remota en .env\n`;
+    }
+
+    return `# docker-compose.dev.yml — ${name} (desarrollo local)
+# Uso: docker compose -f docker-compose.dev.yml up -d
+# Diferencias con docker-compose.yml (producción):
+#   - NODE_ENV=development
+#   - Si el servicio usa BD (Postgres/MySQL), levanta un contenedor "db" local con credenciales por defecto
+#   - docker-compose.yml (producción) asume BD/infra externa ya provisionada — no levanta sidecars
+
+services:
+${dbService}
+  ${name}:
+    build: .
+    ports:
+${portLines}
+    env_file: .env
+    environment:
+      NODE_ENV: development${dependsOn}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:\${PORT:-${defaultPort}}${healthPath} || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3${volumes}
+`;
+  }
+
   protected buildDockerfile(name: string): string {
     return `# Dockerfile — ${name}
 # Multi-stage build generado por Jarvis Platform
