@@ -219,5 +219,31 @@
     "createdBy": "admin",
     "createdAt": "2026-06-01T20:10:36.605Z",
     "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\ms-bs-cie10-service.zip"
+  },
+  {
+    "id": "40982d8d-f9d9-49c0-8da9-1edb7f27dd69",
+    "serviceName": "ag-sdfgn",
+    "type": "AG",
+    "domainId": "",
+    "domainName": "",
+    "architecture": "hexagonal",
+    "orm": "none",
+    "status": "success",
+    "createdBy": "admin",
+    "createdAt": "2026-07-03T23:23:46.021Z",
+    "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\gw-sdfgn.zip"
+  },
+  {
+    "id": "33b9b57e-aba7-4cf0-bb03-e52aca6173bd",
+    "serviceName": "aa-sdfg",
+    "type": "AA",
+    "domainId": "",
+    "domainName": "",
+    "architecture": "hexagonal",
+    "orm": "none",
+    "status": "success",
+    "createdBy": "admin",
+    "createdAt": "2026-07-03T23:25:22.274Z",
+    "zipPath": "C:\\Users\\fpinedo\\AppData\\Local\\Temp\\auth-sdfg.zip"
   }
 ]
